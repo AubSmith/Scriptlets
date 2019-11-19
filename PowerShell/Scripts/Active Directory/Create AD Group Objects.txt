@@ -1,0 +1,16 @@
+[string] $Name = Read-Host -Prompt "What is the name of the group"
+[string] $Scope = Read-Host -Prompt "What is the scope - 0 = DomainLocal, 1 = Global, 2 = Universal"
+[string] $Description = Read-Host -Prompt "Description of the group"
+[string] $Category = Read-Host -Prompt "0 = Distribution, 1 = Security"
+[string] $Path = Read-Host -Prompt "In which OU should it be created"
+
+#$Path = OU=,OU=,OU=,DC=,DC=,DC=com
+
+
+[string] $ADComputer = Read-Host -Prompt "On which server do you want to register MSA"
+[string] $Members = Read-Host -Prompt "Add members to this group - comma seperated"
+
+Import-Module ActiveDirectory
+CD AD:
+New-ADGroup -Name $Name -GroupScope $Scope -Description $Description -GroupCategory $Category -Path $Path -SamAccountName $Name
+Add-ADGroupMember -Identity $Name -Members $Members

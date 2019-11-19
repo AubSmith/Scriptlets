@@ -1,0 +1,22 @@
+[string] $Account = Read-Host -Prompt "What is the name of the service account"
+[Security.SecureString] $Password = Read-Host -Prompt Password -AsSecureString
+[string] $Path = Read-Host -Prompt "In which OU should it be created"
+#$Path = "OU=,OU=,OU=,DC=,DC=,DC=com"
+[string] $ADComputer = Read-Host -Prompt "On which server do you want to register MSA"
+[string] $ADGroup = Read-Host -Prompt "Which group does it need to be a member of"
+
+Import-Module ActiveDirectory
+CD AD:
+New-ADServiceAccount -Name $Account -Path $Path -AccountPassword $Password 
+Add-ADGroupMember -Identity $ADGroup -Members $Account$
+Add-ADComputerServiceAccount -Identity $ADComputer -ServiceAccount $Account
+
+
+############################################################################################################
+#                                                                                                          #
+# The Reset-ADServiceAccountPassword cmdlet resets the service account password for the local computer.    #
+# This cmdlet needs to be run on the computer where the service account is installed.                      #
+#                                                                                                          #
+############################################################################################################
+
+# Reset-ADServiceAccountPassword -Identity $Account

@@ -1,0 +1,459 @@
+# This document is the supplemental download to the TechNet Magazine article:
+# Simplify Group Policy Administration with Windows PowerShell
+#
+# The Windows PowerShell functions included in this document are Windows PowerShell
+# conversions of the GPMC scripts included in the Scripts directory under the
+# installation directory of GPMC. The Windows PowerShell functions are by design not full
+# scripts but rather functions that can either included in other scripts or for 
+# example included in the Windows PowerShell profile and called directly from 
+# the Windows PowerShell Command Line Interface (CLI). The original scripts included with
+# GPMC do not return any values, but the functions here are designed in a 
+# more Windows PowerShell-friendly way and when needed, return the output back to the caller to
+# make it possible to create more complex constructs. If only a simple output is required 
+# just call the function and Windows PowerShell will take of the rest.  For example, typing the 
+# following at the command prompt:
+#
+# GetAllGposInDomain "mydomain.local"
+#
+# would result in all GPOs in the domain mydomain.local being written in the
+# Windows PowerShell CLI.
+# The function only roughly matches the names of the eqvivalent VBScript or Jscript
+# supplied with GPMC, since they are intended more as building blocks than one to one
+# replacements.  For example some scripts do not have a direct eqvivalent function since
+# the original script functionality can be constructed by using the functions. For example 
+# the DumpGPOInfo.wsf can simply be replaced by GetAllGposInDomain function and writing 
+# any selected properties in the CLI. Also, the scripts that do not really access any of the
+# GPMC functions like FindOrphanedGPOsInSYSVOL.wsf, that uses file and LDAP calls, does
+# not have any eqvivalent functions either
+
+###########################################################################
+#########################     Main functions      #########################
+###########################################################################
+
+
+###########################################################################
+# Function   : BackupAllGpos
+# Description: Backs up all GPOs in a Domain
+# Parameters : $backupDirectory - The directory where the backups will be stored
+#            : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+#            : $backupComment - An optional comment for the backups, if nothing is passed the current date will be used.
+# Returns    : N/A
+###########################################################################
+function BackupAllGpos(
+  [string] $backupDirectory=$(throw '$backupDirectory is required'),
+  [string] $domainName=$(throw '$domainName is required'),
+  [string] $backupComment=$(get-date))
+{
+  $gpmAllGposInDomain = GetAllGposInDomain $domainName
+
+  foreach ($gpmGpo in $gpmAllGposInDomain) # Iterate through all the GPOs
+  {
+    "Back up GPO : " + $gpmGpo.DisplayName
+    $gpmResult = $gpmGpo.Backup($backupDirectory, $backupComment) # Backup the GPO
+    [void] $gpmResult.OverallStatus
+    $gpoBackup = $gpmResult.Result
+  }
+}
+
+
+###########################################################################
+# Function   : BackupGpo
+# Description: Backs up a single GPO
+# Parameters : $backupDirectory - The directory where the backups will be stored
+#            : $gpoName - The display name or GPO ID of the GPO to operate on
+#            : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+#            : $backupComment - An optional comment for the backups, if nothing is passed the current date will be used.
+# Returns    : N/A
+###########################################################################
+function BackupGpo(
+  [string]  $backupDirectory=$(throw '$backupDirectory is required'),
+  [string]  $gpoName=$(throw '$gpoName is required'),
+  [string]  $domainName=$(throw '$domainName is required'),
+  [string]  $backupComment=$(get-date))
+{
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants() # Load the GPMC constants
+  $gpmDomain = $gpm.GetDomain($domainName, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+  $gpmGpo = GetGpoByNameOrID $gpoName $gpmDomain
+  # Handle situations where no or multiple GPOs was found
+  switch ($gpmGpo.Count)
+  {
+    {$_ -eq 0} {throw 'No GPO named $gpoName found'; return}
+    {$_ -gt 1} {throw 'More than one GPO named $gpoName found'; return}  
+  }
+  $gpmResult = $gpmGpo.Backup($backupDirectory, $backupComment) # Backup the GPO
+  [void] $gpmResult.OverallStatus
+  $gpoBackup = $gpmResult.Result
+}
+
+
+###########################################################################
+# Function   : RestoreAllGpos
+# Description: Restores all GPOs from a backup to a domain
+# Parameters : $backupDirectory - The directory where the backups will be stored
+#            : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+# Returns    : N/A
+###########################################################################
+function RestoreAllGpos(
+  [string]  $backupDirectory=$(throw '$backupDirectory is required'),
+  [string]  $domainName=$(throw '$domainName is required'))
+{
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants() # Load the GPMC constants
+  $gpmDomain = $gpm.GetDomain($domainName, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+  $gpmSearchCriteria = $gpm.CreateSearchCriteria()
+  $gpmSearchCriteria.Add($gpmConstants.SearchPropertyBackupMostRecent, $gpmConstants.SearchOpEquals, $true)
+  $gpmBackupDir = $gpm.GetBackupDir($backupDirectory)
+  $gpmBackupList = $gpmBackupDir.SearchBackups($gpmSearchCriteria)
+  foreach ($gpmBackup in $gpmBackupList)
+  {
+    if ($gpmBackup.GPODomain -ieq $domainName)
+    {
+      # The Backup is from the the correct domain
+      $gpmResult = $gpmDomain.RestoreGPO($gpmBackup, $gpmConstants.DoNotValidateDC);
+      $gpmResult.OverallStatus();
+    }
+  }
+}
+
+
+###########################################################################
+# Function   : RestoreGpo
+# Description: Restores a single GPO from a backup
+# Parameters : $backupDirectory - The directory where the backup will be stored
+#            : $backupId - The unique Backup ID, not the GPO ID, or the display name of the GPO
+#            : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+# Returns    : N/A
+###########################################################################
+function RestoreGpo(
+  [string]  $backupDirectory=$(throw '$backupDirectory is required'),
+  [string]  $backupId=$(throw '$backupId is required'),
+  [string]  $domainName=$(throw '$domainName is required'))
+{
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants() # Load the GPMC constants
+  $gpmDomain = $gpm.GetDomain($domainName, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+  # Find the backup
+  $gpmBackup = GetBackupByNameOrId $backupDirectory $backupId
+  $gpmResult = $gpmDomain.RestoreGPO($gpmBackup, $gpmConstants.DoNotValidateDC)
+  $gpmResult.OverallStatus()
+}
+
+
+###########################################################################
+# Function   : GetAllBackedUpGpos
+# Description: Retrieves the latest version of GPO backups from a given path
+# Parameters : $backupDirectory - The directory where the backups to retrieve are stored
+# Returns    : All backup objects found in the supplied directory
+###########################################################################
+function GetAllBackedUpGpos(
+[string]  $backupDirectory=$(throw '$backupDirectory is required'))
+{
+  $gpm = New-Object -ComObject GPMgmt.GPM   # Create the GPMC Main object
+  
+  $gpmConstants = $gpm.GetConstants() # Load the GPMC constants
+  $gpmBackupDir = $gpm.GetBackupDir($backupDirectory)
+  $gpmSearchCriteria = $gpm.CreateSearchCriteria() # Create a search criteria
+  $gpmSearchCriteria.Add($gpmConstants.SearchPropertyBackupMostRecent, $gpmConstants.SearchOpEquals, $true)
+
+  # Retrieve the backup collection contain
+  $gpmBackups = $gpmBackupDir.SearchBackups($gpmSearchCriteria)
+  # Itarate through the backup and return the backups instead of the backup collection object
+  foreach ($gpmBackup in $gpmBackups)
+  {
+    # Return the backup object
+    $gpmBackup
+  }
+}
+
+
+###########################################################################
+# Function   : CopyGpo
+# Description: Copies the settings in a GPO to another GPO
+# Parameters : $sourceGpo - The GPO name or GPO ID of the GPO to copy
+#            : $sourceDomain - The dns name, e.g. microsoft.com, of the domain where the original GPO is located
+#            : $targetGpo  - The GPO name of the GPO to add
+#            : $targetDomain - The dns name, e.g. microsoft.com, of the domain where the copy should be put
+#            : $migrationTable - The path to an optional Migration table to use when copying the GPO
+# Returns    : N/A
+###########################################################################
+function CopyGpo(
+  [string] $sourceGpo=$(throw '$sourceGpo is required'),
+  [string] $sourceDomain=$(throw '$sourceDomain is required'),
+  [string] $targetGpo=$(throw '$targetGpo is required'),
+  [string] $targetDomain=$(throw '$targetDomain is required'),
+  [string] $migrationTable=$(""),
+  [switch] $copyAcl)
+{
+  
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants() # Load the GPMC constants
+  $gpmSourceDomain = $gpm.GetDomain($sourceDomain, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+  $gpmSourceGpo = GetGpoByNameOrID $sourceGpo $gpmSourceDomain
+  # Handle situations where no or multiple GPOs was found
+  switch ($gpmSourceGpo.Count)
+  {
+    {$_ -eq 0} {throw 'No GPO named $gpoName found'; return}
+    {$_ -gt 1} {throw 'More than one GPO named $gpoName found'; return}  
+  }
+  if ($migrationTable)
+  {
+    $gpmMigrationTable = $gpm.GetMigrationTable($migrationTable)
+  }
+
+  $gpmTargetDomain = $gpm.GetDomain($targetDomain, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+
+  $copyFlags = 0
+  if ($copyAcl)
+  {
+    $copyFlags = Constants.ProcessSecurity
+  }
+  $gpmResult = $gpmSourceGpo.CopyTo($copyFlags, $gpmTargetDomain, $targetGpo)
+  [void] $gpmResult.OverallStatus
+  
+}
+
+###########################################################################
+# Function   : CreateGpo
+# Description: Creates a new empty GPO
+# Parameters : $gpoName - The display name or GPO ID of the GPO to operate on
+#            : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+# Returns    : N/A
+###########################################################################
+function CreateGpo(
+  [string]  $gpoName=$(throw '$gpoName is required'),
+  [string]  $domainName=$(throw '$domainName is required'))
+{
+
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants()
+  $gpmDomain = $gpm.GetDomain($domainName, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+  $gpmGpo = $gpmDomain.CreateGPO()
+  $gpmGpo.DisplayName = $gpoName
+
+}
+
+
+###########################################################################
+# Function   : DeleteGpo
+# Description: Deletes a GPO
+# Parameters : $gpoName - The display name or GPO ID of the GPO to operate on
+#            : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+# Returns    : N/A
+###########################################################################
+function DeleteGpo(
+  [string]  $gpoName=$(throw '$gpoName is required'),
+  [string]  $domainName=$(throw '$domainName is required'))
+{
+
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants()
+  $gpmDomain = $gpm.GetDomain($domainName, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+  $gpmGpo = GetGpoByNameOrID $gpoName $gpmDomain
+  $gpmGpo.Delete()
+
+}
+
+
+###########################################################################
+# Function   : FindDisabledGpos
+# Description: Returns all GPOs where both the user and computer part are disabled
+# Parameters : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+# Returns    : All GPOs that are disabled
+###########################################################################
+function FindDisabledGpos(
+  [string] $domainName=$(throw '$domainName is required'))
+{
+  $gpmAllGposInDomain = GetAllGposInDomain $domainName
+
+  foreach ($gpmGpo in $gpmAllGposInDomain) # Iterate through all the GPOs
+  {
+    if (($gpmGpo.IsComputerEnabled() -eq $false) -and ($gpmGpo.IsUserEnabled() -eq $false))
+    {
+      $gpmGpo
+    }
+  }
+}
+
+###########################################################################
+# Function   : FindUnlinkedGpos
+# Description: Returns all GPOs that have no links. This does not include the GPOs that are linked to sites and external domains.
+# Parameters : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+# Returns    : All the GPOs that have no links to the domain or OU.
+###########################################################################
+function FindUnlinkedGpos(
+  [string] $domainName=$(throw '$domainName is required'))
+{
+  $gpmAllGposInDomain = GetAllGposInDomain $domainName
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants()
+  $gpmDomain = $gpm.GetDomain($domainName, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+  
+  foreach ($gpmGpo in $gpmAllGposInDomain) # Iterate through all the GPOs
+  {	 
+    $gpmSearchCriteria = $gpm.CreateSearchCriteria()
+    $gpmSearchCriteria.Add($gpmConstants.SearchPropertySOMLinks, $gpmConstants.SearchOpContains, $gpmGpo)
+    $gpmSomList = $gpmDomain.SearchSOMs($gpmSearchCriteria)
+    if ($gpmSomList.Count -eq 0)
+    {
+      $gpmGpo # This GPO is unlinked and will be returned. 
+    }
+  }
+}
+
+
+###########################################################################
+# Function   : CreateReportForGpo
+# Description: Creates a XML report for a single GPO in a domain
+# Parameters : $gpoName - The display name or GPO ID of the GPO to operate on
+#            : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+#            : $reportDirectory - The directory where the report will be placed
+# Returns    : N/A
+###########################################################################
+function CreateReportForGpo(
+  [string] $gpoName=$(throw '$gpoName is required'),
+  [string] $domainName=$(throw '$domainName is required'),
+  [string] $reportDirectory=$(throw '$reportDirectory is required'))
+{
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants() # Load the GPMC constants
+  $gpmDomain = $gpm.GetDomain($domainName, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+  $gpmGpo = GetGpoByNameOrID $gpoName $gpmDomain
+  # Handle situations where no or multiple GPOs was found
+  switch ($gpmGpo.Count)
+  {
+    {$_ -eq 0} {throw 'No GPO named $gpoName found'; return}
+    {$_ -gt 1} {throw 'More than one GPO named $gpoName found'; return}  
+  }
+  $gpmResult = $gpmGpo.GenerateReportToFile($gpmConstants.ReportXML, $reportDirectory + "\" + $gpmGpo.ID + ".xml")
+  [void] $gpmResult.OverallStatus
+  $gpoBackup = $gpmResult.Result
+}
+
+
+###########################################################################
+# Function   : CreateReportForAllGpos
+# Description: Creates a separate XML report for all GPOs in a domain
+# Parameters : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+#            : $reportDirectory - The directory where the report will be placed
+# Returns    : N/A
+###########################################################################
+###########################################################################
+# 
+###########################################################################
+function CreateReportForAllGpos(
+[string] $domainName=$(throw '$domainName is required'),
+[string] $reportDirectory=$(throw '$reportDirectory is required'))
+{
+  $gpmAllGposInDomain = GetAllGposInDomain $domainName
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants()
+
+  foreach ($gpmGpo in $gpmAllGposInDomain) # Iterate through all the GPOs
+  {
+    # Save the report to the given directory and used the GPO id as name since the Dislplay Name is not necessary unique
+    $gpmResult = $gpmGpo.GenerateReportToFile($gpmConstants.ReportXML, $reportDirectory + "\" + $gpmGpo.ID + ".xml")
+    [void] $gpmResult.OverallStatus	
+  }
+}
+
+
+###########################################################################
+#########################    Support functions    #########################
+###########################################################################
+
+###########################################################################
+# Function   : GetGpoByNameOrID
+# Description: Find a GPO by its display name or GPO ID
+# Parameters : $gpoName - The display name or GPO ID of the GPO to operate on
+#            : $gpmDomain - The domain object that represents the domain to search
+# Returns    : A GPO object representing the GPO searched for
+###########################################################################
+###########################################################################
+# 
+###########################################################################
+function GetGpoByNameOrID(
+  [string] $gpoName=$(throw '$gpoName is required'),
+  $gpmDomain=$(throw '$gpmDomain is required'))
+{
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants()
+  $gpmSearchCriteria = $gpm.CreateSearchCriteria()
+	
+  # Test if this is a GUID or something else
+  $ErrorActionPreference="silentlycontinue"
+  $gpoId = New-Object System.Guid($gpoName) 2> Out-Null 
+  if ($? -eq $true)
+  {
+    # This is a GUID, search for the GPO ID
+    $gpmSearchCriteria.Add($gpmConstants.SearchPropertyGPOID, $gpmConstants.SearchOpEquals, $gpoName)
+  }
+  else
+  {
+    # This is not a GUID, search for the Display Name
+    $gpmSearchCriteria.Add($gpmConstants.SearchPropertyGPODisplayName, $gpmConstants.SearchOpEquals, $gpoName)
+  }
+
+  #$ErrorActionPreference="continue"
+  $gpmDomain.SearchGPOs($gpmSearchCriteria) # This will return the GPOs found
+	
+}
+
+###########################################################################
+# Function   : GetBackupByNameOrId
+# Description: Find a GPO backup by its display name or GPO ID
+# Parameters : $backupDirectory - The directory where the backup to retrieve is stored
+#            : $backupName - Name or backup ID to retrieve
+# Returns    : A Group Policy backup object
+###########################################################################
+function GetBackupByNameOrId(
+  [string] $backupDirectory=$(throw '$backupDirectory is required'),
+  [string] $backupName=$(throw '$backupName is required'))
+{
+
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmBackupDir = $gpm.GetBackupDir($backupDirectory)
+  
+  # Test if this is a GUID or something else
+  $ErrorActionPreference="silentlycontinue"
+  $gpoId = New-Object System.Guid($backupName) 2> Out-Null 
+  if ($? -eq $true)
+  {
+    # This is a GUID, open the backup using the ID
+    $ErrorActionPreference="continue"
+    # Return the backup with the ID
+    $gpmBackupDir.GetBackup($backupName)
+  }
+  else
+  {k
+    # This is not a GUID, search for the Display Name
+    $ErrorActionPreference="continue"
+    $gpmConstants = $gpm.GetConstants()
+    $gpmSearchCriteria = $gpm.CreateSearchCriteria()
+    # Only search for the latest version if more than one version exists
+    $gpmSearchCriteria.Add($gpmConstants.SearchPropertyBackupMostRecent, $gpmConstants.SearchOpEquals, $true)
+    $gpmSearchCriteria.Add($gpmConstants.SearchPropertyGPODisplayName, $gpmConstants.SearchOpEquals, $backupName)
+    $gpmBackupList = $gpmBackupDir.SearchBackups($gpmSearchCriteria)
+    foreach ($gpmBackup in $gpmBackupList)
+    {
+      $gpmBackup 
+    }
+  }
+}
+
+
+###########################################################################
+# Function   : GetAllGposInDomain
+# Description: Returns all GPOs in a domain
+# Parameters : $domainName - The dns name, e.g. microsoft.com, of the domain to operate on
+# Returns    : All Group Policy Objects in the supplied domain
+###########################################################################
+function GetAllGposInDomain(
+  [string] $domainName=$(throw '$domainName is required'))
+{
+  $gpm = New-Object -ComObject GPMgmt.GPM # Create the GPMC Main object
+  $gpmConstants = $gpm.GetConstants() # Load the GPMC constants
+  $gpmDomain = $gpm.GetDomain($domainName, "", $gpmConstants.UseAnyDC) # Connect to the domain passed using any DC
+  $gpmSearchCriteria = $gpm.CreateSearchCriteria() # Create a search criteria without any restrictions
+  $gpmDomain.SearchGPOs($gpmSearchCriteria) # Search and find all GPOs in the domain, this will return the array
+}

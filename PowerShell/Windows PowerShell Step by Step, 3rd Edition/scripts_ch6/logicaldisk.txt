@@ -1,0 +1,57 @@
+Name:MemberType:Definition
+Chkdsk:Method:System.Management.ManagementBaseObject Chkdsk(System.Boolean FixErrors, System.Boolean VigorousIndexCheck, System.Boolean SkipFolderCycle, System.Boolean ForceDismount, System.Boolean RecoverBadSectors, System.Boolean OkToRunAtBootUp)
+Reset:Method:System.Management.ManagementBaseObject Reset()
+SetPowerState:Method:System.Management.ManagementBaseObject SetPowerState(System.UInt16 PowerState, System.String Time)
+Access:Property:System.UInt16 Access {get;set;}
+Availability:Property:System.UInt16 Availability {get;set;}
+BlockSize:Property:System.UInt64 BlockSize {get;set;}
+Caption:Property:System.String Caption {get;set;}
+Compressed:Property:System.Boolean Compressed {get;set;}
+ConfigManagerErrorCode:Property:System.UInt32 ConfigManagerErrorCode {get;set;}
+ConfigManagerUserConfig:Property:System.Boolean ConfigManagerUserConfig {get;set;}
+CreationClassName:Property:System.String CreationClassName {get;set;}
+Description:Property:System.String Description {get;set;}
+DeviceID:Property:System.String DeviceID {get;set;}
+DriveType:Property:System.UInt32 DriveType {get;set;}
+ErrorCleared:Property:System.Boolean ErrorCleared {get;set;}
+ErrorDescription:Property:System.String ErrorDescription {get;set;}
+ErrorMethodology:Property:System.String ErrorMethodology {get;set;}
+FileSystem:Property:System.String FileSystem {get;set;}
+FreeSpace:Property:System.UInt64 FreeSpace {get;set;}
+InstallDate:Property:System.String InstallDate {get;set;}
+LastErrorCode:Property:System.UInt32 LastErrorCode {get;set;}
+MaximumComponentLength:Property:System.UInt32 MaximumComponentLength {get;set;}
+MediaType:Property:System.UInt32 MediaType {get;set;}
+Name:Property:System.String Name {get;set;}
+NumberOfBlocks:Property:System.UInt64 NumberOfBlocks {get;set;}
+PNPDeviceID:Property:System.String PNPDeviceID {get;set;}
+PowerManagementCapabilities:Property:System.UInt16[] PowerManagementCapabilities {get;set;}
+PowerManagementSupported:Property:System.Boolean PowerManagementSupported {get;set;}
+ProviderName:Property:System.String ProviderName {get;set;}
+Purpose:Property:System.String Purpose {get;set;}
+QuotasDisabled:Property:System.Boolean QuotasDisabled {get;set;}
+QuotasIncomplete:Property:System.Boolean QuotasIncomplete {get;set;}
+QuotasRebuilding:Property:System.Boolean QuotasRebuilding {get;set;}
+Size:Property:System.UInt64 Size {get;set;}
+Status:Property:System.String Status {get;set;}
+StatusInfo:Property:System.UInt16 StatusInfo {get;set;}
+SupportsDiskQuotas:Property:System.Boolean SupportsDiskQuotas {get;set;}
+SupportsFileBasedCompression:Property:System.Boolean SupportsFileBasedCompression {get;set;}
+SystemCreationClassName:Property:System.String SystemCreationClassName {get;set;}
+SystemName:Property:System.String SystemName {get;set;}
+VolumeDirty:Property:System.Boolean VolumeDirty {get;set;}
+VolumeName:Property:System.String VolumeName {get;set;}
+VolumeSerialNumber:Property:System.String VolumeSerialNumber {get;set;}
+__CLASS:Property:System.String __CLASS {get;set;}
+__DERIVATION:Property:System.String[] __DERIVATION {get;set;}
+__DYNASTY:Property:System.String __DYNASTY {get;set;}
+__GENUS:Property:System.Int32 __GENUS {get;set;}
+__NAMESPACE:Property:System.String __NAMESPACE {get;set;}
+__PATH:Property:System.String __PATH {get;set;}
+__PROPERTY_COUNT:Property:System.Int32 __PROPERTY_COUNT {get;set;}
+__RELPATH:Property:System.String __RELPATH {get;set;}
+__SERVER:Property:System.String __SERVER {get;set;}
+__SUPERCLASS:Property:System.String __SUPERCLASS {get;set;}
+PSStatus:PropertySet:PSStatus {Status, Availability, DeviceID, StatusInfo}
+ConvertFromDateTime:ScriptMethod:System.Object ConvertFromDateTime();
+ConvertToDateTime:ScriptMethod:System.Object ConvertToDateTime();

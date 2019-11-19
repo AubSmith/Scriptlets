@@ -1,0 +1,2 @@
+$PSVersionTable.PSVersion
+$env:PATH

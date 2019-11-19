@@ -1,0 +1,29 @@
+$a = "this is the beginning"
+
+$b = 22
+
+$c = $a + $b
+
+$c
+
+$a = "this is a string"
+
+$c = $a + $b
+
+$c
+
+$b = "this is a number"
+
+$c = $a + $b
+
+$c
+
+[int]$b = 5
+
+$c = $a + $b
+
+$c
+
+$b = "this is a number"
+
+

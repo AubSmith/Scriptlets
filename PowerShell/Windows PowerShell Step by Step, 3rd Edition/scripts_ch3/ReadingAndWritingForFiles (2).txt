@@ -1,0 +1,11 @@
+RI -Path c:\mytest\myfile.txt
+
+New-Item -Path c:\mytest -Name myfile.txt -Type file -Value "My file"
+
+Get-Content C:\mytest\myfile.txt
+
+Add-Content C:\mytest\myfile.txt -Value "ADDITIONAL INFORMATION"
+
+Set-Content C:\mytest\myfile.txt -Value "Setting information"
+
+

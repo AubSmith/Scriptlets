@@ -1,0 +1,1 @@
+dir -recurse | where {$_.notafter -gt (Get-Date) -AND $_.notafter -le (Get-Date).Add(30)}

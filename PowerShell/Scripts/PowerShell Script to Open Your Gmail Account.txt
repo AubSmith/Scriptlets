@@ -1,0 +1,16 @@
+# Ensure that you are not already signed-in Gmail! 
+#seeking help to improve this script 
+ 
+$url = "http://gmail.com" 
+$username="Your_username" 
+$password="Your_password" 
+$ie = New-Object -com internetexplorer.application; 
+$ie.visible = $true; 
+$ie.navigate($url); 
+while ($ie.Busy -eq $true) 
+{ 
+    Start-Sleep -Milliseconds 1000; 
+} 
+$ie.Document.getElementById("email").value = $username 
+$ie.Document.getElementByID("Passwd").value=$password 
+$ie.Document.getElementById("signin").Click();

@@ -1,0 +1,6 @@
+https://blogs.technet.microsoft.com/ashleymcglone/2013/08/28/powershell-get-winevent-xml-madness-getting-details-from-event-logs/
+
+get-eventlog security -newest 100 | where -Property entrytype -eq FailureAudit | Format-List >> C:\Users\a-aubsmith\Desktop\Security.log
+get-eventlog security | gm -membertype *
+$events = get-eventlog security -newest 20 | sort -property entrytype, index foreach ($event in $events) \{$event.index.tostring() + " - " + $event.entrytype write-host\}  
+

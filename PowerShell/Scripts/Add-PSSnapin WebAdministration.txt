@@ -1,0 +1,72 @@
+Cmdlet name			Description 
+Add-WebConfiguration		Adds a collection element to an IIS configuration collection.
+Add-WebConfigurationLock	Locks an IIS configuration section or element.
+Add-WebConfigurationProperty	Adds a property to an IIS configuration section.
+Backup-WebConfiguration		Creates a backup of an IIS configuration.
+Begin-WebCommitDelay		Instructs the IIS configuration system to delay the commitment of changes.
+Clear-WebConfiguration		Removes configuration settings from the configuration location specified.
+Clear-WebRequestTracingSettings	Clears the Request Tracing configuration from the specified Web site.
+ConvertTo-WebApplication	Converts an IIS virtual directory to an IIS Web application.
+Disable-WebGlobalModule		Disables the specified IIS module.
+Disable-WebRequestTracing	Disables Request Tracing for the site specified.
+Enable-WebGlobalModule		Enables the specified IIS module.
+Enable-WebRequestTracing	Enables Request Tracing for the site specified.
+End-WebCommitDelay		Instructs the IIS configuration system to resume the commitment of changes.
+Get-WebAppDomain		Gets the application domains in which the specified IIS worker process is running.
+Get-WebApplication		Gets the Web applications associated with a specific site or with the name specified.
+Get-WebAppPoolState		Gets the run-time state of an IIS application pool.
+Get-WebBinding			Gets the bindings on the specified IIS site.
+Get-WebConfigFile		Gets the file system path of the Web.config file.
+Get-WebConfiguration		Gets an IIS configuration element at the specified path.
+Get-WebConfigurationBackup	Gets a list of available IIS configuration backups.
+Get-WebConfigurationLocation	Gets the location of a specified configuration setting.
+Get-WebConfigurationLock	Gets the lock status of the specified IIS configuration location.
+Get-WebConfigurationProperty	Gets an IIS configuration property at the specified path.
+Get-WebFilePath			Gets the physical path to the location of the specified IIS module.
+Get-WebGlobalModule		Gets the global modules configured in IIS.
+Get-WebHandler			Gets IIS Request Handlers.
+Get-WebItemState		Gets the run-time state of a site or an application pool.
+Get-WebManagedModule		Gets the managed modules that are configured for a particular application.
+Get-WebRequest			Gets the IIS requests that are currently being executed.
+Get-Website			Gets configuration information for an IIS Web site.
+Get-WebsiteState		Gets the state of an IIS Web site.
+Get-WebURL			Gets information about the URL associated with the specified Web site.
+Get-WebVirtualDirectory		Gets the list of virtual directories on the specified site.
+New-WebApplication		Creates a new IIS Web application.
+New-WebAppPool			Creates a new IIS application pool.
+New-WebBinding			Adds a new Web site binding to an existing Web site.
+New-WebFtpSite			Create a new FTP 7 Site
+New-WebGlobalModule		Creates a new IIS module.
+New-WebHandler			Creates a new IIS Request Handler configuration entry.
+New-WebManagedModule		Adds a new managed module to the IIS request pipeline.
+New-Website			Creates a new IIS Web site.
+New-WebVirtualDirectory		Creates a new IIS virtual directory.
+Remove-WebApplication		Removes an IIS Web application.
+Remove-WebAppPool		Removes an IIS application pool.
+Remove-WebBinding		Removes a binding from an IIS Web site.
+Remove-WebConfigurationBackup	Removes an existing IIS configuration backup.
+Remove-WebConfigurationLocation	Removes an IIS configuration location.
+Remove-WebConfigurationLock	Removes a lock on configuration settings.
+Remove-WebConfigurationProperty	Removes an IIS configuration property.
+Remove-WebGlobalModule		Removes an IIS module.
+Remove-WebHandler		Removes and IIS Request Handler.
+Remove-WebManagedModule		Removes an IIS managed module.
+Remove-Website			Removes an IIS Web site.
+Remove-WebVirtualDirectory	Removes an IIS virtual directory.
+Rename-WebConfigurationLocation	Renames a configuration location.
+Restart-WebAppPool		Recycles an application pool.
+Restart-WebItem			Restarts an application pool or a Web site.
+Restore-WebConfiguration	Restores an IIS configuration backup.
+Select-WebConfiguration		Returns Web configuration objects.
+Set-WebBinding			Changes a property of an IIS site binding.
+Set-WebConfiguration		Sets the value of an IIS configuration element.
+Set-WebConfigurationProperty	Changes the value of an IIS configuration property.
+Set-WebGlobalModule		Sets configuration settings for an IIS module.
+Set-WebHandler			Configures an IIS request handler.
+Set-WebManagedModule		Configures an IIS managed module.
+Start-WebAppPool		Starts an application pool.
+Start-WebItem			Starts an application pool or a site.
+Start-Website			Starts an IIS Web site.
+Stop-WebAppPool			Stops an application pool.
+Stop-WebItem			Stops an application pool or a site.
+Stop-Website			Stops an IIS Web site.

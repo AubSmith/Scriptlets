@@ -1,0 +1,5 @@
+gci  -Path c:\ | gm
+
+gci  -Path c:\ | gm | where {$_.membertype -eq "property"}
+
+gci  -Path c:\ | gm | where {$_.membertype -eq "property" -AND $_.typename -like "*file*"}

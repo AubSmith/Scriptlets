@@ -1,0 +1,6 @@
+GCI -path HKLM:\software
+
+GCI -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\HotFix'
+
+GCI -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\HotFix' | where {$_.Name -like "*KB928388"}
+

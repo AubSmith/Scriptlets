@@ -1,0 +1,4 @@
+notepad
+get-process note*
+stop-process -id 1768 -confirm
+y
