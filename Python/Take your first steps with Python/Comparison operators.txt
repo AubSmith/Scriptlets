@@ -1,0 +1,18 @@
+Comparison operators
+The equality operator == is one of a family of operators that you can use to compare two values. The following table doesn't show all possible operators. These are the comparison operators you're likely to use most often.
+
+Operator	Description
+==	        Equality operator
+!=	        Inequality operator
+>	        Greater than operator
+<	        Less than operator
+>=	        Greater than or equal to operator
+<=	        Less than or equal to operator
+The inequality operator != evaluates to True when the operands on either side aren't the same. This concept can be a bit confusing, but sometimes you want to ensure that two values aren't equal.
+
+
+Logical operators
+and
+or
+not
+
