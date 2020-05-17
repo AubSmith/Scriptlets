@@ -1,0 +1,1 @@
+curl -L ‘https://bintray.com/api/v1/content/jfrog/run/art-compose/$latest/art-compose?bt_package=art-compose’ | sudo bash
