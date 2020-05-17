@@ -1,0 +1,25 @@
+sl variable:\
+
+Get-ChildItem
+
+Get-ChildItem | Sort {$_.Name}
+
+Get-Variable ShellId
+
+Get-Variable ShellId | Format-List *
+
+New-Variable administrator
+
+Set-Variable administrator -value mred
+
+Get-Variable administrator
+
+Remove-Variable administrator
+
+Get-Variable administrator
+
+
+
+
+
+

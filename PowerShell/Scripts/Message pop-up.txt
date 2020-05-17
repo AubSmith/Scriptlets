@@ -1,0 +1,15 @@
+looks like this:
+
+
+
+
+
+
+PowerShell
+
+1
+2
+3
+[System.Windows.Forms.MessageBox]::Show( `
+    "This is a small example showing how to localize strings in a PowerShell script.", `
+    "Hello, World!") | Out-Null

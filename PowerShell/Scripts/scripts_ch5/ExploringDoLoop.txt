@@ -1,0 +1,12 @@
+$i=0;
+
+do {$i++;
+
+"i is equal to $i"}
+
+until ($i -eq 0)
+
+$i=0;do {$i++; "i is equal to $i"} until ($i -eq 0)
+
+$i=0;do {$i++; "i is equal to $i"} while ($i -eq 0)
+

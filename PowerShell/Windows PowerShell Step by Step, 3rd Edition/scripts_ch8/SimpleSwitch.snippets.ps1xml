@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+    <Snippets  xmlns='http://schemas.microsoft.com/PowerShell/Snippets'>
+        <Snippet Version='1.0.0'>
+            <Header>
+                <Title>SimpleSwitch</Title>
+                <Description>A simple switch statemet</Description>
+                <Author>ed wilson</Author>
+                <SnippetTypes>
+                    <SnippetType>Expansion</SnippetType>
+                </SnippetTypes>
+            </Header>
+
+            <Code>
+                <Script Language='PowerShell' CaretOffset='9'>
+                    <![CDATA[Switch () {'param1' {  }}]]>
+                </Script>
+            </Code>
+
+    </Snippet>
+</Snippets>
+

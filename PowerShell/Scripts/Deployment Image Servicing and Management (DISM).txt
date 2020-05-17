@@ -1,0 +1,7 @@
+Dism /Online /Enable-Feature /all /FeatureName:Server-Gui-Shell /Source:\\[server]\c$\Windows\WinSxS /LimitAccess
+
+Dism /Online /Enable-Feature /all /FeatureName:Server-Gui-Mgmt-Infra /Source:\\[server]\c$\Windows\WinSxS /LimitAccess
+
+Dism /online /enable-feature /featurename:Server-Gui-Mgmt /featurename:Server-Gui-Shell /featurename:ServerCore-FullServer /source:c:\w2012\MountPoint\windows\winsxs
+
+DISM /online /Cleanup-Image /RestoreHealth

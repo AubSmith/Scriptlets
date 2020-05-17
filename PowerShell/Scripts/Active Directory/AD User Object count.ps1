@@ -1,0 +1,1 @@
+Get-ADUser -filter * | measure-object |Select-Object count

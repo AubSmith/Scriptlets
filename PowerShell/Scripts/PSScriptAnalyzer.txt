@@ -1,0 +1,1 @@
+Install-Module -Name PSScriptAnalyzer -RequiredVersion 1.9.0
