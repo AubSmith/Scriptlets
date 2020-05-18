@@ -5,22 +5,20 @@ import json
 
 
 
-api_address = 'https://art.srvc.domain.com/api'
+# api_address = 'https://art.srvc.domain.com/api'
 
-response = requests.post(api_address)
+# response = requests.post(api_address)
 
-respone.raise_for_status()
+# respone.raise_for_status()
 
-results = respone.json()
-print(json.dumps(results))
+# results = respone.json()
+# print(json.dumps(results))
 
-print()
+# print()
 
 
 
 # Create JSON
-
-import json
 
 # Create dictionary object
 person_dict = {'first' : 'Christopher', 'last' : 'Harrison'}

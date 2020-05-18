@@ -4,6 +4,7 @@ config = configparser.ConfigParser()
 config.readfp(open(r'D:\Artifactory\API\Python\Artifactory.ini'))
 # config.read_file(r'D:\Artifactory\API\Python\Artifactory.ini')
 
+
 # Load credentials
 username = config.get('User', 'UserName')
 apikey = config.get('Token', 'Token')
