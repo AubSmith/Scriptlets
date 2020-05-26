@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>mySiteReportr</title>
+
+    <!-- WinJS references -->
+    <link href="//Microsoft.WinJS.0.6/css/ui-light.css" rel="stylesheet">
+    <script src="//Microsoft.WinJS.0.6/js/base.js"></script>
+    <script src="//Microsoft.WinJS.0.6/js/ui.js"></script>
+
+    <!-- mySiteReportr references -->
+    <link href="/css/default.css" rel="stylesheet">
+    <script src="/js/default.js"></script>
+</head>
+<body>
+    <h1 class="titlearea win-type-ellipsis"><a href="http://sitereportr.com">mySiteReportr</a></h1>
+    <div id="siteLine"> 
+        <span id="urlSpan">URL: </span>
+        <input type="text" size="50" maxlength="100" name="siteURL" id="siteURL" />
+        <progress id="progress" class="win-ring hide"></progress>
+        <input type="submit" name="submit" value="Go" class="go-button" id="siteSubmit" />
+        <div id="statusLine"><span id="resultStaticText" class="hide">Status: </span>
+        <span id="resultMessage" class="hide"></span></div>
+    </div>
+</body>
+</html>
+

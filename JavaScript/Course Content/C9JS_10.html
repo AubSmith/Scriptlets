@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>10. Global Scope versus Function Scope</title>
+  <script type="text/javascript">
+
+/*
+if (true) {
+  var x = 5;
+}
+alert(x);
+*/
+
+myScope = "global";
+
+/*
+(function() {
+  if (true) 
+  {
+    var myScope = "function";
+  }
+  //myScope = "I set this inside the function";
+  alert('inside the function, the scope is: ' + myScope);
+})();
+
+//alert('outside the function, the scope is: ' + myScope);
+*/
+
+alert('window.myScope: ' + window.myScope);
+
+
+
+  </script>
+</head>
+<body>
+  <h1>10. Global Scope versus Function Scope</h1>
+</body>
+</html>

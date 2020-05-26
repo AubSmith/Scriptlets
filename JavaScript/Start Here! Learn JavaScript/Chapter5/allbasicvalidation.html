@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+<title>Start Here</title>
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="verybasicvalidation.js"></script>
+</head>
+<body>
+<form id="myForm" name="myForm" action="#" method="POST">
+<fieldset>
+	<label for="customerName">Name:* </label>
+	<input type="text" name="customerName" id="customerName">
+	<br />
+	<label for="emailAddress">E-mail:* </label>
+	<input type="text" name="emailAddress" id="emailAddress">
+	<br />
+	<hr>
+	<label for="musicFormat">Order Type: </label><br />
+	Carryout: <input type="radio" name="orderType" value="carryout"><br />
+	Delivery: <input type="radio" name="orderType" value="delivery">
+	<br />
+	<br />
+	<label for="pizzaToppings">Pizza Toppings: </label><br />
+	The Works! <input type="checkbox" name="toppings" id="works" value="works"><br />
+	Mushrooms: <input type="checkbox" name="toppings" id="mush" value="mush"><br />
+	Peppers: <input type="checkbox" name="toppings" id="peppers" value="peppers"><br />
+	Sausage: <input type="checkbox" name="toppings" id="sausage" value="sausage"><br />
+	<br />
+	<br />
+	<label for="crust">Crust Type: </label>
+	<select name="crust">
+	<option value="">Please choose...</option>
+	<option value="thin">Thin</option>
+	<option value="deepdish">Deep Dish</option>
+	</select>
+	<br />
+	<hr>
+	<input type="submit" name="submitForm">
+	<p>* - Indicates required field</p>
+</fieldset>
+</form>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# Clone convert drive format
+
+cd "C:\Program Files\Oracle\VirtualBox"
+.\VBoxManage.exe clonehd "C:\Users\Allan James\Desktop\VirtualBox\Smith DC1\Virtual Hard Disks\Smith DC1.vhdx" "C:\Smith DC1.vhd" --format vdi
+.\VBoxManage.exe clonehd "C:\Users\Allan James\Desktop\VirtualBox\Smith DC2\Virtual Hard Disks\Smith DC2.vhdx" "C:\Smith DC2.vhd" --format vdi
+
+# Set screen resolution
+
+
+.\VBoxManage.exe clonehd "D:\Hyper-V\Smith\Smith DC3 16\Virtual Hard Disks\Smith DC3 16.vhdx" "C:\Users\aubre\Desktop\Smith DC3 16.vhd" --format vdi

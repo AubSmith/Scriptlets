@@ -1,0 +1,45 @@
+Configure Git for the first time
+
+Tell Git who you are:
+git config --global user.name "Smith, Aubrey"
+git config --global user.email "Aubrey.Smith@outlook.com"
+
+Create a new local repository:
+git init
+
+Add the remote repository:
+git remote add origin  https://user@bitbucket.com/scm/repo.git
+
+git add <filename>
+git add *
+
+Clone a repository:
+git clone https://user@bitbucket.com/scm/repo.git
+
+Code is ready to be pushed:
+cd existing-project
+git init
+git add --all
+git commit -m "Initial Commit"
+git remote add origin https://user@bitbucket.com/scm/repo.git
+git push -u origin master
+
+My code is already tracked by Git
+cd existing-project
+git remote set-url origin https://user@bitbucket.com/scm/repo.git
+git push -u origin --all
+git push origin --tags
+
+Find excluded files:
+git ls-files --others -i --exclude-standard
+
+View all Push/Pul repos
+git remote -v
+
+Cert Trust
+git config --global http.sslCAInfo /etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt
+
+Check the Credential Manager CP for credentials
+
+Hard reset local with remote
+git reset --hard origin/master

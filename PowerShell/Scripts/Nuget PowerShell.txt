@@ -1,0 +1,16 @@
+Get-Package -ListAvailable
+Get-Package -ListAvailable -PageSize 500
+
+#########################################################################################################
+
+Find-Package CredentialManager
+
+#########################################################################################################
+
+Find-Package CredentialManager -Version 1.1.0
+
+#########################################################################################################
+
+Find-Package CredentialManager -AllVersions
+
+https://docs.microsoft.com/en-us/nuget/tools/package-manager-console

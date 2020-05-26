@@ -1,0 +1,27 @@
+body 
+{
+	font-family: arial, helvetica, sans-serif;
+}
+
+#workBox
+{
+	border: 3px solid black;
+	padding: 10px; 
+}
+
+#startHereHeader
+{
+	width: 300px;
+	background: #999999;
+	text-align: center;
+}
+
+#startHereBox
+{
+	width: 300px;
+	height: 200px;
+	background: #CCCCCC;
+	margin-bottom: 25px;
+}
+
+.transfer { border: 2px solid black; } 

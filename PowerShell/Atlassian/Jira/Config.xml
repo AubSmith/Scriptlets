@@ -1,0 +1,15 @@
+<!-- Config settings consumed by the Jira automation Scripts -->
+<settings>
+  <prod>
+    <url>jira.com/</url>
+    <file>D:\Downloads\Book1.csv</file>
+  </prod>
+  <oat>
+    <url>jira.com//</url>
+    <file>D:\Downloads\Book1.csv</file> 
+  </oat>
+  <test>
+    <url>jira.com//</url>
+    <file>D:\Downloads\Book1.csv</file> 
+  </test>
+</settings>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>9. Looping Statements in JavaScript</title>
+  <script type="text/javascript">
+
+var playlist = [];
+playlist[0] = "One For The Team";
+playlist[1] = "The Joy Formidable";
+playlist[2] = "Young the Giant";
+playlist[3] = "Washed Out";
+
+/*
+// while
+var i = 0;
+while (i < playlist.length) {
+  document.write("<br />Now Playing: " + playlist[i]); 
+  i++;
+}
+
+
+// do - while
+var someResult = false;
+do {
+  document.write("Will print AT LEAST once!");
+} 
+while (someResult)
+
+
+// for loop
+for (var i = playlist.length; i > playlist.length; i--) 
+{
+  document.write("<br/>Now Playing: " + playlist[i]);
+}
+
+
+// for ... in
+for (i in playlist) {
+  document.write("<br/>Now Playing: " + playlist[i]);
+}
+*/
+
+for (var i = playlist.length -1; i > -1; i--) 
+{
+  document.write("<br/>Now Playing: " + playlist[i]);
+}
+
+
+  </script>
+</head>
+<body>
+  <h1>9. Looping Statements in JavaScript</h1>
+</body>
+</html>

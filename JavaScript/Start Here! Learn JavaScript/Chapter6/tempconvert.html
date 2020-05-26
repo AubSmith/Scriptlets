@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+<title>Start Here</title>
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="js/tempconvert.js"></script>
+</head>
+<body>
+    <h1>Temperature Conversions Galore!</h1>
+    <form name="myForm" id="myForm" method="get">
+        <label id="tempLabel" for="temp">
+            Temperature to Convert:
+            <input type="text" size="5" name="temp" id="temp" />
+        </label>
+        <br />
+        <br />
+        <label id="tempTypeLabel" for="tempType">
+            Type of Conversion:
+            <select name="tempType" id="tempType">
+                <option value="f2c">Fahrenheit to Celsius</option>
+                <option value="c2f">Celsius to Fahrenheit</option>
+            </select>
+        </label>
+        <br />
+        <br />
+        <input type="submit" value="Convert!" name="submit" id="submit" />
+        <br />
+        <hr />
+        <br />
+        <span id="resultText">Result: <span id="result"></span></span>
+
+    </form>
+</body>
+</html>
+

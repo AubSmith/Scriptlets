@@ -1,0 +1,28 @@
+Document Object Model (DOM) is the presentation of the webpage
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JavaScript Course</title>
+	<script type="text/javascript">
+	
+		function substitute() {
+			var MyValue = document.getElementById('MyTextBox').value;
+		
+			if (myValue.length == 0) { -- use . operator to access length property of myValue object. myValue is a string object
+				alert('Please enter a real value in the text box!'); -- alert builtin function
+				return;
+			}
+			var myTitle = document.getElementByID('title'); -- getElementByID('title') built in function
+			myTitle.innerHTML = myValue;
+		}
+	
+	</script>
+</head>
+<body>
+	<h1 id'"title">JavaScript Course</h1>
+	
+	<input type="text" id="MyTextBox" />
+	<input type="submit" value="Click Me" onclick="substitute()" /> -- onclick event
+</body>
+</html>

@@ -1,0 +1,93 @@
+body {
+}
+
+@media screen and (-ms-view-state: fullscreen-landscape) {
+}
+
+@media screen and (-ms-view-state: filled) {
+}
+
+@media screen and (-ms-view-state: snapped) {
+}
+
+@media screen and (-ms-view-state: fullscreen-portrait) {
+}
+
+#siteLine {
+   margin-left:  75px;
+}
+
+#resultStaticText { 
+    margin-left: 40px; 
+    text-align:right; 
+    color:#000; 
+    font-size:16px; 
+    line-height:38px; 
+    font-family:Arial; 
+    letter-spacing:2px; 
+    font-weight:bold;
+}
+
+#resultMessage { 
+    padding-top: 5px; 
+    padding-bottom: 5px; 
+    padding-right: 50px; 
+    padding-left: 50px; 
+    height:  41px;
+    margin-left: 10px; 
+    border: 1px solid black; 
+    /*background:#FFFFFF; */
+    text-align:center; 
+    text-transform:uppercase; 
+    color:#000; 
+    text-shadow:1px 1px 1px rgba(0,0,0,0.85); 
+    font-size:24px; 
+    line-height:38px; 
+    font-family:Arial; 
+    letter-spacing:2px; 
+    font-weight:bold;
+}
+
+.go-button { 
+    width:182px; 
+    height:41px; 
+    margin-left: 20px; 
+    /*background:url('../images/bg/button-dark.gif'); */
+    text-align:center;
+    text-transform:uppercase; 
+    color:#fff; 
+    text-shadow:1px 1px 1px rgba(0,0,0,0.85); 
+    font-size:1.4em; 
+    line-height:38px; 
+    font-family:Arial; 
+    letter-spacing:2px; 
+    font-weight:normal;
+}
+
+
+.show {
+    display: inline;
+}
+
+.hide {
+    display:  none;
+}
+
+.hideVis {
+    visibility: hidden;
+}
+.resultUp {
+    background: #00FF00; 
+}
+
+#statusLine {
+    margin-top: 50px;
+}
+
+.resultDown {
+    background:  #FF0000;
+}
+
+.resultUnknown {
+    background:  #FF9900;
+}

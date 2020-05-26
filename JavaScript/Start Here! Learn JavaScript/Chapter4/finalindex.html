@@ -1,0 +1,23 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Start Here</title>
+    <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+    ﻿<script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script>
+</head>
+<body>
+    <div id="startHere" style="border: 3px solid black;">
+        <h1>Start Here</h1>
+    </div>
+    <div>
+        <a href="#" id="hiderLink">Hide it!</a>
+    </div>
+    <script type="text/javascript">
+        $("#hiderLink").click(function () {
+            $("#startHere").hide("slide", {}, 2000);
+        });
+    </script>
+</body>
+</html>
+

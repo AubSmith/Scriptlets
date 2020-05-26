@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Listing 1-1</title>
+<script type="text/javascript" src="js/external.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+var globalNumber = 4;
+alert("Global Number is: " + globalNumber);
+
+function meToo() {
+    var meTooNumber = 18;
+    alert("Inside of function, global number is: " + globalNumber);
+    alert("Inside of function, meTooNumber is: " + meTooNumber);
+}
+
+meToo();
+alert("Outside of function, global number is: " + globalNumber);
+alert("Outside of function, meTooNumber is: " + meTooNumber);
+</script>
+</body>
+</html>
+
