@@ -1,30 +1,29 @@
 [CmdletBinding()]
 Param(
   [parameter(mandatory=$true,Position=1)]
-  [string]$envmt
+  [string]$envmt,
+
+  [parameter(mandatory=$true,Position=2)]
+  [string]$UserID
 )
 
-
-
 $Xml = [XML](Get-Content .\Config.xml)
+
 $Url = $xml.settings.$envmt.url
-$ContentPath = $Xml.settings.$envmt.file 
-$Csv = Import-Csv $ContentPath 
-$Usergrp = $Csv | ForEach-Object {
-  $Group = $_.group
-  $UserName = $_.username
 
-$Group
-$UserName
+$ContentPath = $Xml.settings.$envmt.file
 
-}
+$Groups = Import-Csv $ContentPath
+ForEach ($Group in $Groups){
+    $Groupname = $($Group.Group)
+    $Username = $($Group.Username)
 
-ForEach($User in $UserGrp) {      
+$Data = "{name : $Username}"
+Write-Output $Data
 
-  $Body = @{
-    name = "$UserName"
-    } | ConvertTo-Json -Compress
+D:\Downloads\curl\bin\curl.exe --insecure -D- -u $UserID -X POST --data $Data -H "Content-Type: application/json" https://$url/rest/api/2/group/user?groupname=$Groupname
 
-    D:\Software\curl\bin\curl.exe --insecure -D- -u user:pass -X POST --data $Data -H "Content-Type: application/json" http://$url/rest/api/2/group/user?groupname=$Group
+Write-Output $Url
+Write-Output $Groupname
 
-}
+ }
