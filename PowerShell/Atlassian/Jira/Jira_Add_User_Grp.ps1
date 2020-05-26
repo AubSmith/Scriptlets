@@ -40,7 +40,7 @@
   https://docs.atlassian.com/software/jira/docs/api/REST/8.9.0/#api/2/group-addUserToGroup
 
 .EXAMPLE
-	.\Jira_Add_User_Grp.ps1 "test"
+  .\Jira_Add_User_Grp.ps1 "test"
 
 #>
 
@@ -52,52 +52,72 @@ Param(
 
 Start-Transcript
 
-
 ## Logging ##
-
 $VerbosePreference = "Continue"
 
 # Log file path is the same directory the script is run from
-
 $LogPath = Split-Path $MyInvocation.MyCommand.Path
 
 # Remove logs older than 14 days
-
 Get-ChildItem "$LogPath\*.log" | Where-Object LastWriteTime -LT (Get-Date).AddDays(-14) | Remove-Item -Confirm:$false
 
 # Create log file with todays date
-
 $LogPathName = Join-Path -Path $LogPath -ChildPath "$($MyInvocation.MyCommand.Name)-$(Get-Date -Format 'MM-dd-yyyy').log"
 
 # Start logging - append to if log already exists
-
 Start-Transcript $LogPathName -Append
 
-
 # Authenticate before using the API
-
 $auth = Get-Credential -Message "Enter Credentials for Jira"
 
 
-# Retrieve the environment settings from a config file.
+# Ignore SSL errors
+<# if (-not ([System.Management.Automation.PSTypeName]'ServerCertificateValidationCallback').Type)
+ {
+ $certCallback = @"
+     using System;
+     using System.Net;
+     using System.Net.Security;
+     using System.Security.Cryptography.X509Certificates;
+     public class ServerCertificateValidationCallback
+     {
+         public static void Ignore()
+         {
+             if(ServicePointManager.ServerCertificateValidationCallback ==null)
+             {
+                 ServicePointManager.ServerCertificateValidationCallback += 
+                     delegate
+                     (
+                         Object obj, 
+                         X509Certificate certificate, 
+                         X509Chain chain, 
+                         SslPolicyErrors errors
+                     )
+                     {
+                         return true;
+                     };
+             }
+         }
+     }
+ "@
+     Add-Type $certCallback
+}
+#>
 
+
+# Retrieve the environment settings from a config file.
 $Xml = [XML](Get-Content .\Config.xml)
 $Url = $xml.settings.$envmt.url
-$ContentPath = $Xml.settings.$envmt.file 
-$Csv = Import-Csv $ContentPath 
-$Usergrp = $Csv | ForEach-Object {
-  $Group = $_.group
-  $UserName = $_.user
-}
+$ContentPath = $Xml.settings.$envmt.file
+$Groups = Import-Csv $ContentPath
+ForEach ($Group in $Groups){
+    $Groupname = $($Group.Group)
+    $Username = $($Group.Username)
 
-ForEach($User in $UserGrp) {                
+$Data = "{name : $Username}"
+Write-Output $Data
 
-$User
-
-$Body = "{ name : $UserName}"
-
-$Result = (Invoke-RestMethod -Uri "https://$url/rest/api/2/$Group/user" -Method Post -Credential $Auth -Headers @{ Authorization = "Basic" } -Body $Body -ErrorVariable RestErrorRep).content
-
+Invoke-RestMethod -Uri "https://$url/rest/api/2/group/user?groupname=$Groupname" -Method Post -Credential $Auth -Headers @{ Authorization = "Basic" } -Body $Body -ErrorVariable RestErrorRep
 
   if ($RestErrorRep)
   {

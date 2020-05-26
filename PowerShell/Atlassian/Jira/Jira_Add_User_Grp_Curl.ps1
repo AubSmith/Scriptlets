@@ -8,11 +8,8 @@ Param(
 )
 
 $Xml = [XML](Get-Content .\Config.xml)
-
 $Url = $xml.settings.$envmt.url
-
 $ContentPath = $Xml.settings.$envmt.file
-
 $Groups = Import-Csv $ContentPath
 ForEach ($Group in $Groups){
     $Groupname = $($Group.Group)
