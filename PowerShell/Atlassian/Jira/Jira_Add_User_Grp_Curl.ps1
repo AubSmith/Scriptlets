@@ -15,7 +15,10 @@ ForEach ($Group in $Groups){
     $Groupname = $($Group.Group)
     $Username = $($Group.Username)
 
-$Data = "{name : $Username}"
+$Data = @"
+{\"name\":\"$Username\"}
+"@
+
 Write-Output $Data
 
 D:\Downloads\curl\bin\curl.exe --insecure -D- -u $UserID -X POST --data $Data -H "Content-Type: application/json" https://$url/rest/api/2/group/user?groupname=$Groupname
