@@ -11,9 +11,11 @@ $Xml = [XML](Get-Content .\Config.xml)
 $Url = $xml.settings.$envmt.url
 $ContentPath = $Xml.settings.$envmt.file
 $Groups = Import-Csv $ContentPath
-ForEach ($Group in $Groups){
-    $Groupname = $($Group.Group)
-    $Username = $($Group.Username)
+
+$Groups | ForEach-Object -parallel {
+  
+$Groupname = $($Groups.Group)
+$Username = $($Groups.Username)
 
 $Data = @"
 {\"name\":\"$Username\"}

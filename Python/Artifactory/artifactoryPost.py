@@ -12,7 +12,7 @@ description = sys.argv[4]
 
 # Read the environment settings from Artifactory.ini
 config = configparser.ConfigParser() 
-config.readfp(open(r'.\Artifactory.ini'))
+config.readfp(open(r'.\Config\A:Artifactory.ini'))
 # config.readfp(open(r'D:\Artifactory\API\Python\Artifactory.ini'))
 # config.read_file(r'D:\Artifactory\API\Python\Artifactory.ini')
 

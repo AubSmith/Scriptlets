@@ -1,7 +1,7 @@
 import requests, json, configparser
 
 config = configparser.ConfigParser() 
-config.readfp(open(r'D:\Artifactory\API\Python\Artifactory.ini'))
+config.readfp(open(r'.\Config\Artifactory.ini'))
 # config.read_file(r'D:\Artifactory\API\Python\Artifactory.ini')
 
 
