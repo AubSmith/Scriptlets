@@ -3,3 +3,6 @@ pip freeze > requirements.txt
 
 # Install required packages
 pip install -r requirements.txt
+
+
+pip install requests

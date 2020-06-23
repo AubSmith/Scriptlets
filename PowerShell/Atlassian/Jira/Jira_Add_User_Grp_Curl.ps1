@@ -12,7 +12,7 @@ $Url = $xml.settings.$envmt.url
 $ContentPath = $Xml.settings.$envmt.file
 $Groups = Import-Csv $ContentPath
 
-$Groups | ForEach-Object -parallel {
+$Groups | ForEach-Object -Parallel {
 
 $Update = $_
 $Groupname = $($Update.Group)
