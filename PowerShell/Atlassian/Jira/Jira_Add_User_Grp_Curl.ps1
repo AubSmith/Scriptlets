@@ -18,13 +18,16 @@ $Update = $_
 $Groupname = $($Update.Group)
 $Username = $($Update.Username)
 
+$ApiUrl = https://$using:url/rest/api/2/group/user?groupname=$Groupname
+[uri]::EscapeDataString($ApiUrl)
+
 $Data = @"
 {\"name\":\"$Username\"}
 "@
 
 Write-Output $Data
 
-D:\Downloads\curl\bin\curl.exe --insecure -D- -u $using:UserID -X POST --data $Data -H "Content-Type: application/json" https://$using:url/rest/api/2/group/user?groupname=$Groupname
+D:\Downloads\curl\bin\curl.exe --insecure -D- -u $using:UserID -X POST --data $Data -H "Content-Type: application/json" $ApiUrl
 
 Write-Output $Groupname
 
