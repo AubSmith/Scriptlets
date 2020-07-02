@@ -1,5 +1,5 @@
 # Invoke the script as follows:
-# python .\artifactoryPost.py "pypi" "aubs" "local" "This is me having a great time"
+# python .\artifactoryPost.py "pypi" "aubs" "local" "This is my demo repo"
 
 # Import the required modules
 import configparser, json, requests, sys
@@ -10,22 +10,24 @@ repoName    = sys.argv[2]
 repoType    = sys.argv[3]
 description = sys.argv[4]
 
-# Read the environment settings from Artifactory.ini
-config = configparser.ConfigParser() 
-config.readfp(open(r'.\Config\A:Artifactory.ini'))
-# config.readfp(open(r'D:\Artifactory\API\Python\Artifactory.ini'))
-# config.read_file(r'D:\Artifactory\API\Python\Artifactory.ini')
 
 # Build the JSON construct
 jsonrepo = { "key": repoName, "rclass" : repoType, "packageType": packageType, "description": description }
+
+
+# Read the environment settings from Artifactory.ini
+config = configparser.ConfigParser() 
+config.readfp(open(r'.\Config\A:Artifactory.ini'))
+
+# Load Artifactory environment and build URL
+artifactory = config.get('Environment', 'Test')
+apiv1 = "api/security/users/admin" #you can change this API URL to any API method you'd like to use
+
 
 # Load credentials
 username = config.get('User', 'UserName')
 apikey = config.get('Token', 'Token')
 
-# Load Artifactory environment and build URL
-artifactory = config.get('Environment', 'Test')
-apiv1 = "api/security/users/admin" #you can change this API URL to any API method you'd like to use
 
 url = artifactory + apiv1
 

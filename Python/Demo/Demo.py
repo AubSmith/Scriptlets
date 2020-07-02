@@ -1,9 +1,25 @@
+print("Hello world!")
+
+x = "Hello world!"
+print(x)
+
+x = 1 + 1
+print(x)
+
+x = "1" + "1"
+print(x)
+
 # This is a comment
 # Comments are ignored by the Python runtime
 
 '''This is a multi-line string.
    It is often used for multi-line comments, but such use should be carefully reviewed
    This is not ignored by the Python runtime'''
+
+x = '''This is a multi-line string.
+   It is often used for multi-line comments, but such use should be carefully reviewed
+   This is not ignored by the Python runtime'''
+print(x)
 
 myvariable = 'ateam'
 # print() is a function
@@ -29,6 +45,8 @@ for shows in f:
     print(shows)
 
 f.close()
+
+
 
 # Lists
 
@@ -81,15 +99,7 @@ f.close()
 
 print(participants)
 
-print("Hello world!")
 
-x = "Hello world!"
-
-x = 1 + 1
-print(x)
-
-x = "1" + "1"
-print(x)
 
 
 
