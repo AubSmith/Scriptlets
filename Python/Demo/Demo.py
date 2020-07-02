@@ -143,3 +143,30 @@ else:
     print(f'{name} Wins!!!')
 
 print(f'You rolled the dice {count} times.')
+
+
+
+
+# Creating functions
+def timestwo(x):
+    return x * 2
+
+def squared(x):
+    return x * x
+
+def power(x,y):
+    return x ** y
+
+
+print(timestwo(25))
+print(squared(9))
+print(power(5,3))
+
+
+# Useful modules
+import Calendar
+import OS # Allows interactions with the OS. Depends on OS
+import Random # Generate random numbers or letters
+import Tkinter # Use to build a GUI interface
+# import Pygame # Use to develop games
+# import Math # Advanced mathematical functions - e.g. mass-energy equivalence
