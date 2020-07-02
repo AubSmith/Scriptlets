@@ -1,0 +1,14 @@
+Get-AppxPackage | Select Name, PackageFullName
+Remove-AppxPackage Microsoft.Windows.Cortana_1.4.8.176_neutral_neutral_cw5n1h2txyewy
+
+Get-AppxProvisionedPackage -Online | Select DisplayName, PackageName
+Remove-AppxProvisionedPackage  Microsoft.ZuneMusic_2019.6.11821.0_neutral_~_8wekyb3d8bbwe
+
+Get-AppxPackage | Remove-AppxPackage
+Get-AppxProvisionedPackage -Online | Remove-AppxProvisionedPackage -online
+
+Get-AppxPackage -AllUsers | where-object {$_.name –notlike “*store*”} | Remove-AppxPackage
+Get-appxprovisionedpackage –online | where-object {$_.packagename –notlike “*store*”} |Remove-AppxProvisionedPackage -online
+
+Get-AppxPackage -User {USERNAME} where {USERNAME}
+Remove-AppxPackage {PACKAGEFULLNAME} where {PACKAGEFULLNAME}
