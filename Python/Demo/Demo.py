@@ -164,9 +164,12 @@ print(power(5,3))
 
 
 # Useful modules
-import Calendar
-import OS # Allows interactions with the OS. Depends on OS
-import Random # Generate random numbers or letters
-import Tkinter # Use to build a GUI interface
+# import Calendar
+# import OS # Allows interactions with the OS. Depends on OS
+# import Random # Generate random numbers or letters
+# import Tkinter # Use to build a GUI interface
 # import Pygame # Use to develop games
 # import Math # Advanced mathematical functions - e.g. mass-energy equivalence
+
+z = "'My value'"
+print(z)
