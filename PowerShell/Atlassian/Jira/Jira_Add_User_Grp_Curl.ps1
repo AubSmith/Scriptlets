@@ -12,14 +12,10 @@ $Url = $xml.settings.$envmt.url
 $ContentPath = $Xml.settings.$envmt.file
 $Groups = Import-Csv $ContentPath
 
-$Groups | ForEach-Object -Parallel {
-
-$Update = $_
-$Groupname = $($Update.Group)
-$Username = $($Update.Username)
-
-$ApiUrl = https://$using:url/rest/api/2/group/user?groupname=$Groupname
-[uri]::EscapeDataString($ApiUrl)
+$Groups | ForEach-Object -parallel {
+  
+$Groupname = $($Groups.Group)
+$Username = $($Groups.Username)
 
 $Data = @"
 {\"name\":\"$Username\"}
@@ -27,8 +23,9 @@ $Data = @"
 
 Write-Output $Data
 
-D:\Downloads\curl\bin\curl.exe --insecure -D- -u $using:UserID -X POST --data $Data -H "Content-Type: application/json" $ApiUrl
+D:\Downloads\curl\bin\curl.exe --insecure -D- -u $UserID -X POST --data $Data -H "Content-Type: application/json" https://$url/rest/api/2/group/user?groupname=$Groupname
 
+Write-Output $Url
 Write-Output $Groupname
 
-} -ThrottleLimit 4
+ }
