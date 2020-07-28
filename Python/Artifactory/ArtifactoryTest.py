@@ -1,5 +1,3 @@
-
-
 #!/usr/bin/env python
 
 # .\ArtifactoryAutoTest "oat" "Aubs" "Aubs repo test" "maven"
