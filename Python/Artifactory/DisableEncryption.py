@@ -21,7 +21,7 @@ token = config.get('Token', 'Token')
 
 # Load Artifactory environment and build URL
 Artifactory = config.get('Environment', env)
-apiv1 = '/api/system/encrypt' #you can change this API URL to any API method you'd like to use
+apiv1 = '/api/system/decrypt' #you can change this API URL to any API method you'd like to use
 
 url = Artifactory + apiv1
 
@@ -33,6 +33,6 @@ headers = {'Authorization': 'Bearer ' + token}
 url = Artifactory + apiv1
 enableEncryption = requests.put(url, headers=headers)
 if enableEncryption.status_code == 200:
-  print('Encryption successfully enabled.')
+  print('Encryption successfully disabled.')
 else:
   print(enableEncryption.content)
