@@ -44,3 +44,28 @@ else:
 
   print( "x-request-id : " + r.headers['x-request-id'] )
   print( "Status Code : " + r.status_code)
+
+
+  ##########################################################################################################################################
+
+  import requests
+  host = 'https://artifactory.com/artifactory'
+
+  from artifactory import build_url
+  build_url = '%/api/search/aql' % (host)
+
+
+app_aql_payload = 'items.find(' \
+                                                '{' \
+                                                    '{"repo":{"generic-aubs-local"},' \
+                                                    '"path":{{"$match":"vscode"}},' \
+                                                    '"name":"VSCodeUserSetup-x64-1.44.2.exe"}' \
+                                                '}' \
+                                            ').sort(' \
+                                                    '{' \
+                                                        '{"$desc":["created"]}' \
+                                                    '}' \
+                                            ').limit(1)'
+
+response = response.json()
+print(response)

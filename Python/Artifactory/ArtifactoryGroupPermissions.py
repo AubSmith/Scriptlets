@@ -12,7 +12,9 @@ apikey = config.get('Token', 'Token')
 artifactory = config.get('Environment', 'Test')
 apiv1 = "api/security/users/admin" #you can change this API URL to any API method you'd like to use
 apiv2 = "api/v2/security/permissions/groups/"
+
 print('Enter a groupname:')
+
 groupname = input()
 
 url = artifactory + apiv2 + groupname

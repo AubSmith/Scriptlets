@@ -1,8 +1,17 @@
-import requests, json, configparser
+#!/usr/bin/env python
+
+# .\ArtifactoryAutoTest "oat" "Aubs" "Aubs repo test" "maven"
+# python .\Artifactory.py
+
+# Import the required modules
+import configparser, json, requests, sys
+
+
+# Assign variables based on input parameters
+env = sys.argv[1]
 
 config = configparser.ConfigParser() 
 config.readfp(open(r'.\Config\Artifactory.ini'))
-# config.read_file(r'D:\Artifactory\API\Python\Artifactory.ini')
 
 
 # Load credentials
