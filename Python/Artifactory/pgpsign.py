@@ -2,8 +2,8 @@ import requests
 import json
 
 #enter credentials
-# username = "update username"
-# password = "update password"
+username = "update username"
+password = "update password"
 
 # Build the JSON construct
 #jsongpgv2 = { 'key': {'public_key': public_key ,
