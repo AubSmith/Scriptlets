@@ -5,20 +5,26 @@ import json
 username = "update username"
 password = "update password"
 
-# Build the JSON construct
-#jsongpgv2 = { 'key': {'public_key': public_key ,
-#            'private_key': private_key },
-#            'propagate_to_edge_nodes': true, 'fail_on_propagation_failure': false }
+# Set the keys
+pub = '''PGP Public Key'''
 
-jsongpg = {'public_key': '''''',
-           'private_key': '''''' }
+priv = '''PGP Private Key'''
+
+# Cleanup the strings
+pubk = pub.replace(' ', '')
+priv_key = priv.replace(' ', '')
+pub_key = pubk.replace('\n', '')
+
+# Build the JSON construct
+jsongpg = {'public_key': pub_key,
+           'private_key': priv_key }
 
 appurl = 'https://url/' # URL
 # api = "api/trash/empty" #you can change this API URL to any API method you'd like to use, this URL will empty the trash can
 api = '/api/v1/keys/pgp'
 url = appurl + api
 
-r = requests.put(url, auth = (username, password), verify=False)
+r = requests.put(url, data=json.dumps(jsongpg), auth = (username, password), verify=False)
 
 print(url)
 
@@ -28,6 +34,3 @@ else:
   print('Fail')
   response = json.loads(r.content)
   print(response)
-
-  print( 'x-request-id : ' + r.headers['x-request-id'] )
-  print( 'Status Code : ' + r.status_code)
