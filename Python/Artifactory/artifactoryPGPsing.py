@@ -6,15 +6,11 @@ username = "update username"
 password = "update password"
 
 # Set the key
-pub = '''PGP Public Key'''
-
-# Cleanup the strings
-pubk = pub.replace(' ', '')
-pub_key = pubk.replace('\n', '')
+pub_key = '''PGP Public Key'''
 
 # Build the JSON construct
 jsongpg = { 'alias': 'Distribution Key',
-            'public_key': ''''''
+            'public_key': pub_key
             }
 
 appurl = 'https://url/' # URL
