@@ -1,0 +1,1 @@
+Alt + F4 - Exit current window
