@@ -1,1 +1,1 @@
-openssl verify C:\mycert.cer
+openssl verify -CAfile C:\ca.pem C:\mycert.cer
