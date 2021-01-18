@@ -11,3 +11,6 @@ sudo dhclient -r
 ifdown eth0
 
 ifup eth0
+
+# View all IPs
+hostname --all-ip-addresses

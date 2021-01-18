@@ -1,0 +1,1 @@
+"D:\Apps\Python\python.exe" C:\Users\aubrey\.vscode\extensions\ms-python.python-202011.37\pythonFiles\pyvsc-run-isolated.py pip install -U black -user
