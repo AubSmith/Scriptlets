@@ -10,3 +10,7 @@ ssh-keygen -t rsa -b 4096 -C "aubrey.smith@orcon.net.nz"
 
 # Git remote
 git remote add GitHub ssh://git@github.com/AubSmith/Private
+
+# SSL
+git config --global http.sslBackend schannel # Git will use Windows cert store and ignore http.sslCAInfo config setting
+# git config --global http.sslBackend openssl
