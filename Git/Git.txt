@@ -37,7 +37,12 @@ View all Push/Pul repos
 git remote -v
 
 Cert Trust
+# Update ca-bundle.crt
+# Copy to relevant path such as profile
+# UNIX
 git config --global http.sslCAInfo /etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt
+# Windows
+git config --global http.sslCAInfo C:/Users/username/ca-bundle.crt
 
 Check the Credential Manager CP for credentials
 

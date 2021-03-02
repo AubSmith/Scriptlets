@@ -1,0 +1,120 @@
+Executing Statements in Python
+If you spend a lot of your day typing commands into a terminal, then you are used to executing statements and, perhaps, redirecting the output to a file or to another Unix command. Let’s look at the way we would execute a command in Bash and then compare that to the way it works in Python. In the Bash terminal, type the following:
+
+[ngift@Macintosh-7][H:10701][J:0]# ls -l /tmp/
+total 0
+-rw-r--r--  1 ngift  wheel  0 Apr  7 00:26 file.txt
+In the Python terminal, type the following:
+
+In [2]: import subprocess
+        
+In [3]: subprocess.call(["ls","-l ","/tmp/"])
+total 0
+-rw-r--r--  1 ngift  wheel  0 Apr  7 00:26 file.txt
+Out[3]: 0
+The Bash example shouldn’t need any explanation as it is a simple ls command, but if you have never seen Python code before, the Python example probably looks a bit strange. You might be thinking, “What the heck is this import subprocess thing?” One of the powerful features of Python is its ability to import modules or other files that contain code and reuse them in a new program. If you are familiar with “sourcing” a file in Bash, then you will recognize some similarities. In this particular situation, all that is important to know is that you import the subprocess and use it in the syntax that is shown. We will get into the particulars of how subprocess and import work later, but for now, ignore why it works and copy the code:
+
+subprocess.call(["some_command", "some_argument", "another_argument_or_path"])
+You can run any shell command in Python just as it would be run with Bash. Given this bit of information, you can now create a Python version of ls. Just open up your favorite text editor in another terminal tab or window and place this in a file named pyls.py, and make it executable by using chmod +x pyls.py. See Example 1-1.
+
+Example 1-1. Python wrapper for ls command
+#!/usr/bin/env python
+#Python wrapper for the ls command
+    
+import subprocess
+   
+subprocess.call(["ls","-l"])
+Now if you run this script, you will get the exact same output that you would get if you ran ls -ls from the command line:
+
+[ngift@Macintosh-7][H:10746][J:0]# ./pyls.py 
+total 8
+-rwxr-xr-x  1 ngift  staff  115 Apr  7 12:57 pyls.py
+While this may seem silly, (and it is silly actually), it gives you a good idea of a common use of Python in systems programming. Often, you use Python to “wrap” other scripts or Unix commands. Given this new bit of information, you could happily start writing some basic scripts if you just put one command after another in a file and ran it. Let’s take a look at something pretty simple that does just that. To follow along from home, either cut and paste the code in Example 1-2, or run the scripts pysysinfo.py and bashsysinfo.sh located in the source code that is included with this chapter. See Examples 1-2 and 1-3.
+
+Example 1-2. System information script—Python
+#!/usr/bin/env python
+#A System Information Gathering Script
+import subprocess
+        
+#Command 1
+uname = “uname”
+uname_arg = “-a”
+print "Gathering system information with %s command:\n" % uname
+subprocess.call([uname, uname_arg])
+        
+#Command 2
+diskspace = "df"
+diskspace_arg = "-h"
+print "Gathering diskspace information %s command:\n" % diskspace
+subprocess.call([diskspace, diskspace_arg])
+Example 1-3. System information script—Bash
+#!/usr/bin/env bash
+#A System Information Gathering Script
+       
+#Command 1
+UNAME="uname -a"
+printf “Gathering system information with the $UNAME command: \n\n"
+$UNAME
+       
+#Command 2
+DISKSPACE="df -h"
+printf "Gathering diskspace information with the $DISKSPACE command: \n\n"
+$DISKSPACE
+If we look at both of the scripts, we see that they look a lot a like. And if we run them, we see that the output of each is identical. One quick note though: splitting the command from the argument is completely optional using subprocess.call. You can also use this syntax:
+
+subprocess.call("df -h", shell=True)
+So far so good, but we still haven’t explained import and subprocess completely. In the Python version of the script, we imported the subprocess module because it already contained the code to make system calls in Python.
+
+As we mentioned earlier, importing a module like subprocess is just importing a file that contains code you can use. You can create your own module or file and reuse code you have written in the same way you import subprocess. Importing is not magic at all, it is just a file with some code in it. One of the nice things about the IPython shell that you have open is its ability to inspect inside modules and files, and see the attributes that are available inside them. In Unix terms, this is a lot like running the ls command inside of /usr/bin. If you happen to be on a new system such as Ubuntu or Solaris, and you are used to Red Hat, you might do an ls of /usr/bin to see if tools such as wget, curl, or lynx are available. If you want to use a tool you find inside /usr/bin, you would simply type /usr/bin/wget, for example.
+
+Modules such as subprocess are very similar. With IPython you can use tab complete to look at the tools that are available inside a module. Let’s walk through subprocess using tab complete to look at the attributes available inside of it. Remember, a module is just a file with some code in it. Here is what a tab complete looks like with the subprocess module in IPython:
+
+In [12]: subprocess.
+subprocess.CalledProcessError  subprocess.__hash__            subprocess.call
+subprocess.MAXFD               subprocess.__init__            subprocess.check_call
+subprocess.PIPE                subprocess.__name__            subprocess.errno
+subprocess.Popen               subprocess.__new__             subprocess.fcntl
+subprocess.STDOUT              subprocess.__reduce__          subprocess.list2cmdline
+subprocess.__all__             subprocess.__reduce_ex__       subprocess.mswindows
+subprocess.__builtins__        subprocess.__repr__            subprocess.os
+subprocess.__class__           subprocess.__setattr__         subprocess.pickle
+subprocess.__delattr__         subprocess.__str__             subprocess.select
+subprocess.__dict__            subprocess._active             subprocess.sys
+subprocess.__doc__             subprocess._cleanup            subprocess.traceback
+subprocess.__file__            subprocess._demo_posix         subprocess.types
+subprocess.__getattribute__    subprocess._demo_windows
+To replicate this same behavior, you simply need to type:
+
+import subprocess
+and then type:
+
+subprocess.
+and press Tab to get a tab completion of the attributes available. In the third column of our example, notice that you see subprocess.call. Now, to see more information about how to use subprocess.call, type:
+
+In [13]: subprocess.call?
+
+Type:		function
+Base Class:	<type 'function'>
+String Form:	<function call at 0x561370>
+Namespace:	Interactive
+File:		/System/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/
+       subprocess.py
+Definition:	subprocess.call(*popenargs, **kwargs)
+Docstring:
+    Run command with arguments. Wait for command to complete, then
+    return the returncode attribute.
+    
+    The arguments are the same as for the Popen constructor. Example:
+    
+    retcode = call(["ls", "-l"])
+Think of the special question mark syntax as a manpage query. If you want to know how a tool works in Unix, simply type:
+
+man name_of_tool
+It is the same with an attribute located inside a module such as subprocess.call. In IPython, when you type a question mark after the attribute you want to find information about, the documentation that has been included with the attribute will print out. If you do this on most attributes in the standard library, you should find some helpful information to properly use them. Keep in mind that you can also refer to the Python Standard Library documentation as well.
+
+When we look at this documentation, “Docstring” is the official term, we see an example of the way to use subprocess.call and a description of what it does.
+
+Summary
+You now have enough information to call yourself a Python programmer. You know how to write a simple Python script, how to translate simple scripts from Bash and call them with Python, and, finally, how to find documentation about new modules and attributes. In the next section, you’ll see how to better organize these flat sequences of commands into functions.
+
+share
