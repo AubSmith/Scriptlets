@@ -1,1 +1,0 @@
-curl -uadmin:password https://arturl.com/artifactory/api/system/ping -k
