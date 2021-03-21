@@ -21,3 +21,13 @@ less sag.txt
 
 # View allowed sudo commands
 sudo -l
+
+# Change GUI to virtual terminal
+chvt 2 # 6 Virtual Terminals. Only 1 is graphical
+
+who
+whoami
+who am i
+
+scp /etc/hosts 192.168.22.99:/var/tmp
+scp 192.168.22.99:/etc/hosts .

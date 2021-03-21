@@ -14,3 +14,6 @@ ifup eth0
 
 # View all IPs
 hostname --all-ip-addresses
+
+# Find IP
+ip a
