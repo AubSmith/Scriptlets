@@ -77,3 +77,5 @@ find /etc -type f -size -1000c -exec cp {} /tmp/files/pictures \;
 # Moving files
 mv [ab]* photos/
 mv c* video
+
+scp /var/tmp/myfile.txt username@hostname:/var/tmp/
