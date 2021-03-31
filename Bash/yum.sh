@@ -6,3 +6,6 @@ ls -al /etc/yum.repos.d
 
 # Post password change CNTLM
 cntlm -H -u user@domain
+
+# Update
+yum update

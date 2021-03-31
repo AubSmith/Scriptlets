@@ -1,3 +1,6 @@
+# Find LDAP servers
+host -t srv _ldap._tcp.%DOMAIN_NAME%
+
 # Delete history
 history -d 500 510 # Delete row 500 thru 510 from history
 history -c # Clear all history
@@ -33,3 +36,27 @@ sudo -i # Open root shell
 sudo visudo # Update sudo file
 
 cd /etc/sudoers.d/ # Create snap-in files
+
+# See current UID and GUID
+id
+
+useradd --help # (CentOS)
+useradd -c "The boss" -G wheel -s /bin/bash Dave
+adduser Dave # (Ubuntu)
+groupadd tech # Create group named tech
+
+w # Shows who is currently logged in
+who # Similar to w but sumarised
+getent passwd username
+usermod username
+
+tail /etc/passwd
+
+id username
+usermod -G wheel username
+id username
+usermod -G sales username # Replaces wheel
+usermod -aG wheel username
+
+userdel username
+groupdel sales

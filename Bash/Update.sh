@@ -9,3 +9,6 @@ sudo apt update
 sudo apt upgrade
 
 sudo apt dist-upgrade 
+
+apt-get update && apt-get upgrade
+sudo apt-get install unattended-upgrades apt-listchanges bsd-mailx
