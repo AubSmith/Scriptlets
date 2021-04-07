@@ -1,0 +1,3 @@
+- Add a new virtual disk to VM
+- Create 1GB partition on new disk and format with Ext4 file system
+- Mount the partition as a temporary mount on the /mnt directory
