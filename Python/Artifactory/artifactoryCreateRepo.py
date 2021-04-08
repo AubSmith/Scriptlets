@@ -1,5 +1,5 @@
 # Invoke the script as follows:
-# python .\artifactoryPost.py "pypi" "aubs" "local" "This is my demo repo"
+# python .\artifactoryCreateRepo.py "pypi" "aubs" "local" "This is my demo repo"
 
 # Import the required modules
 import configparser, json, requests, sys

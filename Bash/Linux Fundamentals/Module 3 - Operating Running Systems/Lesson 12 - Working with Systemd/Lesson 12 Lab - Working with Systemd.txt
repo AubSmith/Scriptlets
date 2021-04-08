@@ -1,0 +1,4 @@
+- Examine contents oh sshd service
+- Ensure sshd service is automatically started after reboot
+- Find system default target
+- Show list of all active units
