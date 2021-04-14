@@ -1,0 +1,6 @@
+- From root shell start three background processes
+    dd if=/dev/zero of=/dev/null
+- Use appropriate command to show they are running as expected
+- Change process priority so that one of these jobs gets double CPU resources
+- Monitor processes are running as expected
+- Terminate all three processes 

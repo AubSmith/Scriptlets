@@ -1,0 +1,1 @@
+Set-MpPreference -ScanPurgeItemsAfterDelay 3 # Clear History Items after 3 days.
