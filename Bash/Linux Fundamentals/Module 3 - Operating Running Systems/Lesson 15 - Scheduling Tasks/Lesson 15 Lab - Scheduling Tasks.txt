@@ -1,0 +1,3 @@
+- Use appropriate command to create a file /tmp/testfile from now
+- Use appropriate solution to run the fstrim command on a daily basis
+- Ensure that on a daily basis at 4PM the message "hello" is written to syslog

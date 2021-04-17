@@ -1,0 +1,2 @@
+- Request a list of all installed packages. In this list see if an FTP server has been installed
+- Use the software manager to install nmap

@@ -48,3 +48,7 @@ Check the Credential Manager CP for credentials
 
 Hard reset local with remote
 git reset --hard origin/master
+
+# see current branch
+git branch
+git branch --show-current

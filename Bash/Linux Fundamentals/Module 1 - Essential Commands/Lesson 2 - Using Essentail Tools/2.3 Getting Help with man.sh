@@ -1,0 +1,2 @@
+man whoami
+man lvcreate

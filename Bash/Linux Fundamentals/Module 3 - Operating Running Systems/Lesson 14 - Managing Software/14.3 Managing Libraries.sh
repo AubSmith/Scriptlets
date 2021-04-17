@@ -1,0 +1,1 @@
+ldd /usr/bin/passwd

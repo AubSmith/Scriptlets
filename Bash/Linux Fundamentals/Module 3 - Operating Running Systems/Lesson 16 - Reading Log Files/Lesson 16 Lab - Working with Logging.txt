@@ -1,0 +1,1 @@
+- Find where errors related to authentication are written to
