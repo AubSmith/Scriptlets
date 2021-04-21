@@ -1,0 +1,12 @@
+{
+    "exportPath" : "/artifactrepo/sys-export",
+    "includeMetadata" : true,
+    "createArchive" : false,
+    "bypassFiltering" : false,
+    "verbose" : true,
+    "failOnError" : true,
+    "failIfEmpty" : true,
+    "m2" : false,
+    "incremental" : false,
+    "excludeContent" : true
+}
