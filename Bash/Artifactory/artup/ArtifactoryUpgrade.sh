@@ -1,14 +1,11 @@
 # !/bin/bash
 
-# verify_env () {
-#   if [ "$#" - lt 1 ] ; then
-#        echo "Usage: $0 Environment"
-#        exit 1
-#   else echo "Environment $1 will be upgraded." >> ./artup.log
-#   fi
-
 # Source variables from artup.conf
-ls ./artup.conf && . ./artup.conf
+if ls ./artup.conf ; then
+    . ./artup.conf
+else echo "Configuration files are missing" >> ./artup.log
+    exit 1
+fi
 
 # Download the RPM package
 if curl --silent -o "/var/tmp/$VERSION.rpm" -L "https://$PROD/artifactory/generic-team-local/$VERSION.rpm"; then
@@ -24,38 +21,43 @@ curl --header "Content-Type: application/json" --header "X-JFrog-Art-Api:APIKEY"
 # Stop the Artifactory service and if successful write status to log
 if sudo systemctl stop artifactory.service; then
     systemctl is-failed --quiet artifactory.service && echo "Artifactory service is stopped" >> ./artup.log
-else systemctl is-failed --quiet artifactory.service || echo "Artifactory service has not stopped" >> ./artup.log
+else echo "Artifactory service has not been stopped" >> ./artup.log
     exit 1
 fi
 
 # Stop the httpd service and if successful write status to log
 if sudo systemctl stop httpd.service; then
     systemctl is-failed --quiet httpd.service && echo "Httpd service is stopped" >> ./artup.log
-else systemctl is-failed --quiet httpd.service || echo "Httpd service has not stopped" >> ./artup.log
+else echo "Httpd service has not been stopped" >> ./artup.log
     exit 1
 fi
 
+echo -e "\n" >> ./artup.log
+echo "Installing the RPM package" >> ./artup.log
+echo -e "\n" >> ./artup.log
+
 # Install the RPM package
-sudo /bin/rpm -U /var/tmp/$VERSION
+sudo /bin/rpm -U /var/tmp/$VERSION $>> ./artup.log
+
+echo -e "\n" >> ./artup.log
 
 # Return status of the installation and write to log
-if $? = 0 ; then
-    sudo systemctl start artifactory.service
+if sudo systemctl start artifactory.service ; then
     systemctl is-active --quiet artifactory.service && echo "Service is running" >> ./artup.log
-else $? ! = 0
-    echo "Installation errors have been detected" >> ./artup.log
+else echo "Installation errors have been detected" >> ./artup.log
 fi
 
 # Start the httpd service and if successful write status to log
-if sudo systemctl stop httpd.service; then
+if sudo systemctl start httpd.service ; then
     systemctl is-active --quiet httpd.service && echo "Httpd service is running" >> ./artup.log
-else systemctl is-active --quiet httpd.service || echo "Httpd service has not active" >> ./artup.log
-    exit 1
+else echo "Httpd service is not running" >> ./artup.log
 fi
 
 # Start the Artifactory service and if successful write status to log
-if sudo systemctl stop artifactory.service; then
+if sudo systemctl stop artifactory.service ; then
     systemctl is-active --quiet artifactory.service && echo "Artifactory service is active" >> ./artup.log
-else systemctl is-active --quiet artifactory.service || echo "Artifactory service has not active" >> ./artup.log
-    exit 1
+else echo "Artifactory service is not running" >> ./artup.log
 fi
+
+echo "Script $0 execution is complete!"
+exit 0

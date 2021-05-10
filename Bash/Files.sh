@@ -25,6 +25,9 @@ ls a*
 # All files starting a, exclude directory content
 ls -d a*
 
+# List all directories in a directory
+cd /etc && ls -d */
+
 # Increase filename length - at least 1 character following a
 ls -d a?*
 ls -d a?t*
