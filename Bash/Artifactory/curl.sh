@@ -13,3 +13,5 @@ curl https://artifactory.url/artifactory/generic-software-virtual/path/path/file
 # Connection Test - openssl
 echo | openssl s_client -connect artifactory.url:443
 echo | openssl s_client -connect distribution.url:443
+
+curl -X PUT -u myUser:myPassword -T test.txt "http://localhost:8081/artifactory/libs-release-local/test/test.txt"
