@@ -1,0 +1,8 @@
+# Create a directory structure /tmp/files/pictures, /tmp/files/photos and /tmp/files/videos
+# Copy all files that have a name starting with an a, b or c from /etc to /tmp/files
+# From /tmp/files, move all files that have a name starting with an a or b to /tmp/files/photos,
+# and all files with a name starting with a c to /tmp/files/videos
+# Find all files on /etc that have a size small than 1000 bytes and copy those files to /tmp/files/pictures
+# In /tmp/files, create a symbolic link to /var
+# Create a compressed archive file of the /home directory
+# Extract this compressed archive file with relative file names to /tmp/archive

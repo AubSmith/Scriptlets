@@ -1,0 +1,13 @@
+ls
+cp
+mkdir
+rmdir
+mv
+rm
+ln
+find
+tar
+gzip
+bzip2
+zip
+file
