@@ -12,5 +12,7 @@ vi myfile
 # dd = delete line
 # / = search
 # gg = return to start of document
-# :%s/oldword/newword = search and replace first instance of word
+# :%s/oldword/newword/ = search and replace first instance of word
 # :%s/oldword/newword/g = global search and replace word
+
+vimtutor
