@@ -1,6 +1,11 @@
+# 4.7 Understanding Regular Expressions
+# 4.8 Using Regular Expressions with grep
+
 # Use '' for regex as escaped by shell and not interpreted
 # Used by specific tools - grep, vim, awk, sed
 grep 'a*' a*
+
+man 7 regex
 
 # ^ beginning of line
 # $ end of line
@@ -48,8 +53,8 @@ egrep 'ab*c' regfile
 egrep 'ab+c' regfile
 egrep 'ab?c' regfile
 
-man -k user | grep '1|8'
-man -k user | egrep '1|8'
+man -k user | grep '1|8' # Does not work - use extended
+man -k user | egrep '1|8' # Extended grep
 
 grep -l '^root' /etc/* 2>/dev/null
 grep '\<alex\>' /etc/* 2>/dev/null

@@ -1,0 +1,13 @@
+vim
+more
+less
+head
+tail
+cat
+tac
+grep
+awk
+sed
+tr
+cut
+sort

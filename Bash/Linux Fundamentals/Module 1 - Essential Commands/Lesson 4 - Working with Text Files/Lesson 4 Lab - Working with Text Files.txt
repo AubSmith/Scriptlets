@@ -1,0 +1,6 @@
+# Use head and tail to display the fifth line of the file /etc/passwd
+# Use sed to display the fifth line of the file /etc/passwd
+# Use awk in a pipe to filter the first column out of the results of the command ps aux
+# Use grep to show the names of all files in /etc that have lines starting with the text 'root'
+# Use grep to show all lines from all files in /etc that contain exactly 3 characters
+# Use grep to file all files that contain the string "alex", but make sure "alexander" is not included in the search result
