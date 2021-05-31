@@ -5,7 +5,7 @@ head -n 5 /etc/passwd | tail -n 1
 sed -n 5p /etc/passwd
 
 # Use awk in a pipe to filter the first column out of the results of the command ps aux
-ps aux | awk -F : '{ print $1 }'
+ps aux | awk '{ print $1 }'
 
 # Use grep to show the names of all files in /etc that have lines starting with the text 'root'
 grep -l '^root' /etc/* 2>/dev/null
