@@ -1,0 +1,9 @@
+		    Files	            Dir
+Read	4	Open	            List
+Write	2	Modify	            Create/Delete
+Execute	1	Run	                cd
+			
+		    Files	            Dir
+SUID	4	Run as owner	    NA
+SGID	2	Run as group owner	Inherit dir group owner
+Sticky	1	NA	                Only delete if owner
