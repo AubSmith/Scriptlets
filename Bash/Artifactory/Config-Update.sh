@@ -95,6 +95,9 @@ dirname=`dirname $SubString`
 echo "$filename"
 echo "$dirname"
 
+chown --reference=$SubString /var/tmp/$filename
+chmod --reference=$SubString /var/tmp/$filename
+
 cp -p /var/tmp/$filename $dirname
 echo cp -p /var/tmp/$filename $dirname
 
