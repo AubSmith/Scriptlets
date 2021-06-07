@@ -1,5 +1,6 @@
-# Jfrog Configurtion Update
+#!/bin/bash
 
+# Jfrog Configurtion Update
 # Functions
 
 # Exit with an error message and error code, defaulting to 1
@@ -57,7 +58,7 @@ esac
 
 # String manipulation for each instance of each file case function
 
-URL="https://bitbucket.wayneent.com/projects/project/repos/art-config/var/opt/jfrog/artifactory/etc/logback.xml"
+URL="https://bitbucket.wayneent.com/projects/project/repos/art-config/raw/var/opt/jfrog/artifactory/etc/logback.xml"
 URL_length=${#URL}
 
 my-echo URL $URL
@@ -71,7 +72,7 @@ BaseURL_length=${#BaseURL}
 my-echo BaseURL $BaseURL
 my-echo BaseURL_length $BaseURL_length
 
-# Find folderand file length
+# Find folder and file length
 
 End_string="?${URL#*\?}"
 End_string_length=${#End_string}
@@ -94,6 +95,10 @@ filename=`basename $SubString`
 dirname=`dirname $SubString`
 echo "$filename"
 echo "$dirname"
+
+# Import credentials
+source Credentials.txt
+curl -s -S --user ${USER}:${APP_PASSWORD} -L -O $URL -o /var/tmp/$filename
 
 chown --reference=$SubString /var/tmp/$filename
 chmod --reference=$SubString /var/tmp/$filename

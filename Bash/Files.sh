@@ -82,3 +82,27 @@ mv [ab]* photos/
 mv c* video
 
 scp /var/tmp/myfile.txt username@hostname:/var/tmp/
+
+
+# basename
+FILE="~/myfile.txt"
+basename "$FILE"
+f="$(basename -- $FILE)"
+echo "$f"
+
+url="https://www.cyberciti.biz/files/mastering-vi-vim.pdf"
+basename "$url"
+u="$(basename -- $url)"
+echo "$u"
+
+# Without basename
+FILE="~/myfile.txt"
+echo ${FILE##*/}
+## URL example ##
+url="https://www.cyberciti.biz/files/mastering-vi-vim.pdf"
+echo "${url##*/}"
+
+# dirname
+dir=/var/tmp/test/myfile.txt
+D='dirname dir'
+$d

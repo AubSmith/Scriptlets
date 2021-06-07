@@ -10,3 +10,6 @@
 ss -tulwn
 
 ss -tl
+
+# Find LDAP hosts
+host -t srv _/ldap.tcp.domain.com
