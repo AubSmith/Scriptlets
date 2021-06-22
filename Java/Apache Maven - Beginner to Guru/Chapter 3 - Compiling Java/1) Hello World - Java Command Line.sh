@@ -10,6 +10,7 @@ java HelloWorld
 jar cf myjar.jar HelloWorld.class # cf = Create File
 ls
 
+# Run class HelloWorld from myjar.jar
 java -classpath myjar.jar HelloWorld
 
 mv myjar.jar /var/tmp
