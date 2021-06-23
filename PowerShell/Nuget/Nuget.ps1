@@ -27,6 +27,9 @@ Get-Package -ProviderName PowerShellGet -AllVersions # Installed packages from s
 Get-Package -Name posh-git -RequiredVersion 0.7.3 | Uninstall-Package # Uninstall package
 
 Find-Package -ProviderName NuGet
+Find-Package -Name "JiraPS"
+Find-Package -Name "VMWare*"
+Find-Package -Name "VMWare*" -AllVersions
 Find-Package -Name NuGet.Core -Source MyNuGet
 Find-Package -Name NuGet.Core -Source MyNuGet -AllVersions
 Find-Package -Name NuGet.Core -ProviderName NuGet -RequiredVersion 2.9.0
