@@ -54,3 +54,7 @@ mvn help:effective-pom
 
 Effective-POM.txt
 
+# Resolve dependency tree
+mvn dependency:tree
+
+Dependency-Tree.txt
