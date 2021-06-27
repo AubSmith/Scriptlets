@@ -1,0 +1,28 @@
+{
+    "name": "my_package",
+    "description": "",
+    "version": "1.0.0",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type" : "git",
+      "url" : "https://github.com/facebook/react.git",
+      "directory": "packages/react-dom"
+    },
+    "keywords": [],
+    "author": {
+      "name": "Dev",
+      "email": ""
+    },
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/monatheoctocat/my_package/issues"
+    },
+    "homepage": "https://github.com/monatheoctocat/my_package",
+    "main": "app.js",
+
+    "dependencies": {
+      "express": "^4.13.3"
+    }
+}
