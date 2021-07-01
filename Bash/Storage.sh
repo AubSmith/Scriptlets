@@ -24,3 +24,6 @@ find . -type f -atime +60 |wc -l
 
 # View file/directory age
 ls -al
+
+# Find log files older than 60 days
+find /var/log/httpd/* -mtime +60 -exec ls {} \;
