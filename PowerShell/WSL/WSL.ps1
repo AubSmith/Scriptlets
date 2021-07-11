@@ -1,15 +1,22 @@
+# Start WSL default dist terminal shell
 wsl.exe
-wslconfig.exe /l
 
+# Start WSL default dist terminal shell
 bash.exe
 
+# List WSL distributions
+wslconfig.exe /l
+
+
 # View wsl distributions
-PS C:\Users\aubre> wsl --list --verbose
-  NAME            STATE           VERSION
-* kali-linux      Stopped         2
-  Ubuntu-20.04    Running         2
+wsl --list --verbose
+#  NAME            STATE           VERSION
+#* kali-linux      Stopped         2
+#  Ubuntu-20.04    Running         2
+
 # Shutdown Ubuntu
-  PS C:\Users\aubre> wsl --terminate Ubuntu-20.04
+wsl --terminate Ubuntu-20.04
+
 # Shutdown all
 wsl --shutdown
 
