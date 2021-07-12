@@ -1,3 +1,9 @@
+# WSL Instance IP
+wsl hostname -I
+
+# List Distro and WSL Version
+wsl -l -v
+
 # Start WSL default dist terminal shell
 wsl.exe
 

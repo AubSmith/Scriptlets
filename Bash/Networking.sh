@@ -15,3 +15,7 @@ nmcli connection show Wired\ connection\ 1
 ip a s xxxx
 cat /etc/resolv.conf
 nmcli con up xxxx
+
+# IP Address
+ip -4 a s eth0
+ip addr | grep eth0
