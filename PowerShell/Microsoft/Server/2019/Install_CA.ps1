@@ -79,3 +79,15 @@ Set-Acl -Path "D:\CertEnroll" -AclObject $CertEnrollACL
 Install-WindowsFeature -Name 
 
 New-WebVirtualDirectory -Site "Default Web Site" -Name "CertEnroll" -PhysicalPath "D:\CertEnroll"
+
+# Enable-IisDirectoryBrowsing.ps1
+Enable-IisDirectoryBrowsing -SiteName Default -Directory CertEnroll
+
+cmd
+cd %windir%\system32\inetsrv\ 
+
+Appcmd set config "Default Web Site" /section:system.webServer/Security/requestFiltering -allowDoubleEscaping:True
+iisreset
+
+# Create DNS alias
+Add-DnsServerResourceRecordCName -Name "pki" -HostNameAlias "winsvriis001.waynecorp.com" -ZoneName "waynecorp.com"

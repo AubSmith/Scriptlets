@@ -13,6 +13,9 @@ Get-WindowsFeature
 # Install Script
 Install-ADDSForest -DomainName "waynecorp.com" -CreateDnsDelegation:$false -DatabasePath "C:\Windows\NTDS" -DomainMode "7" -DomainNetbiosName "waynecorp" -ForestMode "7"  -InstallDns:$true -LogPath "C:\Windows\NTDS" -NoRebootOnCompletion:$True -SysvolPath "C:\Windows\SYSVOL" -Force:$true
 
+# Create DNS Reverse Lookup Zone
+Add-DnsServerPrimaryZone -NetworkID "192.168.1.0/24" -ReplicationScope "Domain"
+
 #####endregion
 
 shutdown -r -t 1
