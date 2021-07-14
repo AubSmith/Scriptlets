@@ -19,3 +19,6 @@ nmcli con up xxxx
 # IP Address
 ip -4 a s eth0
 ip addr | grep eth0
+
+# Fluch DNS cache
+sudo rndc flash lan
