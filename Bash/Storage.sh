@@ -12,6 +12,7 @@ du -sh *
 
 # Find and sort directories by size
 du -sh * | sort -h
+du -sh * | sort -h | tail -5
 
 # Count directories in current directory
 find . -mindepth 1 -maxdepth 1 -type d | wc -l
