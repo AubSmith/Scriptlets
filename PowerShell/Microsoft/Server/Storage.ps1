@@ -27,3 +27,7 @@ Initialize-Disk -PassThru |
 New-Partition -AssignDriveLetter -UseMaximumSize |
 # Format disk
 Format-Volume -FileSystem NTFS -NewFileSystemLabel 'Data'
+
+
+Get-Disk | Where-Object IsOffline -eq True
+Set-Disk -Number 1 -isOffline $false
