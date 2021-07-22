@@ -32,4 +32,5 @@ Add-DnsServerResourceRecordCName -Name "pki" -HostNameAlias "winsvriis001.waynec
 
 # After PKI deployed
 cd\
-certutil  -config "Wayne Corp Issuing CA" -cacertfile "winsvradcs001.waynecorp.com_WayneCorp Issuing CA.crt"
+# Retrieve the CA's certificate
+certutil  -config "winsvradcs001\Wayne Corporation Issuing CA" -ca.cert winsvradcs001.crt

@@ -106,3 +106,11 @@ echo "${url##*/}"
 dir=/var/tmp/test/myfile.txt
 D='dirname dir'
 $d
+
+
+# Extract text file
+curl https://artifactory.url.com/artifactory/api/npm/npm-repo-virtual/md5/-/md5-2.3.0.tgz -o ./md5.tgz
+
+tar -axf md5.tgz -O > ./md5.txt
+
+cat md5.txt
