@@ -1,0 +1,1 @@
+vi logrotate.d/httpd
