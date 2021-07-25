@@ -14,3 +14,5 @@ git remote add GitHub ssh://git@github.com/AubSmith/Private
 # SSL
 git config --global http.sslBackend schannel # Git will use Windows cert store and ignore http.sslCAInfo config setting
 # git config --global http.sslBackend openssl
+
+git push --set-upstream GitHub master
