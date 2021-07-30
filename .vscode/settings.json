@@ -1,3 +1,8 @@
 {
-    "python.pythonPath": "C:\\Program Files\\Python38\\python.exe"
+    "python.pythonPath": "C:\\Program Files\\Python38\\python.exe",
+    "githubPullRequests.remotes": [
+        "origin",
+        "upstream",
+        "GitHub"
+    ]
 }
