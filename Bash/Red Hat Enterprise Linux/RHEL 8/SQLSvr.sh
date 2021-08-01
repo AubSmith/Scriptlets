@@ -9,7 +9,7 @@ nmcli con mod eth0 ipv4.dns "192.160.1.100"
 nmcli con up eth0 
 
 # Rename Host
-hostnamectl set-hostname rhelsvrsql001
+hostnamectl set-hostname rhelsvrsql001.waynecorp.com
 
 shutdown -r now
 
