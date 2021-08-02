@@ -63,4 +63,7 @@ sudo vi /etc/sudoers.d/domain_admins
 
 # Configure SQL Server
 
-
+mkdir -p /var/opt/mssql/secrets/
+mv /var/tmp/mssql.keytab /var/opt/mssql/secrets/
+sudo chown mssql:mssql /var/opt/mssql/secrets/mssql.keytab
+sudo chmod 400 /var/opt/mssql/secrets/mssql.keytab

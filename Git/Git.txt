@@ -52,3 +52,6 @@ git reset --hard origin/master
 # see current branch
 git branch
 git branch --show-current
+
+# Turn off SSL verification per remote
+git config --global http.sslVerify false
