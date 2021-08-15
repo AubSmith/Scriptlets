@@ -1,0 +1,65 @@
+name: custom:github.anz.extension
+version: 1.0.0
+minDynatraceVersion: "1.213"
+author: 
+  name: "Aubrey Smith"
+dashboards:
+    - path: "dashboards/dashboard.json"
+  
+alerts:
+    - path: "alerts/alert.json"
+
+snmp:
+  - group: GitHub health
+    interval: 1m
+    dimensions:
+      - key: device.name
+        value: oid:1.3.6.1.2.1.1.5.0
+      - key: sysuptime.0
+        value: sysuptime.0
+
+    subgroups:
+      - subgroup: CPU
+        table: false
+        metrics:
+          - key: builtin:host.cpu.load
+            value: oid:.1.3.6.1.4.1.2021.10.1.3.1
+            type: ratio
+          - key: builtin:host.cpu.load5m
+            value: oid:.1.3.6.1.4.1.2021.10.1.3.2
+            type: ratio
+          - key: builtin:host.cpu.load15m
+            value: oid:.1.3.6.1.4.1.2021.10.1.3.3
+            type: ratio
+          - key: builtin:host.cpu.idle
+            value: oid:.1.3.6.1.4.1.2021.11.11.0
+            type: Percent (%)                   
+      - subgroup: SNMP health
+        table: false
+        metrics:
+          - key: snmp.generic.snmp.in.pkts
+            value: oid:1.3.6.1.2.1.11.1.0
+            type: count
+          - key: snmp.generic.silentdrops
+            value: oid:1.3.6.1.2.1.11.31.0
+            type: count
+      - subgroup: NIC status
+        table: true
+        dimensions:
+          - key: snmp.generic.if.descr
+            value: oid:1.3.6.1.2.1.2.2.1.2
+          - key: snmp.generic.if.type
+            value: oid:1.3.6.1.2.1.2.2.1.3
+        metrics:
+          - key: snmp.generic.if.lastchange
+            value: oid:1.3.6.1.2.1.2.2.1.9
+            type: gauge
+          - key: snmp.generic.if.in.errors
+            value: oid:1.3.6.1.2.1.2.2.1.14
+            type: count
+
+metrics:
+  - key: snmp.generic.snmp.in.pkts
+  - key: snmp.generic.silentdrops
+  - key: snmp.generic.if.lastchange
+  - key: snmp.generic.if.in.errors

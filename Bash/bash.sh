@@ -62,3 +62,28 @@ echo $COLOR
 
 # Alias available in sub-shell
 # Variable is not
+
+
+# The simplest method to get user input at a shell prompt is the read command. A simple demonstration:
+
+while true; do
+    read -p "Do you wish to install this program?" yn
+    case $yn in
+        [Yy]* ) make install; break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+# Another method is Bash's select command. Here is the same example using select:
+
+echo "Do you wish to install this program?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) make install; break;;
+        No ) exit;;
+    esac
+done
+
+# With select you don't need to sanitize the input – it displays the available choices, and you type a number corresponding to your choice.
+# It also loops automatically, so there's no need for a while true loop to retry if they give invalid input.
