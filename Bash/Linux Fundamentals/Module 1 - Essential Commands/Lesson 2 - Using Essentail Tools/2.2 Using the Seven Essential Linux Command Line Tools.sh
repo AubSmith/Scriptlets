@@ -6,7 +6,7 @@ hostname --help | less
 
 date
 
-uname
+uname # System info i.e. kernel
 
 passwd
 
@@ -16,7 +16,7 @@ passwd username
 touch filename
 ls
 
-last
+last # List of users logged in last
 
 # On Ubuntu use
 sudo -i
