@@ -12,6 +12,7 @@ awk -F : '{ print $4 }' /etc/passwd | sort -n # numeric sort
 awk -F : '/amy/ { print $4 }' /etc/passwd
 
 sed # stream editor to batch-modify text files
+# Print line 5 /etc/passwd
 sed -n 5p /etc/passwd
 # replace all instances of how with HOW
 sed -i s/how/HOW/g # interactive
