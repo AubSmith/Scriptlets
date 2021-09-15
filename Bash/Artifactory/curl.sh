@@ -8,7 +8,7 @@ curl -Sv https://artifactory.url/artifactory/api/system/ping
 curl https://artifactory.url/artifactory/api/system/ping -k
 
 # Jfrog Artifactory Download
-curl https://artifactory.url/artifactory/generic-software-virtual/path/path/file.txt -o /var/tmp/file.txt
+curl https://artifactory.url/artifactory/generic-software-virtual/path/path/file.txt -O /var/tmp/file.txt
 
 # Connection Test - openssl
 echo | openssl s_client -connect artifactory.url:443
