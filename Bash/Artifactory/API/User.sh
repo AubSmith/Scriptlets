@@ -1,0 +1,1 @@
+curl -uusername:token https://artifactory.com/artifactory/api/users
