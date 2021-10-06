@@ -52,19 +52,19 @@ snmp:
         table: false
         metrics:
           - key: snmp.generic.cpu.load.1m
-            value: oid:.1.3.6.1.4.1.2021.10.1.3.1
+            value: oid:1.3.6.1.4.1.2021.10.1.3.1
           - key: snmp.generic.cpu.load5m
-            value: oid:.1.3.6.1.4.1.2021.10.1.3.2
+            value: oid:1.3.6.1.4.1.2021.10.1.3.2
           - key: snmp.generic.cpu.load15m
-            value: oid:.1.3.6.1.4.1.2021.10.1.3.3
+            value: oid:1.3.6.1.4.1.2021.10.1.3.3
           - key: snmp.generic.cpu.idle
-            value: oid:.1.3.6.1.4.1.2021.11.11.0
+            value: oid:1.3.6.1.4.1.2021.11.11.0
           - key: snmp.generic.cpu.percentage.usertime
-            value: oid:.1.3.6.1.4.1.2021.11.9.0
+            value: oid:1.3.6.1.4.1.2021.11.9.0
           - key: snmp.generic.cpu.percentage.systemtime
-            value: oid:.1.3.6.1.4.1.2021.11.10.0
+            value: oid:1.3.6.1.4.1.2021.11.10.0
           - key: snmp.generic.cpu.idletime
-            value: oid:.1.3.6.1.4.1.2021.11.11.0
+            value: oid:1.3.6.1.4.1.2021.11.11.0
       - subgroup: snmp-health
         table: false
         metrics:
@@ -73,7 +73,7 @@ snmp:
           - key: snmp.generic.silentdrops
             value: oid:1.3.6.1.2.1.11.31.0
           - key: sysuptime.0
-            value: oid:.1.3.6.1.2.1.1.3.0            
+            value: oid:1.3.6.1.2.1.1.3.0            
       - subgroup: nic-status
         table: true
         dimensions:
@@ -87,41 +87,41 @@ snmp:
           - key: snmp.generic.if.in.errors
             value: oid:1.3.6.1.2.1.2.2.1.14
           - key: snmp.generic.if.bytes.in
-            value: oid:.1.3.6.1.2.1.2.2.1.10.4
+            value: oid:1.3.6.1.2.1.2.2.1.10.4
           - key: snmp.generic.if.bytes.out
-            value: oid:.1.3.6.1.2.1.2.2.1.16.4
+            value: oid:1.3.6.1.2.1.2.2.1.16.4
       - subgroup: memory
         table: false
         metrics:
           - key: snmp.generic.mem.swap.total
-            value: oid:.1.3.6.1.4.1.2021.4.3.0
+            value: oid:1.3.6.1.4.1.2021.4.3.0
           - key: snmp.generic.mem.swap.free
-            value: oid:.1.3.6.1.4.1.2021.4.4.0
+            value: oid:1.3.6.1.4.1.2021.4.4.0
           - key: snmp.generic.mem.available
-            value: oid:.1.3.6.1.4.1.2021.4.5.0
+            value: oid:1.3.6.1.4.1.2021.4.5.0
           - key: snmp.generic.mem.free
-            value: oid:.1.3.6.1.4.1.2021.4.11.0
+            value: oid:1.3.6.1.4.1.2021.4.11.0
           - key: snmp.generic.mem.used
-            value: oid:.1.3.6.1.4.1.2021.4.6.0
+            value: oid:1.3.6.1.4.1.2021.4.6.0
           - key: snmp.generic.mem.shared
-            value: oid:.1.3.6.1.4.1.2021.4.13.0
+            value: oid:1.3.6.1.4.1.2021.4.13.0
           - key: snmp.generic.mem.buffered
-            value: oid:.1.3.6.1.4.1.2021.4.14.0
+            value: oid:1.3.6.1.4.1.2021.4.14.0
           - key: snmp.generic.mem.cached
-            value: oid:.1.3.6.1.4.1.2021.4.15.0
+            value: oid:1.3.6.1.4.1.2021.4.15.0
       - subgroup: disk
         table: true
         dimensions:
           - key: snmp.generic.disk.path
-            value: oid:.1.3.6.1.4.1.2021.9.1.2.1
+            value: oid:1.3.6.1.4.1.2021.9.1.2.1
           - key: snmp.generic.disk.device.partition.path
-            value: oid:.1.3.6.1.4.1.2021.9.1.3.1
+            value: oid:1.3.6.1.4.1.2021.9.1.3.1
         metrics:
           - key: snmp.generic.disk.size
-            value: oid:.1.3.6.1.4.1.2021.9.1.6.1
+            value: oid:1.3.6.1.4.1.2021.9.1.6.1
           - key: snmp.generic.disk.free
-            value: oid:.1.3.6.1.4.1.2021.9.1.7.1
+            value: oid:1.3.6.1.4.1.2021.9.1.7.1
           - key: snmp.generic.disk.used
-            value: oid:.1.3.6.1.4.1.2021.9.1.8.1
+            value: oid:1.3.6.1.4.1.2021.9.1.8.1
           - key: snmp.generic.disk.percentage.used
-            value: oid:.1.3.6.1.4.1.2021.9.1.9.1                         
+            value: oid:1.3.6.1.4.1.2021.9.1.9.1                         
