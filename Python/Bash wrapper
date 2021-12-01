@@ -117,4 +117,4 @@ When we look at this documentation, “Docstring” is the official term, we see
 Summary
 You now have enough information to call yourself a Python programmer. You know how to write a simple Python script, how to translate simple scripts from Bash and call them with Python, and, finally, how to find documentation about new modules and attributes. In the next section, you’ll see how to better organize these flat sequences of commands into functions.
 
-share
+python3 -m pip install 

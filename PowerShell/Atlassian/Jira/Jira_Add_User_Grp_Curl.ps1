@@ -10,7 +10,7 @@ Param(
 $Xml = [XML](Get-Content .\Config.xml)
 $Url = $xml.settings.$envmt.url
 $ContentPath = $Xml.settings.$envmt.file
-$Groups = Import-Csv $ContentPath
+$Groups = Import-Csv $ContentPath -Delimiter ','
 
 $Groups | ForEach-Object -parallel {
   
