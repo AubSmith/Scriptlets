@@ -8,10 +8,17 @@ curl -Sv https://artifactory.url/artifactory/api/system/ping
 curl https://artifactory.url/artifactory/api/system/ping -k
 
 # Jfrog Artifactory Download
-curl https://artifactory.url/artifactory/generic-software-virtual/path/path/file.txt -O /var/tmp/file.txt
+# Download file to current working directory with same filename as remote source
+curl -O https://artifactory.url/artifactory/generic-software-virtual/path/path/file.txt
+
+# Download file to specific directory with filename
+curl -o /var/tmp/file.txt/var/tmp/file.txt https://artifactory.url/artifactory/generic-software-virtual/path/path/file.txt
 
 # Connection Test - openssl
 echo | openssl s_client -connect artifactory.url:443
 echo | openssl s_client -connect distribution.url:443
 
 curl -X PUT -u myUser:myPassword -T test.txt "http://localhost:8081/artifactory/libs-release-local/test/test.txt"
+
+# -L redirects -O filenamed as downloaded -v verbose
+curl -LOv "http://localhost:8081/artifactory/libs-release-local/test/test.txt"

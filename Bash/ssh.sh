@@ -4,9 +4,13 @@ ssh newuser@ip # Login as newuser
 
 # Setup SSH
 ssh-keygen
+ssh-keygen -t ed25519
+ssh-keygen -t rsa
 ssh-copy-id ip
 # or
 ssh-copy-id user@ip
+
+ssh -vvv -p 122 user@github.com
 
 
 

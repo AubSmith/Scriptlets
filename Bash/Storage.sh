@@ -2,6 +2,7 @@
 df -h
 df -h | grep -v run # Hide lines containing run
 df -aTH
+df -h --total
 
 # List disk usage for folder
 du -h .
