@@ -1,0 +1,1 @@
+curl -uuser:token -X PATCH -H "Accept: application/vnd.github.v3+json" https://githuburl.com/api/v3/orgs/myorg -d '{"billing_email":"billings@myorg.com"}'
