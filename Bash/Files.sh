@@ -114,3 +114,8 @@ curl https://artifactory.url.com/artifactory/api/npm/npm-repo-virtual/md5/-/md5-
 tar -axf md5.tgz -O > ./md5.txt
 
 cat md5.txt
+
+
+# Create file with date in name
+touch "backup_$(date +%F).log"
+touch /var/log/"backup_$(date +%F).log"
