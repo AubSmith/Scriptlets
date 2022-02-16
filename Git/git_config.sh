@@ -30,10 +30,10 @@ git init
 
 # Code is ready to be pushed:
 cd existing-project
-git commit -m "Initial Commit"
 git add <filename>
 git add *
 git add --all
+git commit -m "Initial Commit"
 
 # Clone a repository:
 git clone https://aubs@bitbucket.com/scm/repo.git
@@ -49,7 +49,23 @@ git ls-files --others -i --exclude-standard
 git remote rm BitBucket
 
 # Cert Trust
+# Update ca-bundle.crt
+# Copy to relevant path such as profile
+# UNIX
 git config --global http.sslCAInfo /etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt
+# Windows
+git config --global http.sslCAInfo C:/Users/username/ca-bundle.crt
+
+# Hard reset local with remote
+git reset --hard origin/master
+
+# see current branch
+git branch
+git branch --show-current
+
+# Turn off SSL verification per remote
+git config --global http.sslVerify false
+
 
 # Check the Credential Manager CP for credentials
 
