@@ -1,0 +1,1 @@
+curl -uuser:token -X POST -H "Accept: application/vnd.github.v3+json" https://githuburl.com/api/v3/admin/organizations -d '{"profile_name":"IB","login":"IB","admin":"adminacc"}'
