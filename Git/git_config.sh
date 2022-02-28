@@ -1,6 +1,6 @@
 # Setup new Git user
-git config --global user.name "Aubrey Smith"
-git config --global user.email "Aubrey.Smith@outlook.com"
+git config --global user.name "Ethan Smith"
+git config --global user.email "Aubrey.Smith@orcon.net.nz"
 
 # Shell Command: Install 'code' command in path
 git config --global core.editor vscode
