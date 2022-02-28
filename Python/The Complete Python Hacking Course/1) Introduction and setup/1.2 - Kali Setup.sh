@@ -1,3 +1,6 @@
+# Static IP
+sudo ifconfig eth0 172.21.235.195 netmask 255.255.240.0
+
 # Copy/download VSCode package
 curl -o vscode.deb -L http://go.microsoft.com/fwlink/?LinkID=760868
 
