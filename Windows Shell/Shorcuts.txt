@@ -1,0 +1,12 @@
+Screenshot = Windows key + Shift + S
+File properties = Alt + double-click
+Switch Tasks = Alt + Tab
+Close window = Alt + Tab + Del
+Search = Windows + S
+Explorer = Windows + E
+Task Manager - Ctrl + Shift + Esc
+Clipboard History = Windows + V
+Emoji = Windows + .
+Minimise All = Windows + D
+Lock = Windows + L
+Snap = Windows + L/R Arrow
