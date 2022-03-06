@@ -14,4 +14,7 @@ extend size=n
 select partition n
 delete partition override
 
+# Create 10000MB
+create partition primary size=10000
+
 exit
