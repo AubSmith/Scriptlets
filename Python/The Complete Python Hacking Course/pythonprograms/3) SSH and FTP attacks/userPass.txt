@@ -1,0 +1,8 @@
+admin:StarWars1!
+admin:P@$$w0rd
+msfadmin:msfadmin
+admin:password
+admin:Passw0rd
+admin:Logmein123!
+admin:qwerty123!
+admin:Holiday123!
