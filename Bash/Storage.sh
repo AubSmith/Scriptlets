@@ -29,3 +29,22 @@ ls -al
 
 # Find log files older than 60 days
 find /var/log/httpd/* -mtime +60 -exec ls {} \;
+
+# NVMe drives
+sudo dnf install nvme-cli
+
+sudo apt install nvme-cli
+
+# Exploring an NVMe drive
+nvme help
+
+sudo nvme list
+
+sudo nvme id-ctrl /dev/nvme0n1
+
+sudo nvme smart-log /dev/nvme0n1
+
+sudo nvme format /dev/nvme0nX
+
+# Securely wipe drive
+sudo nvme sanitize /dev/nvme0nX

@@ -27,6 +27,9 @@ snmpwalk -On -v3 -l authnoPriv -u username -a SHA -A Password 192.168.1.100 .1.3
 # 1.3.6.1.4.1.2021.9.1.100 (dskErrorFlag)
 # 1.3.6.1.4.1.2021.9.1.101 (dskErrorMsg)
 
+# 1.3.6.1.4.1.2021.4.5 (memTotalReal)
+# 1.3.6.1.4.1.2021.4.5.0 (memMachineTotal)
+
 # Module	UCD-SNMP-MIB (netsnmp)
 # Nom	dskEntry
 # Status	current

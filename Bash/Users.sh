@@ -37,3 +37,5 @@ loginctl list-sessions
 loginctl show session id
 loginctl show-user username
 loginctl terminate-session session-id
+
+# systemd homed

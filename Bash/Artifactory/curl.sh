@@ -22,3 +22,6 @@ curl -X PUT -u myUser:myPassword -T test.txt "http://localhost:8081/artifactory/
 
 # -L redirects -O filenamed as downloaded -v verbose
 curl -LOv "http://localhost:8081/artifactory/libs-release-local/test/test.txt"
+
+# Test docker registry with domain cert
+curl --cacert domain.crt https://your.registry:5000/v2/_catalog
