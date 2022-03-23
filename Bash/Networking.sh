@@ -49,3 +49,8 @@ netstat -au | head -n 5
 sudo netstat --tcp --udp --listening --programs --numeric
 
 sudo netstat -anlp | grep cups
+
+# Test port
+netstat -ane | grep "443" | grep "LISTEN"
+ip a
+telnet 192.168.1.1 443
