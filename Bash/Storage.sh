@@ -48,3 +48,13 @@ sudo nvme format /dev/nvme0nX
 
 # Securely wipe drive
 sudo nvme sanitize /dev/nvme0nX
+
+
+# Disk format
+df -h 
+# Or for unformatted disk
+ls -ltr /dev/sd*
+sudo umount /dev/sdc1
+sudo mkfs.vfat /dev/sdc1
+sudo mkfs.ntfs /dev/sdc1
+sudo mkfs.ext4 /dev/sdc1

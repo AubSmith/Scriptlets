@@ -34,4 +34,14 @@ Get-Service LxssManager | Restart-Service
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 wsl --set-default-version 2
-wsl --set-version <Distro> 2
+wsl --set-version kali-linux 2
+
+# Stop WSL
+wsl --shutdown
+
+# Import custom distro
+# Create tar on source and copy to local disk - see wsl.sh
+wsl --import RHEL8 D:\Software\wslDistro\RHEL8\ H:\rhel8.tar.gz
+
+# Start custom distro
+wsl -d RHEL8

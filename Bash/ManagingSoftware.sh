@@ -15,3 +15,6 @@ yum install -y nmap
 yum update
 yum update nmap
 yum remove nmap
+
+# Debian
+sudo apt update && sudo apt upgrade
