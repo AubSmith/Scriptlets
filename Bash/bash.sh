@@ -87,3 +87,15 @@ done
 
 # With select you don't need to sanitize the input – it displays the available choices, and you type a number corresponding to your choice.
 # It also loops automatically, so there's no need for a while true loop to retry if they give invalid input.
+
+# List all png files
+ls *.png
+
+# List all files named file1
+ls file1*
+
+# List all files ending png
+ls | grep png$
+
+# List all files starting Screen
+ls | grep ^Screen
