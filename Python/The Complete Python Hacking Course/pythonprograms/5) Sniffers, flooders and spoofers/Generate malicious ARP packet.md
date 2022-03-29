@@ -26,7 +26,7 @@ mac_address
 
 # Part 2
 # Create malicious ARP packet to target IP
-packet.pdst = "192.168.1.5"
+finalpacket.pdst = "192.168.1.5"
 answer = srp(finalPacket, timeout=2, verbose=False)[0]
 answer
 mac = answer[0][1].hwsrc
