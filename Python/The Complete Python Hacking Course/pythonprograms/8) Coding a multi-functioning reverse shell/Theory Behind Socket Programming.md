@@ -15,6 +15,7 @@ wine /home/esmith/.wine/drive_c/python27/python.exe -m pip install pyinstaller
 
 # Install required Python libraries
 wine /home/esmith/.wine/drive_c/python27/python.exe -m pip install requests
+wine /home/esmith/.wine/drive_c/python27/python.exe -m pip install mss
 
 # Convert Python to .exe
 wine /home/esmith/.wine/drive_c/Python27/Scripts/easy_install-2.7.exe --onefile --noconsole rs.py
