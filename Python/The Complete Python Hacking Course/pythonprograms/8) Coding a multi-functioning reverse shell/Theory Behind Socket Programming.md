@@ -11,4 +11,19 @@ cd /root/.wine/
 cd /root/Downloads
 wine msiexec /i python.2.7.14.msi
 
-wine '/root/drive_c/python27/python.exe -m pip install pyinstaller
+wine /home/esmith/.wine/drive_c/python27/python.exe -m pip install pyinstaller
+
+# Install required Python libraries
+wine /home/esmith/.wine/drive_c/python27/python.exe -m pip install requests
+
+# Convert Python to .exe
+wine /home/esmith/.wine/drive_c/Python27/Scripts/easy_install-2.7.exe --onefile --noconsole rs.py
+
+ls
+
+
+# Use Apache for file transfer
+mv python.exe /var/www//html
+sudo service apache2 start
+# Delete index.html if required
+# Hit URL
