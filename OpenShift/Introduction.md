@@ -27,3 +27,5 @@ AKA K8s
 
 Container orchestration
 
+# Git URL S2I
+https://github.com/openshift-roadshow/nationalparks-katacoda
