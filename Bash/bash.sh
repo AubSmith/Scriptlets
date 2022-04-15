@@ -99,3 +99,7 @@ ls | grep png$
 
 # List all files starting Screen
 ls | grep ^Screen
+
+
+#??
+cd /etc && ls -d */

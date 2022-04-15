@@ -1,0 +1,48 @@
+# Remove .txt extension
+
+.PHONY: all
+all: build test deploy clean
+
+.PHONY: build image_build image_tag
+build: image_build image_tag
+
+.PHONY: deploy push rollout
+deploy: push rollout
+
+.PHONY: clean clean_containers clean_images
+clean: clean_containers clean_images
+
+# Runs the "build_image" make target from the Makefile
+# make build_image
+
+# Set variables
+# Image values
+REGISTRY := "us.gcr.io"
+PROJECT := "my-project-name"
+IMAGE := "some-image-name"
+IMAGE_REF := $(REGISTRY)/$(PROJECT)/$(IMAGE)
+
+# Git commit hash
+HASH := $(shell git rev-parse --short HEAD)
+
+# Build image
+image_build:
+  podman build --format docker -f Containerfile -t $(IMAGE_REF):$(HASH) .
+
+# Tag image as latest
+image_tag:
+  podman tag $(IMAGE_REF):$(HASH) $(IMAGE_REF):latest
+
+# Push if needed
+push:
+  podman push --remove-signatures $(IMAGE_REF):$(HASH)
+  podman push --remove-signatures $(IMAGE_REF):latest
+
+.PHONY: run_local
+run_local:
+  podman stop mansmk ; podman rm mansmk ; podman run --name=mansmk --rm -p $(HOST_ADDR):$(HOST_PORT):$(TARGET_PORT) -d $(IMAGE_REF):$(HASH) && $(BROWSER) $(HOST_URL):$(HOST_PORT)
+
+clean_images:
+  $(eval LATEST_IMAGES := $(shell podman images --filter "label=my-project.purpose=app-image" --no-trunc | awk '/latest/ {print $$3}'))
+  podman images --filter "label=my-project.purpose=app-image" --no-trunc --quiet | grep -v $(LATEST_IMAGES) | xargs --no-run-if-empty --max-lines=1 podman image rm
+
