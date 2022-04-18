@@ -66,8 +66,6 @@ Image and site links use a very similar syntax.
 
 This is a series of three non-breaking spaces
 &nbsp;
-&nbsp;
-&nbsp;
 
 Making lists
 You can define ordered or unordered lists. You can also define nested items through indentation.
