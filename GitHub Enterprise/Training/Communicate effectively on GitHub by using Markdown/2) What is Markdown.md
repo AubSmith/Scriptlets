@@ -43,11 +43,18 @@ To use a literal asterisk, precede it with an escape character--in GFM that is a
 _This is all **plain** text_.
 
 Declaring headings
+&nbsp;
 HTML provides content headings, such as the <h1> tag. In Markdown, this is supported via the # symbol. Just use one # for each heading level from 1-6.
 
 
 ###### This is H6 text
 This is H6 text
+&nbsp;
+
+# This is H1 text
+This is H1 text
+
+&nbsp;
 Linking to images and sites
 Image and site links use a very similar syntax.
 
@@ -56,6 +63,11 @@ Image and site links use a very similar syntax.
 
 [Link to Microsoft Learn](/learn)
 [Link to Microsoft Learn](https://docs.microsoft.com/en-us/learn)
+
+This is a series of three non-breaking spaces
+&nbsp;
+&nbsp;
+&nbsp;
 
 Making lists
 You can define ordered or unordered lists. You can also define nested items through indentation.
