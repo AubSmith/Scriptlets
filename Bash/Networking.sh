@@ -23,7 +23,6 @@ ip addr | grep eth0
 # Flush DNS cache
 sudo rndc flash lan
 
-
 sysctl net.ipv4.ip_local_port_range
 sysctl net.ipv4.tcp_fin_timeout
 # (61000 - 32768) / 60 = 470
@@ -54,3 +53,23 @@ sudo netstat -anlp | grep cups
 netstat -ane | grep "443" | grep "LISTEN"
 ip a
 telnet 192.168.1.1 443
+
+# Name resolution
+sudo yum install bind-utils
+
+ping -c 3 serverA
+ping -c 3 192.168.1.5
+
+nslookup serverA
+nslookup 192.168.1.5
+nslookup -type=MX wayneent.com
+
+dig serverA
+dig -x 192.168.1.5
+dig wayneent.com MX
+
+host serverA
+host 192.168.1.5
+host -C wayneent.com
+host -t mx wayneent.com
+host -a wayneent.com
