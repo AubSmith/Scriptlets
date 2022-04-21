@@ -1,7 +1,3 @@
-# from pytube import YouTube
-# yt = YouTube("https://www.youtube.com/watch?v=O4xNJsjtN6E")
-# yt = yt.get('mp4', '720p')
-# yt.download('C:\\Users\\Ethan Smith\\Downloads')
 
 '''
 HOW TO: Download YouTube Videos Programmatically with Python & pytube
@@ -20,7 +16,7 @@ def on_complete(stream, file_path):
     print("Download Complete")
 
 yt = YouTube(
-        "https://www.youtube.com/watch?v=ZXFYT-BG2So",
+        "https://www.youtube.com/watch?v=8jLOx1hD3_o",
         on_progress_callback=on_progress,
         on_complete_callback=on_complete,
         use_oauth=False,
