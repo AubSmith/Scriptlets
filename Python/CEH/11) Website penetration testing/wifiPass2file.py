@@ -1,20 +1,34 @@
 #!/usr/bin/python
 
-import subprocess, smtplib, re
+# wifiPass2File - Extract Wifi passwords in Windows to file.
+# Author: Ethan Smith
+# Usage: python .\wifiPass2file.py
+# Python 3
+
+import subprocess, re
 
 show_pro = "netsh wlan show profile"
 wifi = subprocess.check_output(show_pro, shell=True)
 wifi_list = re.findall('(?:Profile\s*:\s)(.*)',wifi.decode("UTF-8"))
 
-global passwd
-passwd = ""
-
 for wlan in wifi_list:
-    strip_r = wlan.strip('\r')
-    passwd_find = "netsh wlan show profile " + "\"" + str(strip_r) + "\"" + " key=clear"
-    wifi_result = subprocess.check_output(passwd_find, shell=True)
-    passwd += str(wifi_result)
+    try:
+        clean_wlan = wlan.strip('\r')
+        passwd_find = f"netsh wlan show profile \"{clean_wlan}\" key=clear"
+        wifi_result = subprocess.Popen(passwd_find,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True)
+        
+        out,err=wifi_result.communicate()
+        rc=wifi_result.wait()
 
-file = open("wifiPass2file.txt", 'w')
-file.write(passwd)
-file.close()
+        with open("wifiPass2file.txt", 'a') as f:
+            f.write(f"\n\n{clean_wlan} Return code: {rc} \n\n {out}")
+    except err:
+       with open("wifiPass2file.txt", 'a') as f:
+           f.write(f"Return code: \n\n {rc} \n\n {err}")
+    except ValueError as v:
+        with open("wifiPass2file.txt", 'a') as f:
+           f.write(f"Return code: \n\n {rc} \n\n {v}")
