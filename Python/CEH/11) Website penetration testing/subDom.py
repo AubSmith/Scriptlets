@@ -7,7 +7,7 @@ url = input("Enter target URL: ")
 
 def request(url):
     try:
-        return requests.get("https://" + url)
+        return requests.get(f"https://{url}")
     except requests.exceptions.ConnectionError:
         pass
 
@@ -18,4 +18,4 @@ for line in dirFile:
     full_url = word + "." + url
     response = request(full_url)
     if response:
-        print("Sub-domain dicovered: " + full_url)
+        print(f"Sub-domain dicovered: {full_url}")
