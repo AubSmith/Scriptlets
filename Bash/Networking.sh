@@ -1,3 +1,8 @@
+nmcli
+nmcli g # Use nmcli c OR nmclie d instead
+nmcli c # Connections
+nmcli d # Devices
+nmcli connection show --active
 nmcli connection show
 nmcli connection show Wired\ connection\ 1
 nmcli device show
@@ -15,6 +20,8 @@ nmcli connection show Wired\ connection\ 1
 ip a s xxxx
 cat /etc/resolv.conf
 nmcli con up xxxx
+
+system restart NetworkManager
 
 # IP Address
 ip -4 a s eth0

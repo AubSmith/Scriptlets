@@ -59,3 +59,11 @@ sudo umount /dev/sdc1
 sudo mkfs.vfat /dev/sdc1
 sudo mkfs.ntfs /dev/sdc1
 sudo mkfs.ext4 /dev/sdc1
+
+
+# Extend Volume
+sudo parted -ls /dev/sda1
+sudo parted /dev/sda1
+
+# p # Print
+# resizepart 2 18GiB

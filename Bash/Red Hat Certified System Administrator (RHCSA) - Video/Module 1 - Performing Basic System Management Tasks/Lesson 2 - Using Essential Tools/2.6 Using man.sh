@@ -6,4 +6,10 @@ man lvcreate # /examples to find examples
 # 8 System Administration - root
 # G to skip to bottom
 
-mn ls
+lvcreate --help
+
+man ls
+
+man man
+man 1 man
+man 1 intro

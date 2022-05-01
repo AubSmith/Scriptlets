@@ -1,5 +1,5 @@
 # RedHat supported repos
-subscription manager status
+subscription-manager status
 subscription-manager register
 subscription-manager attach
 subscription-manager repos --enable
