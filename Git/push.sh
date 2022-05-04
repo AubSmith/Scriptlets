@@ -1,3 +1,12 @@
+# Create SSH Key
+ssh-keygen -t rsa
+cat /home/esmith/.ssh/id_rsa.pub
+# Copy to BitBucket profile + explicit permissions on repo
+
+git remote -v
+git remote set-url origin ssh://esmith@bitbucket.service.wayneent.com:7998/proj/repo_name.git
+
+git pull
 
 mkdir project1
 cd project1
@@ -7,7 +16,6 @@ git checkout -b feature/jira-team123
 # Make code changes
 git commit -am "New feature added"
 git push --set-upstream origin feature/jira-team123
-
 
 # Git Branches
 # Which branch

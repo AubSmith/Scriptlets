@@ -82,6 +82,10 @@ oc label route nationalparks type=parksmap-backend
 
 # Use Go template to filter pods
 # https://cloud.redhat.com/blog/customizing-oc-output-with-go-templates
+oc get pods
 oc get pods --template '{{range .items}}{{.metdata.name}}{{"\n"}}{{end}}'
 oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{.metdata.name}}{{"\n"}}{{end}}{{end}}'
+oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{- .metdata.name}}{{"\n"}}{{end}}{{end}}'
+oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{.metdata.name}}{{"\n"}}{{end}}{{end}}'
+oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{- .metdata.name}}{{"\n"}}{{end}}{{end}}'
 oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{.metdata.name}} {{.status.phase}} {{"\n"}}{{end}}{{end}}'
