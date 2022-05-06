@@ -46,7 +46,7 @@ create-db:
 	@$(OC_PROD) rollout status dc $(OC_PROJECT)-db-internal -w
 
 	# Copy DB custom config
-	$(eval PG_POD_NAME=`oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{.metadata.name}}{{"\n"}}{{end}}{{end}}'`)
+	$(eval PG_POD_NAME=`oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{- .metadata.name}}{{"\n"}}{{end}}{{end}}'`)
 	@$(OC_PROD) cp config/postgresql.conf \
 	$(PG_POD_NAME):/varl/lib/pgsql/data/userdata/postgresql.conf
 	@$(OC_PROD) cp config/custom-postgresql.conf \
@@ -78,7 +78,7 @@ create-db:
 update-db:
 
 	# Copy DB custom config
-	$(eval PG_POD_NAME=`oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{.metadata.name}}{{"\n"}}{{end}}{{end}}'`)
+	$(eval PG_POD_NAME=`oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{- .metadata.name}}{{"\n"}}{{end}}{{end}}'`)
 	@$(OC_PROD) cp config/postgresql.conf \
 	$(PG_POD_NAME):/varl/lib/pgsql/data/userdata/postgresql.conf
 	@$(OC_PROD) cp config/custom-postgresql.conf \
@@ -89,14 +89,14 @@ update-db:
 
 	# Wait for new pod to come up
 	@sleep 5
-	$(eval PG_POD_NAME=`oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{.metadata.name}}{{"\n"}}{{end}}{{end}}'`)
+	$(eval PG_POD_NAME=`oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{- .metadata.name}}{{"\n"}}{{end}}{{end}}'`)
 	@echo "New pod starting: $(PG_POD_NAME)"
 
 # Query running DB using sql script
 query-db:
 
 	# Find running pod and return just the name
-	$(eval PG_POD_NAME=`oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{.metadata.name}}{{"\n"}}{{end}}{{end}}'`)
+	$(eval PG_POD_NAME=`oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{- .metadata.name}}{{"\n"}}{{end}}{{end}}'`)
 	@echo "Running pod is: ${PG_POD_NAME}"
 	@echo
 
@@ -112,4 +112,46 @@ query-db:
 	@echo "Executing the script."
 	@$(OC_PROD) rsh "${PG_POD_NAME}" bash -c ${PG_QUERY_CMD}
 
+# DB Backup
+
+	# Find running pod
+	$(eval PG_POD_NAME=`oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{- .metadata.name}}{{"\n"}}{{end}}{{end}}'`)
+	@echo "Running pod is: ${PG_POD_NAME}"
+	@echo
+
+	# Define backup path
+	@$(eval PG_BACKUP_FILE="${OC_PROJECT}_${shell date --iso=seconds}_postgres.dump")
+	@echo "Backup filename is: " ${PG_BACKUP_FILE}
+	@echo
+
+	# Terminal command to run non-interactively
+	@$(eval PG_BACKUP_CMD="pg_dump -Fc -h 127.0.0.1 -U ${POSTGRESQL_USER} ${OC_PROJECT} -f /var/tmp/${PG_BACKUP_FILE}")
+
+	# Run backup command
+	@echo "Backing up database from ${OC_PROJECT} to ${PG_BACKUP_FILE}"
+	@$(OC_PROD) rsh "${PG_POD_NAME}" bash -c ${PG_BACKUP_CMD}
+
+	# Copy backup file to machine running makefile
+	@$(OC_PROD) rsync ${PG_POD_NAME}:/var/tmp/${PG_BACKUP_FILE} .
+	@echo "Backup completd successfully."
+
+# Restore DB Backup
+
+	# Find running pod
+	$(eval PG_POD_NAME=`oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{- .metadata.name}}{{"\n"}}{{end}}{{end}}'`)
+	@echo "Running pod is: ${PG_POD_NAME}"
+	@echo
+
+	# Copy backup file to pod
+	@$(eval PG_BACKUP_FILE="filename_postgres.dump")
+	@$(OC_PROD) cp ${PG_BACKUP_FILE} ${PG_POD_NAME}:/var/tmp/
+	@echo "Restore will be: ${PG_BACKUP_FILE}"
+	@echo
+
+	# Terminal command to run non-interactively
+	@$(eval PG_RESTORE_CMD="pg_restore -v -h 127.0.0.1 -U ${POSTGRESQL_USER} -d ${OC_PROJECT} -n ${OC_PROJECT} /var/tmp/${PG_BACKUP_FILE}")
+
+	# Run restore command
+	@echo "Restoring database from file: ${PG_BACKUP_FILE}"
+	@${OC_PROD} rsh "${PG_POD_NAME} bash -c ${PG_RESTORE_CMD}"
 	
