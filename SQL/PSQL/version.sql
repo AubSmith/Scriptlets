@@ -1,0 +1,3 @@
+-- psql --version
+
+select version();

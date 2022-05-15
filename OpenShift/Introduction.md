@@ -29,3 +29,21 @@ Container orchestration
 
 # Git URL S2I
 https://github.com/openshift-roadshow/nationalparks-katacoda
+
+# Install make
+On Windows:
+'''winget install GnuWin32.Make'''
+'''set PATH=%PATH%;C:\Program Files (x86)\GnuWin32\bin'''
+
+# PowerShell - enable CRC/WSL integration
+Get-NetIPInterface | where {$_.InterfaceAlias -eq 'vEthernet (WSL)' -or $_.InterfaceAlias -eq 'vEthernet (Default Switch)'} | Set-NetIPInterface -Forwarding Enabled
+
+# VM IP addresses
+get-vm  | Select -ExpandProperty Networkadapters | Select vmname , ipaddress
+# OR
+get-vm -name crc | Format-list *
+
+
+# Set URLs in /etc/hosts/
+
+crc daemon

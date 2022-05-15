@@ -1,3 +1,5 @@
+# Minute - Hour - Day - Month - Week
+
 systemctl status crond
 
 man 5 crontab

@@ -89,3 +89,9 @@ oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{- .
 oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{.metdata.name}}{{"\n"}}{{end}}{{end}}'
 oc get pods --template '{{- range .items -}} {{if eq .status.phase "Running"}} {{- .metdata.name}}{{"\n"}}{{end}}{{end}}'
 oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{.metdata.name}} {{.status.phase}} {{"\n"}}{{end}}{{end}}'
+
+
+# To update
+oc new-app postgresql-13:1-53 -e POSTGRESQL_USER=user -e POSTGRESQL_DATABASE=db -e POSTGRESQL_PASSW)RD=password
+
+oc expose service/postgresql-13
