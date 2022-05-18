@@ -1,0 +1,25 @@
+Vagrant::Config.run do |config|
+    config.vm.box = "precise64"
+    # config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  
+    # config.vm.share_folder "v-root", "/var/tmp", "E:\\temp"
+    # config.vm.share_folder "v-root", "/vagrant", "."
+    config.vm.share_folder "temp", "/var/tmp", "./temp"
+    config.vm.share_folder "home", "~", "%PROFILE%\\Documents"
+
+    config.vm.forward_port 80, 8080
+    config.vm.forwarded_port 80, 8080, auto_correct: true
+    config.vm.usable_port_range = (2200..2250)
+    config.vm.network "bridged"
+    config.vm.network "hostonly", "192.168.33.10"
+
+    # Provisioned in order of provisioners
+    config.vm.provision "shell", path: "provision.sh"
+    # Inline
+    config.vm.provision "shell", inline: "apt-get install -y apache"
+
+    config.vm.provision "chef_solo", run_list: ["vagrant_book"]
+
+    config.vm.provision "puppet"
+
+  end

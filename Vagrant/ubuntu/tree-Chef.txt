@@ -1,0 +1,9 @@
+$ tree
+.
+├── Vagrantfile
+└── cookbooks
+    └── vagrant_book
+        └── recipes
+            └── default.rb
+
+3 directories, 2 files

@@ -41,9 +41,9 @@ def passive_sniffer(self):
         self.filter += ' and (net %s)' %(self.range)
     print("[*] Sniffing started on %s\n" %(self.interface))
     try:
-        sniff(filter=self.filter, prn=self.passive_handler, store=0)
+        sniff(filter=self.filter, prn=passive_handler, store=0)
     except Exception:
-        print("\n[!] An unknown error occured")
+        print("\n[!] An unknown error occured passively sniffing")
         return
     print("\n[*] Sniffing Stopped")
     self.duration = datetime.now() - self.starttime
@@ -57,7 +57,7 @@ def active_scan(self):
         ans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=self.range), timeout=2, iface=self.interface, inter=0.1)[0]
     except Exception:
         print("[FAIL]")
-        print("[!] An unknown error occured")
+        print("[!] An unknown error occured scanning")
         return
     print("[DONE]\n[*] Displaying Discovered HOSTS:\n")
     # Iterate over discovered hosts
@@ -100,12 +100,12 @@ if __name__ == '__main__':
     if args.passive:
         if not not args.range:
             enum = ArpEnumerator(interface=args.interface, passive=True, range=args.range)
-            enum.passive_sniffer()
+            passive_sniffer(enum)
         else:
             enum = ArpEnumerator(interface=args.interface, passive=True)
-            enum.passive_sniffer()
+            passive_sniffer(enum)
     else:
         enum = ArpEnumerator(interface=args.interface, range=args.range)
-        enum.active_scan()
+        active_scan(enum)
     if not not args.file:
         enum.output_results(args.file)

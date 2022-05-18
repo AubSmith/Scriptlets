@@ -1,0 +1,3 @@
+config.vm.provision "chef_client",
+  chef_server_url: "http://mychefserver.com:4000/",
+  validation_key_path: "validation.pem"

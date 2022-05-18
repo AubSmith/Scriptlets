@@ -1,0 +1,13 @@
+config.vm.provision "puppet",
+  module_path: "modules"
+
+config.vm.provision "puppet",
+  hiera_config_path: "hiera.yaml",
+  working_directory: "/vagrant"
+
+config.vm.provision "puppet" do |p|
+  p.facter["vagrant"] = "yes"
+end
+
+config.vm.provision "puppet_server"
+
