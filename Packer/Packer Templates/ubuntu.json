@@ -1,0 +1,40 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": ""
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-east-1",
+    "source_ami": "ami-a025aeb6",
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",
+    "ami_name": "shell-prov {{timestamp | clean_ami_name}}",
+    "ssh_bastion_host": "bastion.example.com",
+    "ssh_bastion_username": "bastion_user",
+    "ssh_bastion_password": "bastion_password"
+  }],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "index.html",
+      "destination": "/tmp/index.html"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mkdir -p /var/www/website",
+        "sudo mv /tmp/index.html /var/www/website"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "install.sh",
+        "post-install.sh"
+      ]
+    }
+  ]
+}

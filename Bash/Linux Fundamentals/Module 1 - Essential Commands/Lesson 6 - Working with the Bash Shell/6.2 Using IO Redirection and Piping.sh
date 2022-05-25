@@ -5,6 +5,8 @@ sort < /etc/services > myfile
 # Standard output (1): >
 ls > ~/myfile
 cat ~/myfile
+ls > ~/myfile | tee ~/myfile2
+cat ~/myfile2
 
 who >> ~/myfile
 cat ~/myfile

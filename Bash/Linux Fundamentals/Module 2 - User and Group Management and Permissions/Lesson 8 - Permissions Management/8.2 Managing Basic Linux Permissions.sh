@@ -10,6 +10,7 @@ chmod u-w,g+w myfile
 chown username object
 chown aubrey myfolder/
 chown aubrey:administrators myfolder/
+chown -R aubrey:administrators myfolder/
 
 chown --reference=sourcefile targetfile
 chmod --reference=sourcefile targetfile

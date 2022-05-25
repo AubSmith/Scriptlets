@@ -1,3 +1,19 @@
+# Find package
+apt-cache search bluefish*
+
+# Search installed
+apt-cache policy gimp
+apt-cache policy bluefish
+
+apt-cache search chrome
+apt-cache policy chrome
+
+# Manually install
+sudo dpkg -i ./google-chrome-stable.deb
+
+# Update all packages
+sudo apt-get upgrade
+
 # Update the list of packages
 sudo apt-get update
 # Install pre-requisite packages.

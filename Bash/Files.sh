@@ -25,6 +25,9 @@ ls a*
 # All files starting a, exclude directory content
 ls -d a*
 
+# List files type in reverse order
+ls -pr
+
 # List all directories in a directory
 cd /etc && ls -d */
 

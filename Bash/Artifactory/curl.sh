@@ -25,3 +25,8 @@ curl -LOv "http://localhost:8081/artifactory/libs-release-local/test/test.txt"
 
 # Test docker registry with domain cert
 curl --cacert domain.crt https://your.registry:5000/v2/_catalog
+
+# SSL Certificates
+curl -sSLK https://artifactory.waynecorp.com/artifactory/repo/certs/prod.tar | tar xf - -C /etc/pki/ca-trust/source/anchors/ \
+&& cd /etc/pki/ca-trust/source/anchors/ \
+&& update-ca-trust extract
