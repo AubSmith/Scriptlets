@@ -1,6 +1,8 @@
 ssh ip -X # Xforwarding - allow graphical UI over SSH
 ssh ip # Login as current user
 ssh newuser@ip # Login as newuser
+ssh ethan@computestick
+exit # Exit SSH session
 
 # Setup SSH
 ssh-keygen
@@ -12,7 +14,13 @@ ssh-copy-id user@ip
 
 ssh -vvv -p 122 user@github.com
 
+sudo apt-get install openssh-server
 
+# Change SSH port and Auth
+sudo vi /etc/ssh/sshd_config
+# PermitRootLogin no
+# AllowUsers ethan
+sudo systemctl restart ssh
 
 # Dump all certs in the chain
 

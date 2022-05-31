@@ -23,6 +23,13 @@ git push origin --tags
 git config --global http.sslBackend schannel # Git will use Windows cert store and ignore http.sslCAInfo config setting
 # git config --global http.sslBackend openssl
 
+# Add git ignore
+git-ignore folder/
+git-ignore .* # Hidden files
+
+# Remove folder
+git rm -r folder
+
 
 # Create a new local repository:
 git init
@@ -61,7 +68,6 @@ git reset --hard origin/master
 
 # see current branch
 git branch
-git branch --show-current
 
 # Turn off SSL verification per remote
 git config --global http.sslVerify false

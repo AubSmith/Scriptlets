@@ -100,3 +100,16 @@ host 192.168.1.5
 host -C wayneent.com
 host -t mx wayneent.com
 host -a wayneent.com
+
+# TCP Dump
+sudo tcpdump -c 10 # Cap 10 Pkts
+sudo tcpdump -c 10 -A
+sudo tcpdump -c 10 -i wlan0
+sudo tcpdump -c 10 -XX -i wlan0 # Hex
+sudo tcpdump -i wlan0 port 22
+
+# Netstat
+netstat -nr
+netstat -i
+netstat -ta
+netstat -tan

@@ -1,0 +1,3 @@
+servername.waynecorp.com
+servername1.waynecorp.com
+servername2.waynecorp.com

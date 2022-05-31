@@ -1,0 +1,2 @@
+man ssh
+man nmap
