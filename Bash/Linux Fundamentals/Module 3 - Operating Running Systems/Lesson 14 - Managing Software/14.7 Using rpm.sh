@@ -31,3 +31,6 @@ rpm -qa | grep artifactory
 
 # Remove package
 rpm -e <package name>
+
+# Uppack RPM to current directory - handy to see what changes
+rpm2cpio jfrog-artifactory.rpm | cpio -idmv

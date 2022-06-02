@@ -43,3 +43,19 @@ git push -u origin my-branch-name
 git push -u origin HEAD
 # If local branch exists
 git push
+
+# Rename a local branch
+git branch -m <old_branch_name> <new_branch_name>
+
+git push origin <new_branch_name>
+git push origin -d -f <old_branch_name>
+
+# Delete a local branch
+git checkout <central_branch_name>
+git branch -a
+git branch -d <name_of_the_branch>
+
+# Delete a remote branch
+git checkout <central_branch_name>
+git branch -a
+git push origin -d <name_of_the_branch>
