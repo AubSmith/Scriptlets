@@ -15,8 +15,6 @@ yum install
 yum search
 yum remove
 
-yum groups list
-yum groups install
 yum provides
 yum history
 
@@ -37,7 +35,11 @@ yum update
 yum search semanage
 yum provides semanage
 
-yum groups list
+# Flush yum repo cache
+sudo yum clean all
+
+sudo yum repolist all
+sudo yum groups list
 yum groups install "Compute Node"
 
 yum history
