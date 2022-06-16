@@ -1,0 +1,29 @@
+﻿
+
+TOPIC
+    about_Win32Shutdown
+
+SHORT DESCRIPTION
+    The Win32Shutdown module contains commands used to log off, reboot, and shutdown local and remote computers.
+
+LONG DESCRIPTION
+    The PowerShell Win32Shutdown module provides commands for logging off, rebooting, and shutting down local and remote computers.
+
+    This is a wrapper module for the methods of the Win32_OperatingSystem WMI class, and uses WSMan and CIM sessions to communicate with remote computers through the use of the CimSession parameter available on each command.
+COMMAND LIST
+    Start-Shutdown is used to log off, reboot, or shutdown a computer based on the value of the Type parameter.
+
+    Start-TrackedShutdown is used to log off, reboot, or shutdown a computer based on the value of the Type parameter, and also provide information to the event log with the ReasonCode and Comment parameters.
+
+    Start-PowerOff powers off a computer.
+
+    Start-Reboot reboots a computer.
+
+KEYWORDS
+    'CIM','WMI','Win32','Shutdown','Reboot','LogOff','Win32_OperatingSystem','Win32Shutdown'
+
+SEE ALSO
+    Get-Help Start-Shutdown
+    Get-Help Start-TrackedShutdown
+    Get-Help Start-PowerOff
+    Get-Help Start-Reboot

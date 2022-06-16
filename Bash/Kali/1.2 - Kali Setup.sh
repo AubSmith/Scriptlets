@@ -23,3 +23,6 @@ sudo apt dist-upgrade # Similar to regular upgrade, but handles changing depende
 
 # Install Kali headers
 apt install linux-headers-$(uname -r)
+
+# SSH
+ssh-copy-id -i ~/.ssh/id_rsa.pub esmith@192.168.1.2

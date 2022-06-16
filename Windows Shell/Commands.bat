@@ -8,7 +8,9 @@ type filename.txt
 query user /server:computername
 
 # User account details
-ney user esmith /domain
+net user esmith /domain
+net user %username% /domain
+net user %username%admin /domain
 
 # User group membership
 whoami /groups /fo list |findstr /:c "Group Name:" | sort
@@ -33,6 +35,7 @@ sfc
 
 # Tasks
 tasklist
+tasklist -v
 
 # Kill Tasks
 taskkill
@@ -41,3 +44,9 @@ chkdsk
 
 # Change cmd prompt
 prompt
+
+
+qwinsta
+
+echo "Hello World" > test.txt
+type test.txt

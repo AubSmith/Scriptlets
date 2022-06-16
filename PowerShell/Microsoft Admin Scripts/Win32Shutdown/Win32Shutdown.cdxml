@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PowerShellMetadata xmlns="http://schemas.microsoft.com/cmdlets-over-objects/2009/11">
+    <Class ClassName="ROOT/cimv2/Win32_OperatingSystem">
+        <Version>1.0</Version>
+        <DefaultNoun>OperatingSystem</DefaultNoun>
+        <InstanceCmdlets>
+            <!--Get-OperatingSystem-->
+            <GetCmdletParameters DefaultCmdletParameterSet="DefaultSet"/>
+
+            <!--Start-Shutdown-->
+            <Cmdlet>
+                <CmdletMetadata Verb="Start" Noun="Shutdown" />
+                <Method MethodName="Win32Shutdown">
+                    <ReturnValue>
+                        <Type PSType="System.UInt32" />
+                        <CmdletOutputMetadata />
+                    </ReturnValue>
+
+                    <Parameters>
+                        <Parameter ParameterName="Flags">
+                            <Type PSType="OS.ShutdownTypes" />
+                            <CmdletParameterMetadata PSName="Type" IsMandatory="true" Position="0" />
+                        </Parameter>
+                    </Parameters>
+                </Method>
+            </Cmdlet>
+
+            <!--Start-TrackedShutdown-->
+            <Cmdlet>
+                <CmdletMetadata Verb="Start" Noun="TrackedShutdown" />
+                <Method MethodName="Win32ShutdownTracker">
+                    <ReturnValue>
+                        <Type PSType="System.UInt32" />
+                        <CmdletOutputMetadata />
+                    </ReturnValue>
+
+                    <Parameters>
+                        <Parameter ParameterName="Timeout">
+                            <Type PSType="System.UInt32" />
+                            <CmdletParameterMetadata IsMandatory="true" Position="3" />
+                        </Parameter>
+
+                        <Parameter ParameterName="Comment">
+                            <Type PSType="System.String" />
+                            <CmdletParameterMetadata IsMandatory="true" Position="2" />
+                        </Parameter>
+
+                        <Parameter ParameterName="ReasonCode">
+                            <Type PSType="System.UInt32" />
+                            <CmdletParameterMetadata IsMandatory="true" Position="1" />
+                        </Parameter>
+
+                        <Parameter ParameterName="Flags">
+                            <Type PSType="OS.ShutdownTypes" />
+                            <CmdletParameterMetadata PSName="Type" IsMandatory="true" Position="0" />
+                        </Parameter>
+                    </Parameters>
+                </Method>
+            </Cmdlet>
+
+            <!--Start-Reboot-->
+            <Cmdlet>
+                <CmdletMetadata Verb="Start" Noun="Reboot" />
+                <Method MethodName="Reboot">
+                    <ReturnValue>
+                        <Type PSType="System.UInt32" />
+                        <CmdletOutputMetadata />
+                    </ReturnValue>
+                </Method>
+            </Cmdlet>
+
+            <!--Start-PowerOff-->
+            <Cmdlet>
+                <CmdletMetadata Verb="Start" Noun="PowerOff" />
+                <Method MethodName="Shutdown">
+                    <ReturnValue>
+                        <Type PSType="System.UInt32" />
+                        <CmdletOutputMetadata />
+                    </ReturnValue>
+                </Method>
+            </Cmdlet>
+        </InstanceCmdlets>
+    </Class>
+    <Enums>
+        <Enum EnumName="OS.ShutdownTypes" UnderlyingType="System.Int32">
+            <Value Name="LogOff" Value="0" />
+            <Value Name="ForcedLogOff" Value="4" />
+            <Value Name="Shutdown" Value="1" />
+            <Value Name="ForcedShutdown" Value="5" />
+            <Value Name="Reboot" Value="2" />
+            <Value Name="ForcedReboot" Value="6" />
+            <Value Name="PowerOff" Value="8" />
+            <Value Name="ForcedPowerOff" Value="12" />
+        </Enum>
+    </Enums>
+</PowerShellMetadata>

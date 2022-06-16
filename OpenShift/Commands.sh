@@ -1,5 +1,10 @@
 oc whoami
 
+oc help
+
+oc status
+oc status --suggest
+
 oc get serviceaccount
 
 
@@ -30,8 +35,6 @@ oc scale --replicas=2 deployment/parksmap
 
 oc get rs
 
-oc get pods
-
 oc describe svc parksmap
 
 oc get endpoints parksmap
@@ -39,8 +42,6 @@ oc get endpoints parksmap
 oc delete pod parksmap-8cb4d64c5-gcqsh && oc get pods
 
 oc scale --replicas=1 deployment/parksmap
-
-oc get pods
 
 # Creating a route
 oc get routes
@@ -63,6 +64,7 @@ oc get pods
 oc rsh parksmap-65c4f8b676-fxcrq
 ls / # OR
 oc rsh parksmap-65c4f8b676-fxcrq whoami
+oc rsh parksmap-65c4f8b676-fxcrq bash -c pwd
 
 # S2I builds
 oc get builds
@@ -95,3 +97,11 @@ oc get pods --template '{{range .items}} {{if eq .status.phase "Running"}} {{.me
 oc new-app postgresql-13:1-53 -e POSTGRESQL_USER=user -e POSTGRESQL_DATABASE=db -e POSTGRESQL_PASSW)RD=password
 
 oc expose service/postgresql-13
+
+oc project
+oc project projectname
+
+# View current settings
+oc config view
+
+oc logout

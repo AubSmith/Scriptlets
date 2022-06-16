@@ -30,3 +30,6 @@ curl --cacert domain.crt https://your.registry:5000/v2/_catalog
 curl -sSLK https://artifactory.waynecorp.com/artifactory/repo/certs/prod.tar | tar xf - -C /etc/pki/ca-trust/source/anchors/ \
 && cd /etc/pki/ca-trust/source/anchors/ \
 && update-ca-trust extract
+
+# Check for redirects
+curl -Lov https://downloads.cypress.com/desktop/10.0.3 -v
