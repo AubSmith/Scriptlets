@@ -60,3 +60,6 @@ usermod -aG wheel username
 
 userdel username
 groupdel sales
+
+# Group membership
+id | egrep -o 'groups=.*' | sed 's/,/\n/g' | cut -d'(' -f2 | sed 's/)//'

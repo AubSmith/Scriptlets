@@ -86,7 +86,6 @@ mv c* video
 
 scp /var/tmp/myfile.txt username@hostname:/var/tmp/
 
-
 # basename
 FILE="~/myfile.txt"
 basename "$FILE"
