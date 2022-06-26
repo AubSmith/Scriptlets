@@ -19,7 +19,7 @@ func test_sha1_string() {
 
 	h1 := sha1.New()    // We first initialize an instance of SHA1 function
 	h1.Write([]byte(s)) // Feed the input message to hash function instance
-	bs1 := h1.Sum(nil)  // Finish hash calculation
+	bs1 := h1.Sum(nil)  // Perform hash calculation
 
 	fmt.Println(s)
 	fmt.Printf("%x\n", bs1)
@@ -32,7 +32,7 @@ func test_sha1_file() {
 	file, _ := os.Open("Text-for-test.txt") //Hash of a file
 	h2 := sha1.New()
 	io.Copy(h2, file)
-	bs2 := h2.Sum(nil)
+	bs2 := h2.Sum(nil) // Perform hash calculation
 	fmt.Printf("%x\n", bs2)
 	fmt.Printf("The number of bytes is %d\n", len(bs2))
 

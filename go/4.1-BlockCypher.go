@@ -28,7 +28,7 @@ func DecryptAes128Ecb(data, key []byte) []byte {
 func EncryptAes128Ecb(data, key []byte) []byte {
 	cipher, _ := aes.NewCipher([]byte(key))
 	encrypted := make([]byte, len(data))
-	size := 16
+	size := 16 // Block size in Bytes
 
 	for bs, be := 0, size; bs < len(data); bs, be = bs+size, be+size {
 		cipher.Encrypt(encrypted[bs:be], data[bs:be])
