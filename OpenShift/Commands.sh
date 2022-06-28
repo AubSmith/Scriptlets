@@ -1,9 +1,14 @@
 oc whoami
+oc whoami -c # Show context
+oc whoami --show-console # Show Web console URL
+
 
 oc help
 
 oc status
 oc status --suggest
+oc get all # List all resources in a namespace
+oc describe pod parksmap-8cb4d64c5-kh2ls
 
 oc get serviceaccount
 
@@ -52,6 +57,7 @@ oc get route
 # View logs
 oc get pods
 oc logs parksmap-1-hx0kv
+oc logs -f parksmap-1-hx0kv
 
 # Set permissions
 oc project test
@@ -65,6 +71,9 @@ oc rsh parksmap-65c4f8b676-fxcrq
 ls / # OR
 oc rsh parksmap-65c4f8b676-fxcrq whoami
 oc rsh parksmap-65c4f8b676-fxcrq bash -c pwd
+
+# Debug container
+oc debug <pod_name>
 
 # S2I builds
 oc get builds
@@ -98,10 +107,18 @@ oc new-app postgresql-13:1-53 -e POSTGRESQL_USER=user -e POSTGRESQL_DATABASE=db 
 
 oc expose service/postgresql-13
 
-oc project
-oc project projectname
+oc project # Display the current project
+oc projects # List existing projects
+oc project list # List existing projects
+oc project projectname # Switch to a specific project
 
 # View current settings
 oc config view
+
+oc scale dc <resource_name> --replicas=<count> 
+oc autoscale deployment <resource_name> --min=2 --max=4 --cpu-percent=80% # Scale the application between 2 and 4 pods with a target CPU utilization of 80%
+
+oc delete all -l app=<app_name> # Delete all resources of the application
+oc delete pod <pod_name> # Delete all pod
 
 oc logout

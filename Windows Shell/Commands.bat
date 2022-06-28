@@ -50,3 +50,11 @@ qwinsta
 
 echo "Hello World" > test.txt
 type test.txt
+
+# Query ADDC bind
+nltest /dsgetdc:
+
+nltest.exe /lsaqueryfti:wayneent.com
+
+# Verify Trust
+netdom trust wayneent.com /domain:waynecorp.com /invoketrustscanner`
