@@ -17,6 +17,8 @@ podman run --detach --publish 8000:8000 --name=helloweb localhost/pythonweb
 
 curl http://localhost:8000
 
+podman ps
+
 podman stop helloweb
 podman logs helloweb
 podman rm helloweb

@@ -2,6 +2,7 @@ curl -uadmin:password https://arturl.com/artifactory/api/system/ping
 
 # Jfrog Artifactory Verbose
 curl https://artifactory.url/artifactory/api/system/ping -vvv
+curl https://artifactory.url/artifactory/api/system/ping -v
 curl -Sv https://artifactory.url/artifactory/api/system/ping
 
 # Jfrog Artifactory Insecure SSL

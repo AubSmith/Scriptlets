@@ -1,3 +1,6 @@
+# Validate cert
+certutil -isvalid 1234567890abcdef0987654321
+
 # View registed curves for ECC
 certutil.exe –displayEccCurve
 

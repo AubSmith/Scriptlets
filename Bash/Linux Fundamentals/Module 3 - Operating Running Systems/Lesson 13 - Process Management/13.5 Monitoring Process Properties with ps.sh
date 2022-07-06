@@ -10,3 +10,5 @@ ps aux --sort pmem
 free -m
 
 pgrep ssh
+
+ps -ef | grep httpd | wc -l

@@ -1,0 +1,1 @@
+Test-Certificate -Cert .\service.waycorp.com.cer

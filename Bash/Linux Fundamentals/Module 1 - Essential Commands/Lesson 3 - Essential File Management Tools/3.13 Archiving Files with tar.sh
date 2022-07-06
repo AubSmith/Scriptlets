@@ -19,3 +19,6 @@ ls -l /tmp/home.tgz
 # Use BZip2 for compression
 tar -cjvf /tmp/homej.tgz /home /root
 ls -l /tmp/homej.tgz
+
+# List contained files
+tar -t /tmp/homej.tgz

@@ -15,6 +15,8 @@ net user %username%admin /domain
 # User group membership
 whoami /groups /fo list |findstr /:c "Group Name:" | sort
 
+whoami /all
+
 # File extension associations
 assoc
 
@@ -58,3 +60,9 @@ nltest.exe /lsaqueryfti:wayneent.com
 
 # Verify Trust
 netdom trust wayneent.com /domain:waynecorp.com /invoketrustscanner`
+
+# Clear Kerberos cache
+Get-WmiObject -ClassName Win32_LogonSession -Filter "AuthenticationPackage != 'NTLM'" | ForEach-Object {[Convert]::ToString($_.LogonId, 16)} | ForEach-Object { klist.exe purge -li $_ }
+
+# Set SPN
+setspn -s http/federation.service.waynecorp.com\gbladfsdsa

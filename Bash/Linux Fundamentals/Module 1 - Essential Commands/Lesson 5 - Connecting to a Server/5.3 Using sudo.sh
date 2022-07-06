@@ -6,3 +6,6 @@ exit
 sudo user add lori
 
 sudo -i # Interactive user session
+
+# Revalidate credentials
+sudo -v
