@@ -11,6 +11,8 @@ du -csh
 du -csh --block-size=1G
 du -csh --block-size=1M
 du -sh *
+du -a ~/Downloads # All files
+du -ah ~/Downloads # All files + Human readable
 
 # Find and sort directories by size
 du -sh * | sort -h

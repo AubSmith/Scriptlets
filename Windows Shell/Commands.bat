@@ -66,3 +66,6 @@ Get-WmiObject -ClassName Win32_LogonSession -Filter "AuthenticationPackage != 'N
 
 # Set SPN
 setspn -s http/federation.service.waynecorp.com\gbladfsdsa
+
+# Task scheduler
+schtasks /create
