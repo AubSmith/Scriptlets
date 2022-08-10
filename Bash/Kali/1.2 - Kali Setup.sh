@@ -15,11 +15,16 @@ systemctl status ssh.service
 
 # SSH Public Key
 
+# Check sources
+cat /etc/apt/sources.list
+
 # Kali update 
 sudo apt update
+sudo apt full-upgrade -y # Downloads and updates packages, also removes already installed packages if needed.
+sudo apt autoremove # Clean up old packages
+
+# Other update options
 sudo apt upgrade # Downloads and updates packages without deleting anything previously installed on Kali Linux.
-sudo apt full-upgrade # Downloads and updates packages, also removes already installed packages if needed.
-sudo apt dist-upgrade # Similar to regular upgrade, but handles changing dependencies, removes obsolete packages, and adds new ones.
 
 # Install Kali headers
 apt install linux-headers-$(uname -r)

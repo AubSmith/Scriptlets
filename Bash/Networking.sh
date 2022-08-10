@@ -47,8 +47,15 @@ system restart NetworkManager
 ip -4 a s eth0
 ip addr | grep eth0
 
+# DNS
+sudo lsof -i :53 -S # Determine local DNS resolver service
+sudo systemctl restart systemd-resolved
+systemctl status systemd-resolved
+ping google.com
+
 # Flush DNS cache
-sudo rndc flash lan
+sudo rndc flash lan # OR
+sudo resolvectl flush-caches
 
 sysctl net.ipv4.ip_local_port_range
 sysctl net.ipv4.tcp_fin_timeout
