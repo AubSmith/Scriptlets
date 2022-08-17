@@ -71,6 +71,8 @@ ls -li /etc/hosts hosts # -li = long inode
 ln -s /etc/hosts hosts # Create symbolic link
 
 # Find
+find -name passwords.txt
+find -name *.txt
 find / -name "hosts"
 find / -name "host" # does not find hosts
 mkdir /root/amy; find / -user amy -exec cp {} /root/amy \; # \; closes exec cmd
@@ -79,6 +81,10 @@ find / -type f -size +100M
 find /etc -exec grep -l amy {} \; -exec cp {} root/amy/ \; 2>/dev/null
 find /etc -name '*' -type   f | xargs grep "127.0.0.1"
 find /etc -type f -size -1000c -exec cp {} /tmp/files/pictures \;
+
+# Grep
+grep "192.168.1.10" access.log
+grep "THM" access.log
 
 # Moving files
 mv [ab]* photos/
@@ -121,3 +127,6 @@ cat md5.txt
 # Create file with date in name
 touch "backup_$(date +%F).log"
 touch /var/log/"backup_$(date +%F).log"
+
+# WC
+wc -l access.log # Count lines in access.log

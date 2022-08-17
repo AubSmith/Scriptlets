@@ -1,0 +1,1 @@
+sc create "TFS2Git" start= demand displayname= "Team Foundation Server to Git" binpath= D:\tfs2git.bat
