@@ -1,7 +1,7 @@
--- Single line comment
+-- Test table creation
 
 /*
-Multi-line comment
+create table tbltest (testing text);
 */
 
 CREATE TABLE [IF NOT EXISTS] os_login (

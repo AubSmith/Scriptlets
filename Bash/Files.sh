@@ -130,3 +130,9 @@ touch /var/log/"backup_$(date +%F).log"
 
 # WC
 wc -l access.log # Count lines in access.log
+
+# Determine file type
+file $filename
+
+file desktop.ini
+file bshell.c
