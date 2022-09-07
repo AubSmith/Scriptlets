@@ -44,23 +44,25 @@ logins = json.loads(req.text)
 # Loop over returned JSON list and extract organization names
 for login in logins:
     try:
+        # Extract list of members
         logging.info(f"Starting member extract for {login['login']}")
         login = login['login']
         logging.info(f'Member extract URL = {ghe}/orgs/{login}/members')
         try:
-            reply = requests.get(f'{ghe}/orgs/{login}/members', headers=header, verify='cacert')
-            if (reply.status_code == 200):
+            member = requests.get(f'{ghe}/orgs/{login}/members', headers=header, verify='cacert')
+            if (member.status_code == 200):
                 pass
             else:
-                logging.error(f'An HTTP error occurred: {reply.status_code}')
+                logging.error(f'An HTTP error occurred: {member.status_code}')
                 sys.exit(1)
             try:
-                logging.info(f'Writing report for {login}')
+                logging.info(f'Writing member report for {login}')
+                # Write to file
                 with open(f'Reports/{login}.json', 'w') as f:
-                    f.write(reply.text)
-                logging.info(f'Writing report for {login} completed')
+                    f.write(member.text)
+                logging.info(f'Writing member report for {login} completed')
             except Exception as e:
-                logging.error(f'Unable to write log for {login}', exc_info=True)
+                logging.error(f'Unable to write member log for {login}', exc_info=True)
                 sys.exit(1)
         except Exception as e:
             logging.error('Error extracting member list', exc_info=True)

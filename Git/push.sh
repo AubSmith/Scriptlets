@@ -6,6 +6,8 @@ cat /home/esmith/.ssh/id_rsa.pub
 git remote -v
 git remote set-url origin ssh://esmith@bitbucket.service.wayneent.com:7998/proj/repo_name.git
 
+git remote add origin git@git.bitbucket.service.wayneent.com:7998/proj/repo_name.git
+
 git pull
 
 mkdir project1
@@ -59,3 +61,12 @@ git branch -d <name_of_the_branch>
 git checkout <central_branch_name>
 git branch -a
 git push origin -d <name_of_the_branch>
+
+
+# Push to two repos simultaneously
+# Updates remote.origin.pushurl config
+git remote set-url --add --push origin ssh://git@bitbucket.corp.waynecorp.com:7998/mil/batmobile.git
+git remote set-url --add --push origin ssh://git@github.corp.waynecorp.com:mil/batmobile.git
+
+git remote show origin
+git fetch --all

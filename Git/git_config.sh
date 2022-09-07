@@ -34,13 +34,19 @@ git rm -r folder
 # Create a new local repository:
 git init
 
+git remote add origin https://github.service.waynecorp.com/bwayne/batmobile.git
+
+git branch -m Main
 
 # Code is ready to be pushed:
 cd existing-project
 git add <filename>
 git add *
+git add -A # Very useful
 git add --all
 git commit -m "Initial Commit"
+
+git push --set-upstream origin main
 
 # Clone a repository:
 git clone https://aubs@bitbucket.com/scm/repo.git

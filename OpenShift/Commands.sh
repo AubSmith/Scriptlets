@@ -84,6 +84,7 @@ oc get routes
 # Database
 oc create -f https://raw.githubusercontent.com/openshift-labs/starter-guides/ocp-4.8/mongodb-template.yaml -n aubreysmith-dev # Create template
 oc import-image mongodb:3.6 --from=registry.access.redhat.com/rhscl/mongodb-36-rhel7 --confirm
+# oc import-image postgres:latest docker-remote.artifactory.service.waynecorp.com --confirm
 
 oc label dc/mongodb-nationalparks svc/mongodb-nationalparks app=workshop component=nationalparks role=database --overwrite
 

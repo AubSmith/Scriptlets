@@ -5,6 +5,7 @@ ip address
 
 # Hostname
 snmpwalk -v3 -l authnoPriv -u username -a SHA -A Password 192.168.1.100 .1.3.6.1.2.1.1.5.0
+snmpget -v 3 -u $username -A $password -a SHA -l authnoPriv $host .1.3.6.1.2.1.1.5.0
 
 # Disk Dimensions
 snmpwalk -On -v3 -l authnoPriv -u username -a SHA -A Password 192.168.1.100 .1.3.6.1.4.1.2021.9
