@@ -69,3 +69,11 @@ sudo parted /dev/sda1
 
 # p # Print
 # resizepart 2 18GiB
+
+# Low disk
+df -h
+
+du -a ./ | sort -n -r | head -n 20
+
+du -sh ./httpd/log
+du -sh ./artifactory/log
