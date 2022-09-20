@@ -33,6 +33,8 @@ git branch -a
 git checkout -b my-branch-name
 # Switch to branch
 git checkout my-branch-name
+# Delete branch
+git branch --delete <branchname>
 
 # Switch branch from remote
 # Get list of branches
