@@ -1,1 +1,6 @@
 Alt + F4 - Exit current window
+
+VS Code
+Cursor at start of multple lines
+Alt + Shift + I
+Home Home

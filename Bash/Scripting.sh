@@ -6,6 +6,11 @@ echo '$1 = ' $1
 echo '$2 = ' $2
 echo '$3 = ' $3
 
+# All parameters
+echo {$@}
+# All parameters from parameter 3 onwards
+echo {$@:3}
+
 # AND
 echo -n "Enter some integer:"
 read num
