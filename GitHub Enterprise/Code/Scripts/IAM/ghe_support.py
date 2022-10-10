@@ -20,7 +20,7 @@ Select one of the following options to be run - enter numeric value;
 1 - Create organization
 2 - Add owner to organization
 3 - List owners of an organization
-4 - list members of an organization
+4 - List members of an organization
 5 - Run IAM reports for all organizations
 6 - Quit
 
