@@ -21,7 +21,8 @@ Select one of the following options to be run - enter numeric value;
 2 - Add owner to organization
 3 - List owners of an organization
 4 - list members of an organization
-5 - Run IAM rports for all organizations
+5 - Run IAM reports for all organizations
+6 - Quit
 
 '''
 
@@ -78,119 +79,127 @@ admin = ''
 
 # Logic to handle support functions
 def ghe_support():
-    # print utility options
-    print(f'''
-    
-    Select one of the following options to be run in the {environment.lower()} environment:
-    1 - Create organization
-    2 - Add owner to organization
-    3 - List owners of an orgaization
-    4 - List members of an organization
-    5 - Run IAM reports for all organizations
-    6 - Quit
 
-    ''')
+    # Loop through menu options
+    while True:
 
-    try:
-        option = input('Please enter your option: ')
-
-        if option == '1':
-            global login
-            login = input('Enter the name of the organization to create: ')
-
-            global admin
-            admin = input('Enter organization owner: ')
-
-            global data
-            data = {"login": f"{login}", "admin": f"{admin}"}
-    
-            try:
-                create_organization()
-    
-                if create_organization() in (200, 201) :
-                    print(f'Organization {login} has been created.')
-                else:
-                    print('An error has occurred. Please check the log for further details.')
-            except:
-                print('An error has been encountered. Please check the log for further details.')
-            
-        elif option == '2':
-            login = input('Please provide organization name: ')
-            admin = input('Please provide owner name: ')
-
-            data = {"role": "admin"}
-
-            try:
-                set_organization_owner()
-                
-                if set_organization_owner() in (200, 201) :
-                    print(f'User {admin} has been successfully added to organization {login}.')
-                else:
-                    print('An error has occurred. Please check the log for further details.')
-            except:
-                print('An error has been encountered. Please check the log for further details.')
-
-
-    
-        elif option == '3':
-            login = input('Please provide organization name: ')
-
-            global role
-            role = 'owner'
-
-            global api_url
-            api_url = 'members?role=admin'
-    
-            get_organization_ownermember()
-    
-        elif option == '4':
-            login = input('Please provide organization name: ')
-
-            role = 'member'
-
-            api_url = 'members?role=member'
-    
-            get_organization_ownermember()
+        # Print utility options
+        print(f'''
         
-        else:
-            option == '5'
-            print('You have selected to run all reports.')
+        Select one of the following options to be run in the {environment.lower()} environment:
+        1 - Create organization
+        2 - Add owner to organization
+        3 - List owners of an orgaization
+        4 - List members of an organization
+        5 - Run IAM reports for all organizations
+        6 - Quit
     
-            global report
+        ''')
     
-            # Create owner extract
-            try:
-                report = 'owner'
+        try:
+            option = input('Please enter your option: ')
+    
+            if option == '1':
+                global login
+                login = input('Enter the name of the organization to create: ')
+    
+                global admin
+                admin = input('Enter organization owner: ')
+    
+                global data
+                data = {"login": f"{login}", "admin": f"{admin}"}
+        
+                try:
+                    create_organization()
+        
+                    if create_organization() in (200, 201) :
+                        print(f'Organization {login} has been created.')
+                    else:
+                        print('An error has occurred. Please check the log for further details.')
+                except:
+                    print('An error has been encountered. Please check the log for further details.')
+                
+            elif option == '2':
+                login = input('Please provide organization name: ')
+                admin = input('Please provide owner name: ')
+    
+                data = {"role": "admin"}
+    
+                try:
+                    set_organization_owner()
+                    
+                    if set_organization_owner() in (200, 201) :
+                        print(f'User {admin} has been successfully added to organization {login}.')
+                    else:
+                        print('An error has occurred. Please check the log for further details.')
+                except:
+                    print('An error has been encountered. Please check the log for further details.')
+    
+    
+        
+            elif option == '3':
+                login = input('Please provide organization name: ')
+    
+                global role
+                role = 'owner'
+    
+                global api_url
                 api_url = 'members?role=admin'
-                iam_extract()
-            except:
-                print('Failed to generate owner extracts.')
-            
-            # Create member extract
-            try:
-                report = 'member'
+        
+                get_organization_ownermember()
+        
+            elif option == '4':
+                login = input('Please provide organization name: ')
+    
+                role = 'member'
+    
                 api_url = 'members?role=member'
-                iam_extract()
-            except:
-                print('Failed to generate member extracts.')
+        
+                get_organization_ownermember()
             
-    
-            # Crate repository extract
-            try:
-                report = 'repository'
-                api_url = 'repos'
-                iam_extract()
-            except:
-                print('Failed to generate repository extracts.')
-            
-    
+            elif option == '5':
+                print('You have selected to run all reports.')
+        
+                global report
+        
+                # Create owner extract
+                try:
+                    report = 'owner'
+                    api_url = 'members?role=admin'
+                    iam_extract()
+                except:
+                    print('Failed to generate owner extracts.')
+                
+                # Create member extract
+                try:
+                    report = 'member'
+                    api_url = 'members?role=member'
+                    iam_extract()
+                except:
+                    print('Failed to generate member extracts.')
+                
+        
+                # Create repository extract
+                try:
+                    report = 'repository'
+                    api_url = 'repos'
+                    iam_extract()
+                except:
+                    print('Failed to generate repository extracts.')
+            else:
+                option == '6'
+                print('Goodbye')
 
-    except:
-        print(f'''Please select a valid numeric option. 
-
-            {usage}
-            
-            ''')
+                return
+    
+    
+    
+        except:
+            print(f'''Please select a valid numeric option. 
+    
+                {usage}
+                
+                ''')
 
 
 
@@ -204,11 +213,6 @@ def create_organization():
             logging.error(f'A HTTP error occured: {organization_url.status_code}')
     except:
         logging.error(f'Unable to create organization', exc_info=True)
-
-
-
-owners = ['iamdsa']
-# owners = owners.append(iter(lambda: input('Enter owner to add or leave blank when done: ', owners)))
 
 
 
@@ -252,7 +256,7 @@ def get_organization_ownermember():
 def organization_extract_all():
 # Make API call
     try:
-        req = requests.get(f'{environment_url}/organizations', headers=header, verify='cacert')
+        req = requests.get(f'{environment_url}/api/v3/organizations', headers=header, verify='cacert')
 
         logging.info('REST call made')
         logging.info(f'Status code = {req.status_code}')
@@ -266,7 +270,7 @@ def organization_extract_all():
 
     except Exception as e:
         logging.error('An exception has occured', exc_info=True)
-        logging.info(f'URL = {environment_url}/organizations')
+        logging.info(f'URL = {environment_url}/api/v3/organizations')
         sys.exit(1)
     
     # Load returned JSON
@@ -307,18 +311,6 @@ def iam_extract():
         except Exception as e:
             logging.error('Unable to read list', exc_info=True)
             logging.error(f"{report} extract for {login} failed")
-
-
-
-# Verify valid report type requested
-#if report.lower() == 'owner':
-#    role = 'owner'
-#    
-#elif report.lower() == 'member':
-#    role = 'member'
-#    
-#elif report.lower() == 'repository':
-#    api_url = 'repos'
 
 
 
