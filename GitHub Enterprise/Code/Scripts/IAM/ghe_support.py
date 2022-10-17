@@ -55,13 +55,18 @@ else:
 if environment.lower() == 'test':
     environment_url = config.get('Environment', 'Test')
     token = config.get('Token', 'TestToken')
+    iam_account = config.get('IAM','TestAccount')
     logging.info(f'Environment set is {environment_url}')
+
 elif environment.lower() == 'prod':
     environment_url = config.get('Environment', 'Production')
     token = config.get('Token', 'ProdToken')
+    iam_account = config.get('IAM','ProductionAccount')
     logging.info(f'Environment set is {environment_url}')
+
 elif environment.lower() == '-h':
     print(usage)
+
 else:
     logging.error('Invalid environment specified. Valid environments are test or prod.')
     sys.exit(1)
@@ -102,10 +107,10 @@ def ghe_support():
             if option == '1':
                 global login
                 login = input('Enter the name of the organization to create: ')
-    
+
                 global admin
-                admin = input('Enter organization owner: ')
-    
+                admin = input('Enter your admin username: ')
+   
                 global data
                 data = {"login": f"{login}", "admin": f"{admin}"}
         
@@ -118,6 +123,60 @@ def ghe_support():
                         print('An error has occurred. Please check the log for further details.')
                 except:
                     print('An error has been encountered. Please check the log for further details.')
+                
+                try:
+                    admin = iam_account
+
+                    data = {"role": "admin"}
+
+                    try:
+                        set_organization_owner()
+                    
+                        if set_organization_owner() in (200, 201) :
+                            print(f'User {admin} has been successfully added to organization {login}.')
+                        else:
+                            logging.error(f'Unexpected error adding IAM account as owner', exc_info=True)
+                            print('An expected error occurred updating the organization owner. Please see the log for details.')
+                    except:
+                        logging.error(f'Unable to update IAM account as owner', exc_info=True)
+                        print('An error has been encountered. Please check the log for further details.')
+                except:
+                    logging.error(f'Unable to update IAM account as owner', exc_info=True)
+                    print('An error has been encountered. Please check the log for further details.')
+
+                
+                try:
+                    owner_add = input('''Do you wish to add another owner? \
+                                     Yes = y \
+                                     No = n \
+                                     ''')
+
+                    if owner_add.lower() == 'y':
+                        admin = input('Enter organization owner: ')
+
+                        data = {"role": "admin"}
+
+                        try:
+                            set_organization_owner()
+                    
+                            if set_organization_owner() in (200, 201) :
+                                print(f'User {admin} has been successfully added to organization {login}.')
+                            else:
+                                print('An error has occurred. Please check the log for further details.')
+                        except:
+                            print('An error has been encountered. Please check the log for further details.')
+                    
+                    elif owner_add.lower() == 'n':
+                        pass
+
+                    else:
+                        print('Invalid option. Options are y/n. Please update owner via options menu.')
+
+                except:
+                    logging.error(f'Unexpected error adding owner', exc_info=True)
+                    print('An expected error occurred updating the organization owner. Please see the log for details.')
+
+
                 
             elif option == '2':
                 login = input('Please provide organization name: ')
