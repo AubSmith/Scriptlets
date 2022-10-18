@@ -82,8 +82,6 @@ header = {'Accept-Language': 'application/vnd.github+json',
 
 
 
-admin = ''
-
 # Logic to handle support functions
 def ghe_support():
 
@@ -111,7 +109,7 @@ def ghe_support():
                 login = input('Enter the name of the organization to create: ')
 
                 global admin
-                admin = input('Enter your admin username: ')
+                admin = admin
    
                 global data
                 data = {"login": f"{login}", "admin": f"{admin}"}
