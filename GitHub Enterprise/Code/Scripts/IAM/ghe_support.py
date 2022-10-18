@@ -56,12 +56,14 @@ if environment.lower() == 'test':
     environment_url = config.get('Environment', 'Test')
     token = config.get('Token', 'TestToken')
     iam_account = config.get('IAM','TestAccount')
+    admin = config.get('Token','TestAccount')
     logging.info(f'Environment set is {environment_url}')
 
 elif environment.lower() == 'prod':
     environment_url = config.get('Environment', 'Production')
     token = config.get('Token', 'ProdToken')
     iam_account = config.get('IAM','ProductionAccount')
+    admin = config.get('Token','ProdAccount')
     logging.info(f'Environment set is {environment_url}')
 
 elif environment.lower() == '-h':
