@@ -117,7 +117,7 @@ def ghe_support():
                 try:
                     create_organization()
         
-                    if create_organization() in (200, 201, 422) :
+                    if create_organization() == 200 :
                         print(f'Organization {login} has been created.')
                     else:
                         print('An error has occurred. Please check the log for further details.')
@@ -267,8 +267,8 @@ def ghe_support():
 def create_organization():
     try:
         logging.info(f'Attempting to create organization {login}.')
-        organization_url = requests.put(f'{environment_url}/api/v3/admin/organizations', headers=header, json=data, verify='cacert')
-        if organization_url.status_code in (200, 201):
+        organization_url = requests.post(f'{environment_url}/api/v3/admin/organizations', headers=header, json=data, verify='cacert')
+        if organization_url.status_code in (200, 201, 422):
             return 200
         else:
             logging.error(f'A HTTP error occured: {organization_url.status_code}')
