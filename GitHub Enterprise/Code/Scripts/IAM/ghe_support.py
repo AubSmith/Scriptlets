@@ -367,7 +367,7 @@ def get_organization_ownermember():
                 f.write(organization_url.text)
 
             logging.info(f"Writing {role} report for {login} completed!")
-            print(3
+            print(
                 f"\n Writing {role} report for {login} completed! \n Report can be found in .\\Reports\\{login}_{role}.json"
             )
 
