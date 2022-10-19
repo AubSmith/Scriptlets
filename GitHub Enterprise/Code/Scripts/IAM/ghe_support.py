@@ -288,7 +288,7 @@ def ghe_support():
 
                 except:
                     print("Failed to generate repository extracts.")
-                    
+
             elif option == "6":
                 print("Goodbye")
 
@@ -367,8 +367,8 @@ def get_organization_ownermember():
                 f.write(organization_url.text)
 
             logging.info(f"Writing {role} report for {login} completed!")
-            print(
-                "\n Writing {role} report for {login} completed! \n Report can be found in .\\Reports\\{login}_{role}.json"
+            print(3
+                f"\n Writing {role} report for {login} completed! \n Report can be found in .\\Reports\\{login}_{role}.json"
             )
 
         except:
