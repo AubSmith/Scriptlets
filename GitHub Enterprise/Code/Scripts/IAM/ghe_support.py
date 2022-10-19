@@ -267,7 +267,7 @@ def ghe_support():
 def create_organization():
     try:
         logging.info(f'Attempting to create organization {login}.')
-        organization_url = requests.post(f'{environment_url}/api/v3/admin/organizations', headers=header, json=data, verify='cacert')
+        organization_url = requests.put(f'{environment_url}/api/v3/admin/organizations', headers=header, json=data, verify='cacert')
         if organization_url.status_code in (200, 201):
             return 200
         else:
