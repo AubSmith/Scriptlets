@@ -117,7 +117,7 @@ def ghe_support():
                 try:
                     create_organization()
         
-                    if create_organization() in (200, 201) :
+                    if create_organization() in (200, 201, 422) :
                         print(f'Organization {login} has been created.')
                     else:
                         print('An error has occurred. Please check the log for further details.')
@@ -245,12 +245,14 @@ def ghe_support():
                     iam_extract()
                 except:
                     print('Failed to generate repository extracts.')
-            else:
-                option == '6'
+            elif option == '6':
                 print('Goodbye')
 
                 return
-    
+
+            else:
+                pass
+                
     
     
         except:
