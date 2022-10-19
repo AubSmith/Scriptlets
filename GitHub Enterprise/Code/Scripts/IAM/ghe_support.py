@@ -253,40 +253,42 @@ def ghe_support():
 
                 try:
                     organization_extract_all()
+
                 except:
                     print(
                         "Unable to retrieve list of organizations. Please see the log for details."
                     )
 
-                    # Create owner extract
-                    try:
-                        report = "owner"
-                        api_url = "members?role=admin"
-    
-                        iam_extract()
-    
-                    except:
-                        print("Failed to generate owner extracts.")
-    
-                    # Create member extract
-                    try:
-                        report = "member"
-                        api_url = "members?role=member"
-    
-                        iam_extract()
-    
-                    except:
-                        print("Failed to generate member extracts.")
-    
-                    # Create repository extract
-                    try:
-                        report = "repository"
-                        api_url = "repos"
-    
-                        iam_extract()
-    
-                    except:
-                        print("Failed to generate repository extracts.")
+                # Create owner extract
+                try:
+                    report = "owner"
+                    api_url = "members?role=admin"
+
+                    iam_extract()
+
+                except:
+                    print("Failed to generate owner extracts.")
+
+                # Create member extract
+                try:
+                    report = "member"
+                    api_url = "members?role=member"
+
+                    iam_extract()
+
+                except:
+                    print("Failed to generate member extracts.")
+
+                # Create repository extract
+                try:
+                    report = "repository"
+                    api_url = "repos"
+
+                    iam_extract()
+
+                except:
+                    print("Failed to generate repository extracts.")
+                    
             elif option == "6":
                 print("Goodbye")
 
