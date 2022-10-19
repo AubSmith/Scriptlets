@@ -3,7 +3,7 @@ import configparser, json, logging, requests, ssl, sys
 
 
 # Enable logging and configure log filename
-logging.basicConfig(filename="ghe_iam.log", level=logging.DEBUG)
+logging.basicConfig(filename="ghe_support.log", level=logging.DEBUG)
 
 
 usage = """
