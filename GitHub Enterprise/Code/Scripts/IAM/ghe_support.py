@@ -1,11 +1,12 @@
 # Import required Python modules
-import configparser, json, logging, requests, ssl, sys
+import argparse, configparser, json, logging, requests, ssl, sys
 
 
-# Enable logging and configure log filename
+# Enable logging, configure log filename, set log level
 logging.basicConfig(filename="ghe_support.log", level=logging.DEBUG)
 
 
+# Usage variable
 usage = """
 USAGE: ./ghe_support.py environment
 
@@ -27,7 +28,7 @@ Select one of the following options to be run - enter numeric value;
 # Import config from ghe.ini
 try:
     config = configparser.ConfigParser()
-    config.readfp(open(r"ghe.ini"))
+    config.read_file(open(r"ghe.ini"))
     logging.info("Config file has been read")
 except:
     logging.error("Unable to read config file!")
@@ -36,34 +37,36 @@ except:
 
 # Assign variables based on input parameters
 # Environment to read config values for - either test or prod
-if len(sys.argv) != 2:
-    print(usage)
+try:
+    parser = argparse.ArgumentParser(description='GitHub Enterprise management utility')
+    parser.add_argument('environment', type=str, help='Environment in which to run. Either prod or dev')
+    args = parser.parse_args()
+    environment = args.environment.lower()
+    logging.info(f"\n Environment selected is: {environment}")
+    print(f"\n Environment selected is: {environment}")
+    
+except:
     logging.error(
         f"Incorrect usage! Please specify and environment when invoking this script. \n {usage}"
     )
     sys.exit(1)
-else:
-    environment = sys.argv[1]
-    print(f"{environment}")
+    
 
 
 # Verify valid environment specified
-if environment.lower() == "test":
+if environment == "test":
     environment_url = config.get("Environment", "Test")
     token = config.get("Token", "TestToken")
     iam_account = config.get("IAM", "TestAccount")
     admin = config.get("Token", "TestAccount")
     logging.info(f"Environment set is {environment_url}")
 
-elif environment.lower() == "prod":
+elif environment == "prod":
     environment_url = config.get("Environment", "Production")
     token = config.get("Token", "ProdToken")
     iam_account = config.get("IAM", "ProductionAccount")
     admin = config.get("Token", "ProdAccount")
     logging.info(f"Environment set is {environment_url}")
-
-elif environment.lower() == "-h":
-    print(usage)
 
 else:
     logging.error(
@@ -163,12 +166,7 @@ def ghe_support():
                     )
 
                 try:
-                    owner_add = input(
-                        """Do you wish to add another owner?
-                                     Yes = y
-                                     No = n
-                                     """
-                    )
+                    owner_add = input(" Do you wish to add another owner? \n Yes = y \n No = n \n")
 
                     if owner_add.lower() == "y":
                         admin = input("Enter organization owner: ")

@@ -1,3 +1,4 @@
 .vscode/settings.json
 ghe_iam.log
 GitHub Enterprise/Code/Scripts/IAM/ghe.ini
+Python/__pycache__/argparse.cpython-310.pyc
