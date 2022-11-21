@@ -22,21 +22,32 @@ def function_support():
         Select one of the following options:
         1 - Function1
         2 - Function2
-        3 - Quit
+        3 - Function3
+        4 - Quit
     
         ''')
     
         try:
             option = input('Please enter your option: ')
+
+            fav_superhero = 'DareDevil'
+            fav_villian = 'Black Mask'
     
-            if option == '1':    
-                function1()
+            if option == '1':
+                superhero = 'Batman'
+                universe = 'DC'
+
+                function1(superhero, universe)
                 
             elif option == '2':
-                function2()
+                superhero = 'Spider-Man'
+                function2(superhero)
+            
+            elif option == '3':
+                function3(fav_superhero, fav_villian)
         
             else:
-                option == '3'
+                option == '4'
                 print('Goodbye')
 
                 # Exit function
@@ -49,17 +60,21 @@ def function_support():
                 
                 ''')
 
-def function2():
+def function3(fav_superhero, fav_villian):
+    print(f'My favourite superhero is: {fav_superhero}')
+    print(f'My favourite villian is: {fav_villian}')
+
+def function2(superhero):
     print('Inside function 2')
+    print(superhero)
 
     return
 
-def function1():
+def function1(superhero, universe):
+    print(f'{superhero} in {universe}')
     print('Calling function 2')
-    function2()
+    function2(superhero)
 
     print('Back in function 1')
-
-
 
 function_support()

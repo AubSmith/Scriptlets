@@ -51,6 +51,12 @@ git push --set-upstream origin main
 # Clone a repository:
 git clone https://aubs@bitbucket.com/scm/repo.git
 
+# Clone all branches in repository:
+git clone --mirror https://aubs@bitbucket.com/scm/repo.git
+
+# Push mirror to remote
+git push --mirror https://aubs@bitbucket.com/scm/repo.git
+
 # My code is already tracked by Git
 cd existing-project
 

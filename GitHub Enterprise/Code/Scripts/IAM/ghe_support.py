@@ -78,8 +78,7 @@ else:
 # Set REST request header
 header = {
     "Accept-Language": "application/vnd.github+json",
-    "Authorization": f"token {token}",
-}
+    "Authorization": f"token {token}"}
 
 
 # Logic to handle support functions
@@ -312,7 +311,7 @@ def create_organization():
             f"{environment_url}/api/v3/admin/organizations",
             headers=header,
             json=data,
-            verify="cacert",
+            verify="cacert"
         )
         if organization_url.status_code in (200, 201, 422):
             return 200
@@ -331,7 +330,7 @@ def set_organization_owner():
             f"{environment_url}/api/v3/orgs/{login}/memberships/{admin}",
             headers=header,
             json=data,
-            verify="cacert",
+            verify="cacert"
         )
         if organization_url.status_code in (200, 201):
             return 200
@@ -349,7 +348,7 @@ def get_organization_ownermember():
         organization_url = requests.get(
             f"{environment_url}/api/v3/orgs/{login}/{api_url}",
             headers=header,
-            verify="cacert",
+            verify="cacert"
         )
         if organization_url.status_code in (200, 201):
             pass
@@ -383,8 +382,7 @@ def organization_extract_all():
         req = requests.get(
             f"{environment_url}/api/v3/organizations",
             headers=header,
-            verify="cacert",
-        )
+            verify="cacert")
 
         logging.info("REST call made")
         logging.info(f"Status code = {req.status_code}")
@@ -423,8 +421,7 @@ def iam_extract():
                 report_url = requests.get(
                     f"{environment_url}/orgs/{login}/{api_url}",
                     headers=header,
-                    verify="cacert",
-                )
+                    verify="cacert")
                 if report_url.status_code == 200:
                     pass
                 else:
