@@ -6,4 +6,6 @@ select pid as process_id,
     backend_start,
     state,
     state_change
-from pg_stat_actiity;
+from pg_stat_activity;
+
+SELECT * FROM pg_stat_activity;
