@@ -27,5 +27,3 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 # Install fonts
 # Load NF in Terminal
-
-# Linux
