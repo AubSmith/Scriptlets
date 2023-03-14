@@ -2,13 +2,13 @@ import-module ActiveDirectory
 
 Get-ADUser esmith -Properties *
 
-Get-ADUser -Filter * -Properties EmailAddress,DisplayName, samaccountname| select EmailAddress, DisplayName
+Get-ADUser -Filter * -Properties EmailAddress,DisplayName, samaccountname| select-object EmailAddress, DisplayName
 
-Get-ADUser -Filter * -Properties EmailAddress,DisplayName, samaccountname| select EmailAddress, DisplayName, samaccountname | Export-CSV D:\PowerShell\Ad_user_email_Address.csv
+Get-ADUser -Filter * -Properties EmailAddress,DisplayName, samaccountname| select-object EmailAddress, DisplayName, samaccountname | Export-CSV D:\PowerShell\Ad_user_email_Address.csv
 
 $users = Get-Content .\samaccountname.txt
 $users | ForEach-Object {
-    Get-ADUser -Identity $_ -properties mail | Select samaccountname,mail
+    Get-ADUser -Identity $_ -properties mail | Select-Object samaccountname,mail
 } | Export-CSV aduserEmails.txt -NoTypeInformation
 
 Get-ADUser -Filter {Emailaddress -eq 'ethan.smith@waynecorp.com'}

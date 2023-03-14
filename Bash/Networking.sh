@@ -88,6 +88,8 @@ netstat -ane | grep "443" | grep "LISTEN"
 ip a
 telnet 192.168.1.1 443
 
+netstat -ane | grep "443" | grep "LISTEN"
+
 # Name resolution
 sudo yum install bind-utils
 
@@ -101,11 +103,13 @@ nslookup -type=MX wayneent.com
 dig serverA
 dig -x 192.168.1.5
 dig wayneent.com MX
+dig soa github.service.wayneent.com # Find owning authority of DNS record
 
 host serverA
 host 192.168.1.5
 host -C wayneent.com
 host -t mx wayneent.com
+host -t soa github.service.wayneent.com # Find owning authority of DNS record
 host -a wayneent.com
 
 # TCP Dump

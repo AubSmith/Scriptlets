@@ -34,3 +34,21 @@ curl -sSLK https://artifactory.waynecorp.com/artifactory/repo/certs/prod.tar | t
 
 # Check for redirects
 curl -Lov https://downloads.cypress.com/desktop/10.0.3 -v
+
+# Artifactory YUM repo
+# Getting a 404 "Resource has expired" message
+
+curl -O https://artifactory.url/artifactory/rpm-redhat-virtual/path/path/repo.md
+
+ls -lrt
+
+cat repomd.xml
+
+# Delete repomd.xml using UI
+
+curl -O https://artifactory.url/artifactory/rpm-redhat-virtual/path/path/repo.md
+
+ls -lrt
+
+cat repomd.xml
+

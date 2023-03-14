@@ -1,4 +1,4 @@
-$FilePath = Get-ChildItem -Path .\ -Filter *.cer -Recurse
+$FilePath = Get-ChildItem -Path .\ -Filter *.txt -Recurse
 
 $FilePath | % { 
 
