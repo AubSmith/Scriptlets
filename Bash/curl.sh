@@ -9,3 +9,6 @@ curl -LO https://github.com/github/backup-utils/releases/download/v3.8.0/github-
 
 # Download
 curl https://artifactory.test/artifactory/github-remote/github/backup-utils/releases/downloads/v3.8.0/githun-backup-utils-v3.8.0.tar.gz -o github-backup-utils-v3.8.0.tar.gz -kvvv
+
+# Verify SNI
+curl https://sniservice2.wayneent.com:4433/ --resolve sniservice2.wayneent.com:4433:192.168.100.101

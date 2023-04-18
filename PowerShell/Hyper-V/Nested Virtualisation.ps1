@@ -1,0 +1,1 @@
+Set-VMProcessor -VMName "ES - Windows 11 Development" -ExposeVirtualizationExtensions $true

@@ -69,3 +69,24 @@ setspn -s http/federation.service.waynecorp.com\gbladfsdsa
 
 # Task scheduler
 schtasks /create
+
+# DNS
+# Flush cache
+ipconfig /flushdns
+
+# SOA
+nslookup -type=soa wayneent.com
+
+# Lookups
+nslookup server.wayneent.com # Forward
+nslookup 192.168.1.100 # Reverse
+
+nslookup # Interactive mode
+# > set q=ns
+# > dns.wayneent.com
+# > set q=mx
+# > dns.wayneent.com
+# > set q=soa
+# > dns.wayneent.com
+# > set debug
+# > server1.wayneent.com

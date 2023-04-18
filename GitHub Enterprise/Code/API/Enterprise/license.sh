@@ -1,0 +1,1 @@
+curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $Token" https://github.wayneent.com/api/v3/enterprise/settings/license

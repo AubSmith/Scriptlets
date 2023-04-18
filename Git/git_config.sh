@@ -84,6 +84,8 @@ git branch
 # Turn off SSL verification per remote
 git config --global http.sslVerify false
 
+# Use Windows crypto store
+git config --global http.sslbackend schannel
 
 # Check the Credential Manager CP for credentials
 

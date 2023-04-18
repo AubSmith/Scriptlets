@@ -14,3 +14,5 @@ cd "C:\Program Files\Oracle\VirtualBox"
 tar -xvf wakanda-1.ova
 D:\Oracle\VirtualBox\VBoxManage.exe clonehd --format vhd "E:\Software\Security\OS\Mr. Robot\mrRobot.vmdk" "E:\Software\Security\OS\Mr. Robot\mrRobot.vhd"
 D:\Oracle\VirtualBox\VBoxManage.exe clonehd --format vhd "E:\Software\Security\OS\Fristi Leaks\FristiLeaks 1.3-disk2.vmdk" "E:\Software\Security\OS\Fristi Leaks\FristiLeaks_1.3.vhd"
+
+# Mouse escape = Right Ctrl
