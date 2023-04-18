@@ -12,3 +12,5 @@ curl https://artifactory.test/artifactory/github-remote/github/backup-utils/rele
 
 # Verify SNI
 curl https://sniservice2.wayneent.com:4433/ --resolve sniservice2.wayneent.com:4433:192.168.100.101
+
+curl -resolve https://google.com:443
