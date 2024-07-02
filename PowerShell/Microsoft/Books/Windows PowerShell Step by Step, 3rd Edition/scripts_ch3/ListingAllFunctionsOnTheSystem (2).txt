@@ -1,0 +1,9 @@
+Set-Location function:\
+
+GCI 
+
+GCI | Where {$_.definition -like "set*"}
+
+GCI | Where {$_.definition -notlike "set*"}
+
+Get-content md

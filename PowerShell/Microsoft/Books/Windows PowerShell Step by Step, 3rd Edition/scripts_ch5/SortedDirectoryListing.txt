@@ -1,0 +1,1 @@
+Get-ChildItem c:\fso | Where-Object {$_.Length -gt 1000} | Sort-Object -Property name

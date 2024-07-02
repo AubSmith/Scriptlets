@@ -1,0 +1,7 @@
+GI * | where {$_.PsisContainer -AND $_.name -Like "*my*"}
+
+RI mytest -recurse
+
+New-Item -Path c:\ -Name mytest -type directory
+
+New-Item -Path c:\mytest -Name myfile.txt -type file

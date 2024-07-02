@@ -1,0 +1,2 @@
+ipconfig /all >tshoot.txt; route print >>tshoot.txt; netdiag /q >>tshoot
+.txt; net statistics workstation >>tshoot.txt
