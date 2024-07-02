@@ -1,0 +1,1 @@
+Move-ADDirectoryServerOperationMasterRole -Identity "AK-S02-DC2" -OperationMasterRole SchemaMaster

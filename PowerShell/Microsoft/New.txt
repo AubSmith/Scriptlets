@@ -1,0 +1,26 @@
+Set-Item -Path HKCU:\Software\Microsoft\Cryptography\Sample -Value "Sample key"
+New-Item -Path HKCU:\Software\Microsoft\Cryptography\Sample -Value "default value" -Force
+
+## Modify existing value ##
+
+Push-Location
+Set-Location HKCU:
+Set-ItemProperty .\Software\Microsoft\Cryptography\Sample -Value "New Value" -Name Sample # Period identifies current location
+Pop-Location
+
+## OR to update an existing value ##
+
+Push-Location
+Set-Location HKCU:\Software\Microsoft\Cryptography\Sample
+Set-ItemProperty . newproperty -Value "My New Value"
+Pop-Location
+
+## OR
+
+Set-ItemProperty -Path HKCU:\Software\Microsoft\Cryptography\Sample -Name NewProperty -Value NewValue
+
+Set-ItemProperty -Path HKCU:\Software\Microsoft\Cryptography\Sample -Name MissingProperty -Value MissingValue
+
+Test-Path HKCU:\Software\Microsoft\Cryptography\Sample
+
+Test-Path HKCU:\Software\Microsoft\Cryptography\Sample\MissingProperty 
