@@ -1,0 +1,7 @@
+$ tree
+.
+├── Vagrantfile
+└── manifests
+    └── default.pp
+
+1 directories, 2 files

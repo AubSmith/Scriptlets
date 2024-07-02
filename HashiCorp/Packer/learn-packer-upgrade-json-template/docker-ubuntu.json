@@ -1,0 +1,20 @@
+{
+  "variables": {
+    "image": "ubuntu:xenial"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "{{user `image`}}",
+      "commit": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "echo Hello world!"
+      ]
+    }
+  ]
+}

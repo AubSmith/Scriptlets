@@ -1,0 +1,18 @@
+"provisioners": [
+    {
+      "type": "shell",
+      "script": "install-puppet.sh"
+    },
+    {
+      "type": "file",
+      "source": "hieradata",
+      "destination": "/tmp"
+    },
+    {
+      "type": "puppet-masterless",
+      "puppet_bin_dir": "/opt/puppetlabs/bin",
+      "manifest_file": "manifests/site.pp",
+      "hiera_config_path": "hiera.yaml",
+      "module_paths": ["modules"]
+    }
+  ]

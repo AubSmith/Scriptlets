@@ -1,0 +1,6 @@
+$ tree
+.
+├── Vagrantfile
+├── box-disk1.vmdk
+├── box.ovf
+└── metadata.json

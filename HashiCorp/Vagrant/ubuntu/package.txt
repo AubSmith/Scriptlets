@@ -1,0 +1,7 @@
+Create new VM in Hyper-V
+Deploy OS
+Deploy software
+
+vagrant package --base my_new_box
+
+vagrant package --base my_new_box --vagrantfile Vagrantfile
