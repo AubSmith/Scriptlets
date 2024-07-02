@@ -1,1 +1,0 @@
-Get-EventLog System | Format-List >> C:\Users\a-aubsmith\Desktop\System.txt

@@ -1,5 +1,0 @@
-powershell.exe -file D:\AutoScripts\Service_Restart.PS1 <Action> <CountryCode> <InputFileName>
-
-Eg:
-powershell.exe -file D:\AutoScripts\Service_Restart.PS1 restart HK StorQM.txt
-

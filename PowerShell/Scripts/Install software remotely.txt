@@ -1,8 +1,0 @@
-Enable-PSRemoting -Force
-Set-Item wsman:\localhost\client\trustedhosts * -Force
-Restart-Service WinRM 
-
-Get-Service remoteregistry -ComputerName $computer | start-service
-Copy-item "\\$server\share\Office 2010" -conatiner -recurse \\$computer\c$\windows\temp\
-$InstallString = '"C:\windows\temp\Office 2010\setup.exe" /adminfile Updates/OfficeSetup.MSP /config ProPlus.WW/config.xml"'
-([WMICLASS]"\\$computer\ROOT\CIMV2:Win32_Process").Create($InstallString)

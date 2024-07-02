@@ -1,1 +1,0 @@
-Get-WmiObject -Class Win32_product | Select -Property Name > D:\Software.txt

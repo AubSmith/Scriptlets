@@ -1,3 +1,0 @@
-get-alias |sort
-get-help set-alias -full
-set-alias gh get-help
