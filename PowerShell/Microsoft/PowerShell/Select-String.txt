@@ -1,0 +1,1 @@
+You can use Select-String similar to grep in UNIX or findstr.exe in Windows. Select-String is based on lines of text. By default, Select-String finds the first match in each line and, for each match, it displays the file name, line number, and all text in the line containing the match.
