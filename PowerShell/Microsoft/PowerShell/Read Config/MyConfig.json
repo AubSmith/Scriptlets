@@ -1,0 +1,8 @@
+{
+    "File":"\\Users.txt",
+    "InputFile":"C:\\Users.txt",
+    "OutputFile":"C:\\output.log",
+    "link1": "http://www.google.com",
+    "link2": "http://www.apple.com",
+    "link3": "http://www.microsoft.com"
+}

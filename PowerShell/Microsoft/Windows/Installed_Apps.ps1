@@ -1,0 +1,1 @@
+Get-WMIObject Win32_installedWin32Program | Select Name, Version, ProgramID
