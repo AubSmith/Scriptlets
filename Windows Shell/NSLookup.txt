@@ -1,0 +1,1 @@
+Use trailing "." for faster name resolution. Treats it like FQDN rather than checking for suffixes.

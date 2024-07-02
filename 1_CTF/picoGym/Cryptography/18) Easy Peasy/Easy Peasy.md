@@ -1,1 +1,0 @@
-nc mercury.picoctf.net 58913

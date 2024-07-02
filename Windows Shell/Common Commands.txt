@@ -1,0 +1,17 @@
+query user # From shell
+
+net user /domain
+
+
+# Use WMI to get user info
+
+nltest /dclist:
+
+([adsisearcher]”objectclass=computer”).FindAll()
+
+Get-AdComputer -Filter * | Select-Object -First 20
+
+
+# WMI to get DC
+
+Get-wmiobject -class ds_computer -namespace root\directory\ldap

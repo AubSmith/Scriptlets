@@ -40,7 +40,8 @@ tasklist
 tasklist -v
 
 # Kill Tasks
-taskkill
+taskkill /?
+taskkill /pid 1230 /pid 1241 /pid 1253
 
 chkdsk
 
