@@ -1,2 +1,0 @@
-.\ArtifactoryAutoTest "oat" "Aubs" "Aubs repo test" "maven"
-.\CreateRepo.ps1 "oat" "Aubs" "Aubs repo test" "maven"

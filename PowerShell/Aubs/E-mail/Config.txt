@@ -1,2 +1,0 @@
-MailFrom,SMTPServer,SMTPPort
-aubrey.smith@orcon.net.nz,mail.orcon.net.nz,25

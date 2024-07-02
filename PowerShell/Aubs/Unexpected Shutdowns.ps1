@@ -1,1 +1,0 @@
-﻿Get-EventLog -LogName System | WHERE {$_.EventID -eq "6008"} | OGV

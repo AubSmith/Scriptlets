@@ -1,3 +1,0 @@
-cd C:\notbackedup\Code\StatusPage\API\
-.\StatusPage_Update_Incident.ps1 "API" "Closed" "API available" "critical"
-.\StatusPage_Update_Incident.ps1 "API" "Closed" "My TV was unplugged" "critical"

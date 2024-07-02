@@ -1,1 +1,0 @@
-﻿Install-Module -Name Artifactory -RequiredVersion 0.1.7 
