@@ -1,3 +1,0 @@
-notepad
-get-process note*
-stop-process -id 1056 -whatif

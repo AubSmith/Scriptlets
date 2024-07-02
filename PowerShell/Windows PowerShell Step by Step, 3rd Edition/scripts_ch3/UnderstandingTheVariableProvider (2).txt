@@ -1,4 +1,0 @@
-Get-Help *variable | Where-Object {$_.category -eq “cmdlet”}
-
-Get-Help *variable | Where-Object {$_.category -eq "cmdlet"} | Format-List name, category, synopsis
-
