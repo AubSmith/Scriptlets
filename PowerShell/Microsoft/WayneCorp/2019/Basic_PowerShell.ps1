@@ -1,2 +1,0 @@
-# Logoff
-logoff
