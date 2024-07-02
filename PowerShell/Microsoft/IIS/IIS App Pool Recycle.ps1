@@ -1,0 +1,1 @@
+Get-WinEvent -LogName System | Where-Object {$_.Message -like "*recycle*"}

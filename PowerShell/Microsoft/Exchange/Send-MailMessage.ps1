@@ -1,0 +1,1 @@
+Send-MailMessage -SMTPServer smtp.domain.com -To xxxxx@gmail.com -From youremail@domain.com -Subject "This is a test email" -Body "Hi, this is a test email sent via PowerShell to test the STMP relay server"
