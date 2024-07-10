@@ -1,0 +1,1 @@
+rsync -av --exclude=".*" /home/aubreysmith/Documents /Volumes/"My Passport"
