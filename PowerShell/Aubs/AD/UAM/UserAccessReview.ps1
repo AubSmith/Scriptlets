@@ -4,6 +4,8 @@ Param(
   [string]$application
 )
 
+$dir = "C:\Users\administrator\Desktop\UAM"
+Push-Location $dir
 
 function Get_Member {
   param(
@@ -12,30 +14,35 @@ function Get_Member {
   )
 
   $adGroups | ForEach-Object{
-    $adGroup = $_
-    #Get all the members of the filtered AD group
-    $members = Get-ADGroupMember -Identity $adGroup | Get-ADUser -Properties *
+    try {
+      $results = @()
 
-    $results = @()
+      $adGroup = $_
+      #Get all the members of the filtered AD group
+      $members = Get-ADGroupMember -Identity $adGroup | Get-ADUser -Properties *
 
-    ForEach($member in $members){
-      try {
-      
-      # For each member of the AD group, get the user's Name, Sam Account Name, Manager, and Manger's e-mail address
-      $result = [PSCustomObject] @{
-          memberName = $member.Name
-          memberSamAccountName = $member.SamAccountName
-          memberManagerName = if ([string]::IsNullOrEmpty($member.Manager)) { "None" } else { (Get-ADUser $($member.Manager) -Properties * | Select-Object -ExpandProperty Name) }
-          memberManagerEmail = if ([string]::IsNullOrEmpty($member.Manager)) { "None" } else { (Get-ADUser $($member.Manager) -Properties * | Select-Object -ExpandProperty EmailAddress) }
-          memberGroupName = $adGroup
-          }
+      ForEach($member in $members){
+        try {
+        
+        # For each member of the AD group, get the user's Name, Sam Account Name, Manager, and Manger's e-mail address
+        $result = [PSCustomObject] @{
+            memberName = $member.Name
+            memberSamAccountName = $member.SamAccountName
+            memberManagerName = if ([string]::IsNullOrEmpty($member.Manager)) { "None" } else { (Get-ADUser $($member.Manager) -Properties * | Select-Object -ExpandProperty Name) }
+            memberManagerEmail = if ([string]::IsNullOrEmpty($member.Manager)) { "None" } else { (Get-ADUser $($member.Manager) -Properties * | Select-Object -ExpandProperty EmailAddress) }
+            memberGroupName = $adGroup
+            }
+        }
+        catch {
+          Write-Output $_
+          Exit 1
+
+        }
+      $results += $result
       }
-      catch {
-        Write-Output "$_.exception"
-        Exit 1
-          
-      }
-    $results += $result
+    }
+    catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+    Write-Output "The group, ${adGroup} does not exist." | Add-Content -Path $groupsForReview
     }
 
   RETURN $results
@@ -46,8 +53,9 @@ function Get_Member {
 # Import AD group variables
 try {
   if (${application} = "Wayne"){
-    $applicationGroups = Get-Content -Path ".\Wayne\Wayne_Group.txt"
-    $roleGroups = Get-Content -Path ".\Wayne\Wayne_Role.txt"
+    $applicationGroups = Get-Content -Path ".\${application}\Wayne_Group.txt"
+    $roleGroups = Get-Content -Path ".\${application}\Wayne_Role.txt"
+    $recipients = Get-Content -Path ".\${application}\email.txt"
   
   }
   elseif (${application} = "Artifactory"){
@@ -57,8 +65,8 @@ try {
   }
 }
 catch {
-  Write-Output "Either an invalid ${application} has been specified or an unexpected error has occurred"
-  Write-Output "$_.exception"
+  Write-Output "Either an invalid application has been specified or an unexpected error has occurred"
+  Write-Output $_
   
   Exit 1
 }
@@ -76,6 +84,9 @@ $currentExtract = ".\${application}\Working\${application}_${month}.csv"
 # Report to be reviewed by line managers
 $usersForReview = ".\${application}\Working\${application}_${month}_Review.csv"
 
+# Group report to be viewed by application support
+$groupsForReview = ".\${application}\Working\${application}_Grp_${month}_Review.csv"
+
 
 ##### 1. Extract all members of application role groups #####
 $roleGroupUsers = try {
@@ -83,7 +94,7 @@ $roleGroupUsers = try {
   
 }
 catch {
-  Write-Output "$_.exception"
+  Write-Output $_
   Exit 1
 }
 
@@ -102,7 +113,7 @@ try {
   $applicationGroupUsers | ConvertTo-Csv -NoTypeInformation | Add-Content -Path $currentExtract
 }
 catch {
-  Write-Output "$_.exception"
+  Write-Output $_
   Exit 1
 }
 
@@ -148,27 +159,51 @@ try {
   Compare-Object (Get-Content ".\${application}\Working\${application}_${previousExtractRun}.csv") -DifferenceObject (Get-Content $currentExtract) -PassThru | Where-Object SideIndicator -eq '=>' | Add-Content $usersForReview
  }
 catch {
-  Write-Output "$_.exception"
+  Write-Output $_
   Exit 1
 }
 
 
 ##### 6. E-mail #####
 
-$managerEmailAddress = 1
+### User Access Review ###
+# extract manager e-mail addresses
+$extractManagerEmailAddress = $applicationGroupUsers | ForEach-Object { $_.memberManagerEmail } | Where-Object { $_ -ne "None" } | Select-Object -Unique
+
+# Join the extracted properties into a comma-separated list
+$managerEmailAddress = $extractManagerEmailAddress -join ', '
 
 $sendEmailSplat = @{
   From = 'User01 <uar@waynecorp.com>'
   To = $managerEmailAddress
-  Cc = ${Recipients}, 'Finance Application Support <finance_app_support@waynecorp.com>'
+  Cc = $recipients, 'finance_app_support@waynecorp.com'
   Subject = 'Sending the Attachment'
-  Body = "Forgot to send the attachment. Sending now."
+  Body = 'Forgot to send the attachment. Sending now.'
   Attachments = $usersForReview
   Priority = 'High'
   DeliveryNotificationOption = 'OnSuccess', 'OnFailure'
   SmtpServer = 'smtp.fabrikam.com'
 }
+
 Send-MailMessage @sendEmailSplat
+
+### Missing groups ###
+
+if (Test-Path $groupsForReview) {
+  $sendEmailSplat = @{
+    From = 'User01 <uar@waynecorp.com>'
+    To = 'Finance Application Support <finance_app_support@waynecorp.com>'
+    Subject = "${application} UAR - Invalid groups detected"
+    Body = "The attachment contains a list of AD groups specified in the quarterly ${application} process that do not exist."
+    Attachments = $groupsForReview
+    Priority = 'High'
+    DeliveryNotificationOption = 'OnSuccess', 'OnFailure'
+    SmtpServer = 'smtp.fabrikam.com'
+  }
+  
+  Send-MailMessage @sendEmailSplat
+}
+
 
 ##### 7. Tidy up #####
 
@@ -176,8 +211,9 @@ Send-MailMessage @sendEmailSplat
 try {
   Move-Item -Path ".\${application}\Working\${application}_${previousExtractRun}.csv" -Destination ".\${application}\Archive"
   Move-Item -Path ".\${usersForReview}" -Destination ".\${application}\Archive"
+  Move-Item -Path ".\${groupsForReview}" -Destination ".\${application}\Archive"
 }
 catch {
-  Write-Output "$_.exception"
+  Write-Output $_
   Exit 1
 }
