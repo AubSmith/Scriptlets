@@ -13,6 +13,7 @@ function Get_Member {
     $adGroups
   )
 
+  # Loop through the list of AD groups and filter for each group
   $adGroups | ForEach-Object{
     try {
       $results = @()
@@ -46,26 +47,26 @@ function Get_Member {
     }
 
   RETURN $results
-  }
+  } # Close ForEach-Object loop
 } # Close Get_Member function
 
 
 # Import AD group variables
 try {
-  if (${application} = "Wayne"){
-    $applicationGroups = Get-Content -Path ".\${application}\Wayne_Group.txt"
-    $roleGroups = Get-Content -Path ".\${application}\Wayne_Role.txt"
+  if (${application} = "Vault"){
+    $applicationGroups = Get-Content -Path ".\${application}\${application}_Group.txt"
+    $roleGroups = Get-Content -Path ".\${application}\${application}_Role.txt"
     $recipients = Get-Content -Path ".\${application}\email.txt"
   
   }
   elseif (${application} = "Artifactory"){
-    $applicationGroups = Get-Content -Path ".\Artifactory\Artifactory_Group.txt"
-    $roleGroups = Get-Content -Path ".\Artifactory\Artifactory_Role.txt"
+    $applicationGroups = Get-Content -Path ".\${application}\${application}_Group.txt"
+    $roleGroups = Get-Content -Path ".\${application}\${application}_Role.txt"
+    $recipients = Get-Content -Path ".\${application}\email.txt"
   
   }
 }
 catch {
-  Write-Output "Either an invalid application has been specified or an unexpected error has occurred"
   Write-Output $_
   
   Exit 1
@@ -131,7 +132,7 @@ try {
   }
 }
 catch {
-  Write-Output "$_.exception"
+  Write-Output $_
   Exit 1
 }
 
@@ -147,7 +148,7 @@ try {
 
   }
 catch {
-  Write-Output "$_.exception"
+  Write-Output $_
   Exit 1
 }
 
@@ -168,17 +169,15 @@ catch {
 
 ### User Access Review ###
 # extract manager e-mail addresses
-$extractManagerEmailAddress = $applicationGroupUsers | ForEach-Object { $_.memberManagerEmail } | Where-Object { $_ -ne "None" } | Select-Object -Unique
+$managerEmailAddress = @($applicationGroupUsers | ForEach-Object { $_.memberManagerEmail } | Where-Object { $_ -ne "None" } | Select-Object -Unique)
 
-# Join the extracted properties into a comma-separated list
-$managerEmailAddress = $extractManagerEmailAddress -join ', '
 
 $sendEmailSplat = @{
   From = 'User01 <uar@waynecorp.com>'
   To = $managerEmailAddress
-  Cc = $recipients, 'finance_app_support@waynecorp.com'
-  Subject = 'Sending the Attachment'
-  Body = 'Forgot to send the attachment. Sending now.'
+  Cc = ($recipients + ',' + 'finance_app_support@waynecorp.com')
+  Subject = "${application} User Aaccess Review - ${month}"
+  Body = "Please find herewith attached the list of users with access to the ${application} application for your review. `n`nThis is an automated message. Please do not reply to this email."
   Attachments = $usersForReview
   Priority = 'High'
   DeliveryNotificationOption = 'OnSuccess', 'OnFailure'
@@ -194,7 +193,7 @@ if (Test-Path $groupsForReview) {
     From = 'User01 <uar@waynecorp.com>'
     To = 'Finance Application Support <finance_app_support@waynecorp.com>'
     Subject = "${application} UAR - Invalid groups detected"
-    Body = "The attachment contains a list of AD groups specified in the quarterly ${application} process that do not exist."
+    Body = "The attachment contains a list of AD groups specified in the quarterly ${application} UAR process that do not exist."
     Attachments = $groupsForReview
     Priority = 'High'
     DeliveryNotificationOption = 'OnSuccess', 'OnFailure'
