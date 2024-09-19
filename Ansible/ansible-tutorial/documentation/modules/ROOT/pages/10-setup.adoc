@@ -1,0 +1,80 @@
+= Setup
+include::_attributes.adoc[]
+
+In this section, you'll learn:
+
+* [x] Installing the tools required for running the second part of the deep dive
+
+[#previousrequirements]
+== Previous Requirements
+
+For this second part, you need some extra requirements apart from exactly the same requirements as the xref:01-setup.adoc[first part].
+
+If you've already run the first part of the deep dive, you've got everything done, remember to start again the containers using the `docker-compose` command as explained in xref:01-setup.adoc#bootingservers[this section].
+
+[#newprerequisite]
+== New Prerequisite
+
+To run this second part, the following CLI tools are required for running the exercises in this tutorial. 
+Please have them installed and configured before you get started with any of the tutorial chapters.
+
+[cols="4*^,4*.",options="header,+attributes"]
+|===
+|**Tool**|**macOS**|**Linux**|**windows**
+
+| `Java Development Kit >=17`
+| https://adoptium.net/en-GB/temurin/releases/[Download, window="_blank"]
+| https://adoptium.net/en-GB/temurin/releases/[Download, window="_blank"]
+| https://adoptium.net/en-GB/temurin/releases/[Download, window="_blank"]
+|===
+
+With Java installed, it's important you set the `JAVA_HOME` environment variable to the location you installed the JVM.
+In my specific case `JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-19.jdk/Contents/Home`.
+
+[#setupansiblerulebook]
+== Setup Ansible Rulebook
+
+We'll use `pip` to install Ansible Rulebook and its dependencies.
+First of all, install `ansible-rulebook`.
+In a terminal window run the following command:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+pip install ansible-rulebook ansible ansible-runner
+----
+
+Then install the Ansible Events collection with the Ansible Galaxy CLI:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-galaxy collection install ansible.eda
+----
+
+Finally, install the python module dependencies:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+pip install aiohttp aiokafka watchdog azure-servicebus asyncio
+----
+
+Validate the correctness of the installation, running the following command :
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-rulebook --version
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+__version__ = '0.10.1'
+  Executable location = /usr/local/bin/ansible-rulebook
+  Drools_jpy version = 0.1.7
+  Java home = /Library/Java/JavaVirtualMachines/temurin-19.jdk/Contents/Home
+  Java version = openjdk 19.0.1 2022-10-18
+  Python version = 3.10.9 (main, Dec 15 2022, 18:18:30) [Clang 14.0.0 (clang-1400.0.29.202)]
+----

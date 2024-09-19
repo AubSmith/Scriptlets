@@ -1,0 +1,226 @@
+= Setup
+include::_attributes.adoc[]
+
+In this section, you'll learn:
+
+* [x] Installing the tools required for running this deep dive
+
+[#prerequisite]
+== Prerequisite CLI tools
+
+The following CLI tools are required for running the exercises in this tutorial. 
+Please have them installed and configured before you get started with any of the tutorial chapters.
+
+[cols="4*^,4*.",options="header,+attributes"]
+|===
+|**Tool**|**macOS**|**Linux**|**windows**
+
+| `Git`
+| https://git-scm.com/download/mac[Download, window="_blank"]
+| https://git-scm.com/download/linux[Download, window="_blank"]
+| https://git-scm.com/download/win[Download, window="_blank"]
+
+| `Docker`
+| https://docs.docker.com/docker-for-mac/install[Docker for Mac, window="_blank"]
+| `dnf/apt-get/... install docker`
+| https://docs.docker.com/docker-for-windows/install[Docker for Windows, window="_blank"]
+
+| `Python`
+| https://www.python.org/ftp/python/3.11.1/python-3.11.1-macos11.pkg
+| `dnf/apt-get/... install python3`
+| https://www.python.org/downloads/windows/
+
+| `Pip`
+| `python3 -m ensurepip --upgrade`
+| `python3 -m ensurepip --upgrade`
+| `py -m ensurepip --upgrade`
+|===
+
+
+
+WARNING: In case of not having `ensurepip` module installed, you can always download `get-pip.py` file and execute it. You can find more information in https://pip.pypa.io/en/stable/installation/.
+
+[#ansible]
+== Setup Ansible
+
+To install Ansible and all its toolset, use `pip`.
+In a terminal window, run the following command:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+sudo pip install ansible --upgrade
+----
+
+IMPORTANT: You must use `pip3` instead of `pip` depending on the environment and version.
+
+And check that ansible is installed:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible --version
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+ansible [core 2.14.1]
+  config file = None
+  configured module search path = ['/Users/asotobu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/local/lib/python3.10/site-packages/ansible
+  ansible collection location = /Users/asotobu/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/local/bin/ansible
+  python version = 3.10.9 (main, Dec 15 2022, 18:18:30) [Clang 14.0.0 (clang-1400.0.29.202)] (/usr/local/opt/python@3.10/bin/python3.10)
+  jinja version = 3.1.2
+  libyaml = True
+----
+
+[#downloadtutorial]
+== Get tutorial sources
+
+:tutorial-url: https://github.com/redhat-scholars/ansible-tutorial
+:folder: ansible-tutorial
+include::https://raw.githubusercontent.com/redhat-developer-demos/rhd-tutorial-common/master/download-sources.adoc[]
+
+
+[#preparingkeys]
+== Preparing Keys
+
+Ansible uses SSH to run commands against managed machines.
+To login to these machines, you can use login/password, but the most common way is using public/private keys to login.
+
+WARNING: In case of using Microsoft Windows, you might need to install https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui[OpenSSH client for Windows, window="_blank"].
+
+Let's create a pair of keys.
+Run the following command in a terminal window:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ssh-keygen -f ~/.ssh/id_rsa_ansible
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+Generating public/private rsa key pair.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Passphrases do not match.  Try again.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /Users/asotobu/.ssh/id_rsa_ansible
+Your public key has been saved in /Users/asotobu/.ssh/id_rsa_ansible.pub
+----
+
+INFO: You can use a passphrase or not. But if you set one (in production you should!!!), remember it as you'll need it later.
+
+Validate the creation of the keys.
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+cat ~/.ssh/id_rsa_ansible.pub
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDISVzwTEBoVEygssPwpI/SmZkBvSgWcwkPfCWBTFpXRBJuxA3q+4dBf4lWKt2g1sXoF55KEWsBVcFPKHKb6jkg10gStIvjhEb9eglRSNUPR0yZxjvSNskrimlndSkx59GpL8F1JMo4oXSKtzV3zif/Rapp2SUG8P+iATqxU9FRNnauqiR843OP6rEpNnPKk1TRUV8cHjtCLb0ZXIlMdYDBuosLoykjMr8dW4CKwCZ8SYSPOeuvFDBOSRpdyr1/h97xSxUVVlu2CiEij1wCKjg1MbGPyDprVyYC7rWriMn31iyoLymX9gE5V4hdF3KgHaAh/88dEXRJxX7m57QccT2xP86HriAswNjssuJ1kpaDLesliQeThQ5eVHow2+FHUZsquvGyr8rSsyfeNyGgOGFzI4gOs1DzJ9OEBbHI+RsLoDe4/E+pVD4SlWGW5WZRCIRMEBkFLI9am0m0PBWXupdsWhTxQyrUHPyrVF490uJZcsJyFvDjlY+6cb0GdODWuhE= asotobu@Alexs-MacBook-Pro-3.local
+----
+
+[#bootingservers]
+== Booting Servers
+
+Ansible manages servers, and we need some servers to work.
+One option could be to prepare some virtual machines and start them locally, but since these are heavy, we are providing a `docker-compose` file that starts two containers acting as "virtual machines".
+
+In the terminal window, go to the `apps` directory and run the `docker-compose` command:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+docker-compose up --remove-orphans
+----
+
+[.console-output]
+[source, bash,subs="+macros,+attributes"]
+----
+Attaching to apps_preprod_1, apps_prod_1
+prod_1     | /usr/lib/python3.11/site-packages/supervisor/options.py:474: UserWarning: Supervisord is running as root and it is searching for its configuration file in default locations (including its current working directory); you probably want to specify a "-c" argument specifying an absolute path to a configuration file for improved security.
+prod_1     |   self.warnings.warn(
+preprod_1  | /usr/lib/python3.11/site-packages/supervisor/options.py:474: UserWarning: Supervisord is running as root and it is searching for its configuration file in default locations (including its current working directory); you probably want to specify a "-c" argument specifying an absolute path to a configuration file for improved security.
+preprod_1  |   self.warnings.warn(
+prod_1     | 2023-02-07 08:57:47,469 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+prod_1     | 2023-02-07 08:57:47,470 WARN No file matches via include "/etc/supervisord.d/*.conf"
+preprod_1  | 2023-02-07 08:57:47,469 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+preprod_1  | 2023-02-07 08:57:47,471 WARN No file matches via include "/etc/supervisord.d/*.conf"
+preprod_1  | 2023-02-07 08:57:47,487 INFO RPC interface 'supervisor' initialized
+preprod_1  | 2023-02-07 08:57:47,487 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+preprod_1  | 2023-02-07 08:57:47,488 INFO supervisord started with pid 1
+prod_1     | 2023-02-07 08:57:47,489 INFO RPC interface 'supervisor' initialized
+prod_1     | 2023-02-07 08:57:47,490 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+prod_1     | 2023-02-07 08:57:47,490 INFO supervisord started with pid 1
+preprod_1  | 2023-02-07 08:57:48,493 INFO spawned: 'sshd' with pid 7
+prod_1     | 2023-02-07 08:57:48,495 INFO spawned: 'sshd' with pid 8
+prod_1     | 2023-02-07 08:57:49,499 INFO success: sshd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+preprod_1  | 2023-02-07 08:57:49,499 INFO success: sshd entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+----
+
+See that each server exposes SSH service in different ports, one to `2223` and the other to `2224`.
+
+image::ansibleservers.png[]
+
+The last step before we can start using Ansible is copying the public key into the servers, so we can login using the local private key generated in the previous step.
+
+In another terminal window run the following commands to copy the public key generated before.
+The password to encrypt is `mypassword`:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+.Server One
+----
+ssh-copy-id -i ~/.ssh/id_rsa_ansible -p 2223 root@localhost
+----
+
+[.console-oupt]
+[source, terminal,subs="+macros,+attributes"]
+.Server One
+----
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: 
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 keys remain to be installed if you are prompted now it is to install the new keys
+root@localhost s password:
+
+Number of key(s) added:        1
+
+Now try logging into the machine, with:   "ssh -p '2223' 'root@localhost'"
+and check to make sure that only the key(s) you wanted were added.
+----
+
+And do the same  with the other service which is in port `2224`.
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+.Server One
+----
+ssh-copy-id -i ~/.ssh/id_rsa_ansible -p 2224 root@localhost
+----
+
+[.console-oupt]
+[source, terminal,subs="+macros,+attributes"]
+.Server One
+----
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: 
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+root@localhost s password:
+
+Number of key(s) added:        1
+
+Now try logging into the machine, with:   "ssh -p '2224' 'root@localhost'"
+and check to make sure that only the key(s) you wanted were added.
+----
+
+IMPORTANT: In this deep dive, we'll run some commands downloading an amount of data, so depending on the speed of internet, it might take a bit of time.

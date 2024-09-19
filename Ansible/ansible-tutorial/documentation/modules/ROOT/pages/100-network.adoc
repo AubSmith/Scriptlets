@@ -1,0 +1,46 @@
+= Network Automation
+include::_attributes.adoc[]
+
+In this section, you'll learn:
+
+* [x] Installing a Virtual VyOs Router in VirutalBox
+* [x] Getting information form Router
+* [x] Configuring Router
+* [x] Executing Commands in Router
+
+== Ansible and Networking
+
+Ansible has also support for configuring network devices (switches/routers), so automation also occurs at network level such as configuring LAN, VLANs, firewalls, ...
+
+To continue with this tutorial, you need to import the Virtual Box machine with the VyOS installed.
+
+=== Importing Router 
+
+To import the Virtual Machine, first of all download the `ova` file from the folloing link.
+
+The second step is to import the machine into Virtual Box.
+Open the program and click on `File > Import`.
+
+image::vbimport.png[]
+
+Then select the folder icon and selectthe file you have downloaded.
+
+image::vbimportalvirtual.png[]
+
+Finally, in the `settings` section select in `MAC address policy` option, the `Include all network adapter...` value.
+
+image::vbnetworkset.png[]
+
+Finally, import the image, and start it pushing the `Start` button on top menu.
+
+image::vbstart.png[]
+
+=== Configuring The Router
+
+When the machine is up and running (if you cannot see the `login` message in the terminal push `enter`), you can login by using `vyos`/`vyos` as login and password.
+
+image::vbvoyosstart.png[]
+
+Then, this comes the _complicated_ part, as the router machine (guest machine) and your machine (host machine) should be in the same network address. 
+
+After login, and having the terminal started run `ip a`

@@ -1,0 +1,500 @@
+= Collections
+
+In this section, you'll learn the following:
+
+* [x] Create a Collection
+* [x] Build and Install a Collection
+* [x] Sharing Collections
+* [x] Downloading Collections from Ansible Galaxy
+
+So far, we've seen Ansible Roles as a way to implement everyday Ansible tasks and reuse them across playbooks/projects.
+But in some cases, we might need something more, not just to share tasks between tasks but also modules, plugins, other roles, or even playbooks.
+
+Ansible Collections are a distribution format for Ansible content that can include playbooks, roles, modules, and plugins.
+
+[INFO]
+====
+Ansible Collections have two default lookup paths:
+
+User scoped path:: `/home/<username>/.ansible/collections`
+System scoped path:: `/usr/share/ansible/collections`
+====
+
+[#firstcollection]
+== First Collection
+
+In your working directory, create a new directory named `my-collection`:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+mkdir my-collection
+cd my-collection
+----
+
+Then use Ansible Galaxy CLI to scaffold the collection layout.
+The collection is named `mynamespace.collection`:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-galaxy collection init mynamespace.collection
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+- Collection mynamespace.collection was created successfully
+----
+
+The structure of a plugin is the following one:
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+.
+└── mynamespace // <1>
+    └── collection // <2>
+        ├── README.md
+        ├── docs // <3>
+        ├── galaxy.yml // <4>
+        ├── meta // <5>
+        │   └── runtime.yml
+        ├── plugins // <6>
+        │   └── README.md
+        └── roles // <7>
+----
+<1> Sets a namespace to the collection
+<2> Collection name
+<3> Collections documentation
+<4> Contains all the metadata used in the Ansible Galaxy hub to index the collection
+<5> Additional metadata
+<6> Holds plugins, modules, and module_utils
+<7> Hosts custom roles
+
+=== Create an Ansible Module
+
+Let's create a custom Ansible module that returns a *Hello World* message with the `name` of the person provided as a parameter.
+
+Move into the `plugins` directory and create a new directory named `modules`:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+cd mynamespace/collection/plugins/
+mkdir modules
+cd modules
+----
+
+Let's implement the _hello_ module with the *Hello World* logic.
+In this case, it's a Python module, but any other language could be used.
+
+Create a new file, `demo_hello.py` in the `modules` directory with the following content:
+
+[.console-input]
+[source, python,subs="+macros,+attributes"]
+.mynamespace/collection/plugins/modules/demo_hello.py
+----
+#!/usr/bin/python
+
+ANSIBLE_METADATA = {
+    'metadata_version': '1.0',
+    'status': ['preview'],
+    'supported_by': 'community'
+}
+
+DOCUMENTATION = '''
+---
+module: demo_hello
+short_description: A module that says hello
+version_added: "2.8"
+description:
+  - "A module that says hello."
+options:
+    name:
+        description:
+          - Name of the person to salute. If no value is provided the default
+            value will be used.
+        required: false
+        type: str
+        default: John Doe
+author:
+    - Gianni Salinetti (@giannisalinetti)
+'''
+
+EXAMPLES = '''
+# Pass in a custom name
+- name: Say hello to Linus Torvalds
+  demo_hello:
+    name: "Linus Torvalds"
+'''
+
+RETURN = '''
+fact:
+  description: Hello string
+  type: str
+  sample: Hello John Doe!
+'''
+
+import random
+from ansible.module_utils.basic import AnsibleModule
+
+
+FACTS = "Hello {name}!"
+
+
+def run_module():
+    module_args = dict(
+        name=dict(type='str', default='Ada'),
+    )
+
+    module = AnsibleModule(
+        argument_spec=module_args,
+        supports_check_mode=True
+    )
+
+    result = dict(
+        changed=False,
+        fact=''
+    )
+
+    result['fact'] = FACTS.format(
+        name=module.params['name']
+    )
+
+    if module.check_mode:
+        return result
+
+    module.exit_json(**result)
+
+
+def main():
+    run_module()
+
+
+if __name__ == '__main__':
+    main()
+----
+
+=== Create a Role
+
+It's a good practice to provide an Ansible Role when developing a module, so the user of the module is abstracted from the module, and Ansible Collections are about bundling content that belongs together.
+
+So let's create a role inside the custom collection that utilizes the new module to get the message and print it in the console.
+We've already seen this in xref:04-roles.adoc[Ansible Roles] section on how to develop Roles.
+
+Go to `my-collection/mynamespace/collection` directory and run the following command to scaffold a Role:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+cd ../..
+
+ansible-galaxy init --init-path roles hello_msg
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+- Role hello_msg was created successfully
+----
+
+At this point, the Role is created in the `roles/hello_msg` directory.
+
+Let's create the task role running the module and printing the output.
+`Open roles/hello_msg/tasks/main.yml` file and copy the following content:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.roles/hello_msg/tasks/main.yml
+----
+---
+# tasks file for hello_motd
+- name: Generate greeting and store result
+  demo_hello: # <1>
+    name: "{{ friend_name }}" # <2>
+  register: demo_greeting # <3>
+
+- name: dump output
+  debug: # <4>
+    msg: "{{ demo_greeting }}\n"
+----
+<1> Sets the name of the module (Python file)
+<2> Sets the `name` parameter 
+<3> Registers the output of the command
+<4> Prints the outout to console
+
+Finally, set a default value for the `name` parameter in `roles/hello_msg/defaults/main.yml`:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.roles/hello_msg/defaults/main.yml
+----
+---
+# defaults file for hello_motd
+friend_name: "Alexandra"
+----
+
+=== Build and Install the Collection
+
+From the `my-collection/mynamespace/collection` directory run the following command to build the collection and generate a `.tar.gz` file that can be installed locally or uploaded to Galaxy:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-galaxy collection build
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+Created collection for mynamespace.collection at /Users/asotobu/git/ansible-tutorial/apps/my-collection/mynamespace/collection/mynamespace-collection-1.0.0.tar.gz // <1>
+----
+<1> The output folder will depend on your layout
+
+Then install the collection into the Ansible collections folder (`~/.ansible/collections/ansible_collections`) to use it in the playbooks:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-galaxy collection install mynamespace-collection-1.0.0.tar.gz
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+Starting galaxy collection install process
+Process install dependency map
+Starting collection install process
+Installing 'mynamespace.collection:1.0.0' to '/Users/asotobu/.ansible/collections/ansible_collections/mynamespace/collection'
+mynamespace.collection:1.0.0 was installed successfully // <1>
+----
+<1> Version is taken from `galaxy.yml` file
+
+=== Test the Collection
+
+Now, it's time to validate the Collection; to do that, we'll create a new playbook that uses our new module and role.
+
+Return to the `my-collection` directory and create a new directory named `collections_test` to generate the test playbook.
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+mkdir collections_test
+cd collections_test
+----
+
+To test the Collection, create a simple `playbook.yaml` file with the following content:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.my-collection/collections_test/playbook.yaml
+----
+---
+- hosts: localhost # <1>
+  connection: local
+  tasks:
+  - import_role: # <2>
+      name: mynamespace.collection.hello_msg
+    vars:
+      friend_name: "Alexandra" # <3>
+----
+<1> Sets `localhost` host so no inventory required
+<2> Imports the `hello_msg` Role defined in the collection 
+<3> Override the variable value to `Alexandra`
+
+The playbook runs the *hello_msg* Role, which invokes the module we've developed in Python.
+
+Go to the terminal and run the following command:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-playbook playbook.yaml
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [localhost] *****************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [mynamespace.collection.hello_msg : Generate greeting and store result] *****************************************************************************************************
+ok: [localhost]
+
+TASK [mynamespace.collection.hello_msg : dump output] ****************************************************************************************************************************
+ok: [localhost] => { // <1>
+    "msg": {
+        "changed": false,
+        "fact": "Hello Alexandra!",
+        "failed": false
+    }
+}
+
+PLAY RECAP ***********************************************************************************************************************************************************************
+localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+----
+<1> The output from the module
+
+[#sharingollections]
+== Share Collections
+
+So far, we've seen Ansible Collections enable the creation of modules, roles, and playbooks and package them in a single artifact.
+But how to share Collections between different projects/teams?
+
+There are several ways to do this, like Ansible Galaxy or Ansible Tower, but the easiest way is using a well-known old friend named *Git*.
+
+The way is pretty similar as we've seen in xref:04-roles.adoc#sharingroles[Sharing Roles], but the commands are slightly different:
+
+To install a remote Collection from the Git repository using the `ansible-galaxy` tool:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-galaxy collection install git+https://github.com/ansible-collections/amazon.aws.git
+----
+
+Or you can also set them in a `requirements.yaml` file:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.requirements.yaml
+----
+collections:
+  - name: https://github.com/ansible-collections/amazon.aws.git
+    type: git
+    version: main
+----
+
+And you can install it by running the `ansible-galaxy install` command:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-galaxy install -r requirements.yaml
+----
+
+[#collectionsansiblegalaxy]
+== Download Collections from Ansible Galaxy
+
+https://galaxy.ansible.com/[Ansible Galaxy] provides pre-packaged units of work known to Ansible as roles and collections.
+It's like the NPM or Maven central but for Ansible.
+
+One of these packages available in Galaxy is the https://galaxy.ansible.com/ansible/posix[Ansible Posix] Collection.
+It is an Ansible Collection of modules and plugins that target POSIX UNIX/Linux and derivative Operating Systems.
+The collection contains several modules, for example, one for managing `firewalld`, another for `selinux`, `sysctl`, ...
+
+In this example, we'll install Posix Collection and the `at` module to schedule a job using the https://www.redhat.com/sysadmin/linux-at-command[at] tool.
+
+Go to the root directory, and create a new directory named `atlinux-example`.
+This directory should be a sibling of `my-collection`:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+mkdir atlinux-example
+cd atlinux-example
+----
+
+=== Install the Collection from Galaxy
+
+Let's install the Collection from the Galaxy server to our local machine.
+`ansible-galaxy` downloads automatically (if no URL is defined) a collection from Ansible Galaxy.
+Run the following command from the terminal:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-galaxy collection install -f ansible.posix
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+Starting galaxy collection install process
+Process install dependency map
+Starting collection install process
+Downloading https://galaxy.ansible.com/download/ansible-posix-1.5.1.tar.gz to /Users/asotobu/.ansible/tmp/ansible-local-213760u56e6h9/tmp7w0rcl7k/ansible-posix-1.5.1-tysuskbu
+Installing 'ansible.posix:1.5.1' to '/Users/asotobu/.ansible/collections/ansible_collections/ansible/posix'
+ansible.posix:1.5.1 was installed successfully
+----
+
+=== Create Ansible Content
+
+To test this Galaxy Collection, create an inventory file and a playbook.
+
+First, create a new `inventory` file configuring the container's location.
+It's the same document we created at xref:02-getting-started.adoc#inventory[Inventory]:
+
+[.console-input]
+[source, ini,subs="+macros,+attributes"]
+.atlinux-example/inventory
+----
+[staging]
+staging ansible_user=root ansible_host=127.0.0.1 ansible_port=2223 ansible_ssh_private_key_file=~/.ssh/id_rsa_ansible
+
+[production]
+production ansible_user=root ansible_host=127.0.0.1 ansible_port=2224 ansible_ssh_private_key_file=~/.ssh/id_rsa_ansible
+----
+
+Then let's create a `atlinux-playbook.yaml` enforcing SELinux in the production host:
+
+[.console-input]
+[source, ini,subs="+macros,+attributes"]
+.atlinux-example/atlinux-playbook.yaml
+----
+---
+- name: set at command
+  hosts: production # <1>
+  become: yes
+  tasks:
+    - name: Install at Package # <2>
+      dnf:
+        name: httpd >= 2.4
+        state: present
+    - name: Schedule a command to execute in 1 minute making sure it is unique in the queue
+      ansible.posix.at: # <3>
+        command: ls -d / > /tmp/ls.txt
+        count: 10
+        units: minutes
+        unique: yes
+----
+<1> Applies only to production hosts
+<2> Installs `at` package
+<3> Uses the fully qualified name `<author>.<collection>.<module>`
+
+Finally, run the playbook to schedule a job:
+
+[.console-input]
+[source, ini,subs="+macros,+attributes"]
+----
+ansible-playbook -i inventory atlinux-playbook.yaml
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+[WARNING]: Found both group and host with same name: production
+[WARNING]: Found both group and host with same name: staging
+
+PLAY [set at command] ************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************************************************************
+ok: [production]
+
+TASK [Install at Package] ********************************************************************************************************************************************************
+ok: [production]
+
+TASK [Schedule a command to execute in 1 minute making sure it is unique in the queue] *******************************************************************************************
+ok: [production]
+
+PLAY RECAP ***********************************************************************************************************************************************************************
+production                 : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+----
+
+Done. You've used Ansible to schedule a Job on a remote machine.

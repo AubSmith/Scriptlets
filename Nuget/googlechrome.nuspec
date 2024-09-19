@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+
+        <id>googlechromestandaloneinstall</id>
+        <version>128.0.6597.0</version>
+        <title>googlechromestandaloneinstall (Install)</title>
+        <authors>Google</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <projectUrl>https://www.google.com/chrome/what-you-make-of-it/</projectUrl>
+        <description>TCurrently the latest version of Google Chrome.</description>
+        <summary>Currently the latest version of Google Chrome.</summary>
+        <tags>google chrome</tags>
+
+
+    </metadata>
+</package>

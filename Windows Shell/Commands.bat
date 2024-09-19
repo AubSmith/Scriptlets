@@ -1,5 +1,8 @@
 sc query spooler
 
+# View DC logged onto
+set L
+
 # Read file in cmd shell
 more filename.txt
 type filename.txt

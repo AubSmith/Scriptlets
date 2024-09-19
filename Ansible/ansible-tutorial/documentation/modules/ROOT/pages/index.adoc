@@ -1,0 +1,55 @@
+= Welcome to Ansible Tutorial
+:page-layout: home
+:!sectids:
+
+[.text-center.strong]
+== Getting started in Ansible
+
+In this Ansible tutorial, you'll learn the basics of Ansible to start working with it.
+
+[.tiles.browse]
+== Browse modules
+
+[.tile]
+.xref:01-setup.adoc[Get Started]
+* xref:01-setup.adoc#prerequisite[Prerequisites]
+
+[.tile]
+.xref:02-getting-started.adoc[First Steps]
+* xref:02-getting-started.adoc#inventory[Inventory]
+* xref:02-getting-started.adoc#runningansible[Running Ansible]
+* xref:02-getting-started.adoc#playbook[Playbooks]
+
+[.tile]
+.xref:03-advanced.adoc[Templates]
+* xref:03-advanced.adoc#createtemplates[Create Templates]
+* xref:03-advanced.adoc#ansiblevault[Securing Files]
+
+[.title]
+.xref:04-roles.adoc[Roles]
+* xref:04-roles.adoc#firstrole[First Role]
+* xref:04-roles.adoc#handlers[Handlers]
+* xref:04-roles.adoc#sharingroles[Sharing Roles]
+* xref:04-roles.adoc#ansiblegalaxy[Ansible Galaxy]
+
+[.title]
+.xref:11-collections.adoc[Collections]
+* xref:11-collections.adoc#firstcollection[First Collection]
+* xref:11-collections.adoc#sharingollections[Sharing Collections]
+* xref:11-collections.adoc#collectionsansiblegalaxy[Ansible Galaxy and Collections]
+
+[.title]
+.xref:12-ansible-eda.adoc[Ansible EDA]
+* xref:12-ansible-eda.adoc#rulebookeda[Ansible Rulebook and EDA]
+* xref:12-ansible-eda.adoc#firstrulebook[First Rulebook]
+* xref:12-ansible-eda.adoc#executingplaybooksfromgit[Executing Playbooks stored at a Git repo]
+
+[.title]
+* xref:13-kubernetes.adoc[Ansible and Kubernetes]
+* xref:13-kubernetes.adoc#ansiblekubernetes[Ansible Kubernetes Collection]
+* xref:13-kubernetes.adoc#deployapp[Deploy the application]
+* xref:13-kubernetes.adoc#ansibletemplatek8s[Ansible Templates in Kubernetes]
+
+[.title]
+.Appendix
+* xref:99-vagrant.adoc[Vagrant]

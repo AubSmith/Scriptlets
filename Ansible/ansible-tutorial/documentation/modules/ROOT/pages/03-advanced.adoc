@@ -1,0 +1,296 @@
+= Ansible Templates
+
+In this section, you'll learn the following:
+
+* [x] Create Ansible templates
+* [x] Set variables values
+* [x] Encrypt/Decrypt sensitive data
+
+Ansible supports http://jinja.pocoo.org/docs/[Jinja2 templating language, window="_blank"] for creating templates and rendering them at the host, replacing the placeholders with either implicit or explicit vars.
+
+[#createtemplates]
+== Creation of Templates
+
+Let's create two template files, one for configuring the application and another for setting the date the script was run.
+
+Still in `app1` directory, create a new directory named `templates` to store both files:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+mkdir templates
+----
+
+Then create two _Jinja2_ template files inside the directory:
+
+The first one is the release template which sets the date when the file is rendered.
+Name the file `release.j2`:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+.templates/release.j2
+----
+# <1>
+{{ ansible_date_time.iso8601 }}
+----
+<1> Ansible has an implicit variable to get date
+
+The second one is a properties configuration file setting some properties like the *hostname*, *buffer_size* depending on the amount of the available memory, and a *username* and *password*.
+Some of these properties are set from Ansible variables, and others are set manually.
+Name the file `conf.properties.j2`:
+
+[.console-input]
+[source, jinja2,subs="+macros,+attributes"]
+.templates/conf.properties.j2
+----
+# <1>
+hostname={{ ansible_hostname }}
+
+# <2>
+{% if ansible_memtotal_mb > 500 %}
+buffer_size=30
+{% else %}
+buffer_size=100
+{% endif %}
+
+# <3>
+username={{ username }}
+password={{ password }}
+----
+<1> Hostname where template is rendered
+<2> Conditional structure in Jinja2
+<3> Custom properties
+
+Go back to the root directory (`app1`) to create the Ansible file:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+cd ..
+----
+
+Create a new Ansible file, defining the custom properties value, iterating through both template files, and rendering them into a destination folder:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.template.yaml
+----
+---
+- name: configuration template
+  hosts: all
+  vars: # <1>
+    - username: Alex
+    - password: Alex
+  tasks:
+    - name: Copy conf files
+      loop: # <2>
+        - conf.properties
+        - release
+      template: # <3>
+        src: "{{item}}.j2" # <4>
+        dest: "/tmp/{{item}}" # <5>
+    - name: Display conf.properties contents
+      command: cat conf.properties chdir=/tmp
+      register: command_output
+    - name: Print to console
+      debug:
+        msg: "{{command_output.stdout}}"
+----
+<1> Section to set variables values
+<2> Loop section establishing the list of template files
+<3> `template` section used to configure template locations
+<4> `templates` folder is implicitly set as the source directory
+<5> Remote folder where templates are rendered
+
+Then you can run Ansible as usual from the command line:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-playbook -i inventory template.yaml
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+[WARNING]: Found both group and host with same name: staging
+[WARNING]: Found both group and host with same name: production
+
+PLAY [configuration template] **************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [staging]
+ok: [production]
+
+TASK [Copy conf files] *********************************************************
+ok: [staging] => (item=conf.properties)
+changed: [production] => (item=conf.properties)
+changed: [staging] => (item=release)
+changed: [production] => (item=release)
+
+TASK [Display conf.properties contents] ****************************************
+changed: [staging]
+changed: [production]
+
+TASK [Print to console] ********************************************************
+ok: [staging] => {
+    "msg": "# <1>\nhostname=6d4b0c215195\n\n# <2>\nbuffer_size=30\n\n# <3>\nusername=Alex\npassword=Alex"
+}
+ok: [production] => {
+    "msg": "# <1>\nhostname=f602be09e2c3\n\n# <2>\nbuffer_size=30\n\n# <3>\nusername=Alex\npassword=Alex"
+}
+
+PLAY RECAP *********************************************************************
+production                 : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+staging                    : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+----
+
+=== Setting Variables externally
+
+In the previous example, we've set the variables in the Ansible file, but you can override them from the command line using the `extra-vars` argument.
+
+Create a new file named `staging.yaml` to set these variables in a _YAML_ file:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.staging.yaml
+----
+username: test
+password: test
+----
+
+Then let's apply these parameters in the case of staging servers.
+Run the following command to run tasks on the staging environment with variables set in the `staging.yaml` file:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-playbook -l staging -i inventory template.yaml --extra-vars "@staging.yaml"
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+[WARNING]: Found both group and host with same name: staging
+[WARNING]: Found both group and host with same name: production
+
+PLAY [configuration template] **************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [staging]
+
+TASK [Copy conf files] *********************************************************
+changed: [staging] => (item=conf.properties)
+changed: [staging] => (item=release)
+
+TASK [Display conf.properties contents] ****************************************
+changed: [staging]
+
+TASK [Print to console] ********************************************************
+ok: [staging] => {
+    "msg": "# <1>\nhostname=6d4b0c215195\n\n# <2>\nbuffer_size=30\n\n# <3>\nusername=test\npassword=test"
+}
+
+PLAY RECAP *********************************************************************
+staging                    : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+----
+
+[#ansiblevault]
+== Ansible Vault
+
+At this point, we can configure the application depending on the environment, staging with some values, and production with others.
+
+But, some properties are sensitive and should be protected, for example, the username and password of the application (especially in production).
+
+=== Encrypting
+
+Ansible comes with Ansible Vault to manage this scenario.
+Let's create a _YAML_ configuration file but with encrypted content.
+
+In the terminal window, run the following command:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-vault create prod.yaml
+----
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+New Vault password:
+Confirm New Vault password:
+----
+
+Set `mysecret` as the password, and in the editor file copy the content to protect:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.prod.yaml
+----
+username: Secret
+password: Secret
+----
+
+Save the file, and inspect the content of the generated file:
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+$ANSIBLE_VAULT;1.1;AES256
+66343761653764386535666430306133386536303662373335633638653562373035316632643366
+3032356164306165323964303764616231643562356662650a386336633037666234333430353837
+35643966373537323264333461353035623639386562663561363666353938616432656264626164
+3332326431306362370a626538636336646530363037346261616631393438353865303934363934
+63333830346334623235653565643463326461663839616366333533303436376161626433303765
+6231333662356364646138366134643864333565656634366634
+----
+
+The file is encrypted, so no attacker might guess the values.
+At this point, file is safe to publish in Git repository or shared with others.
+
+=== Decrypting
+
+To decrypt this file while running Ansible, use the `--ask-vault-pass` option to set Ansible to ask for the password to decrypt the encrypted files.
+
+Let's apply the encrypted properties file to the production environment.
+Run the following command in the terminal to create the file for the production environment:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+----
+ansible-playbook -l production -i inventory template.yaml --extra-vars "@prod.yaml" --ask-vault-pass
+Vault password:
+----
+
+Set `mysecret` as the password.
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+[WARNING]: Found both group and host with same name: staging
+[WARNING]: Found both group and host with same name: production
+
+PLAY [configuration template] **************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [production]
+
+TASK [Copy conf files] *********************************************************
+changed: [production] => (item=conf.properties)
+changed: [production] => (item=release)
+
+TASK [Display conf.properties contents] ****************************************
+changed: [production]
+
+TASK [Print to console] ********************************************************
+ok: [production] => {
+    "msg": "# <1>\nhostname=f602be09e2c3\n\n# <2>\nbuffer_size=30\n\n# <3>\nusername=Secret\npassword=Secret"
+} // <1>
+
+PLAY RECAP *********************************************************************
+production                 : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+----
+<1> The content is created decrypted inside the host
+
+TIP: Any Ansible file like `inventory` can also be secured in the same way.

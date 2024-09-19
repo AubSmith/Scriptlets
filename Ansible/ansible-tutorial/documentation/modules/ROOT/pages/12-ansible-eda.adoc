@@ -1,0 +1,721 @@
+= Ansible Rulebook
+
+In this section, you'll learn the following:
+
+* [x] Understand Ansible Rulebook and _EDA_ (Event-Driven Ansible)
+* [x] Run an Ansible task when an event is triggered
+* [x] Run Playbook stored in a Git repository
+
+[#rulebookeda]
+== Ansible Rulebook and EDA
+
+Event-Driven Ansible (_EDA_) is designed for simplicity and flexibility.
+With _EDA_, you subscribe to an event listening source (i.e., a WebHook, Kafka Event, watchdog, ...). When an event occurs in one of these sources, it triggers an event to the _EDA_ server notifying the change, making Ansible react by running an action.
+This action could be running an Ansible action, or start the execution of a playbook, or run a module directly, or sending another event.
+
+image::eda.png[]
+
+[#firstrulebook]
+== First Rulebook
+
+A rulebook is a YAML file configuring the Ansible server, what events to flag and how to respond to them. 
+These rulebooks are similar to Ansible Playbooks, but one difference you'll find is the _If-this-then-that_ coding.
+
+A rulebook is composed of three significant elements:
+
+Sources:: Define which event source is listening and reacting. Some examples: are webhooks, Kafka, Azure service bus, file changes, or alertmanager. 
+Rules:: Define conditionals to match the event source. 
+Actions:: what needs to be executed when a condition is met. 
+
+=== Create a Rulebook
+
+Let's start with a simple Rulebook that waits until Github triggers a webhook due to a push in a repository.
+When Ansible receives the event, it will print some information from the request (HTTP headers and some body parts of the JSON body content).
+
+In your working directory, create a new directory named `eda`:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+mkdir eda
+cd eda
+----
+
+Then create a `rulebook-debug.yaml` file containing the Ansible EDA server definition (_source_), _rules_ on when to show the content, and finally, the _action_ of displaying the content on the terminal.
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.eda/rulebook-debug.yaml
+----
+---
+- name: Capture POSTs from GitHub
+  hosts: all
+  sources:
+    - ansible.eda.webhook: # <1>
+        host: 0.0.0.0
+        port: 5000
+      filters:
+        - ansible.eda.dashes_to_underscores: # <2>
+
+  rules:
+    - name: Print Important Data
+      condition: event.meta.headers.X_GitHub_Event == "push" # <3>
+      action:
+        echo: # <4>
+          message: "A change in {{ event.meta.headers.X_GitHub_Event }} in repo {{event.payload.repository.name}} URL {{event.payload.repository.clone_url}}." # <5>
+----
+<1> Source is a webhook. EDA server is listening at port 5000
+<2> Body content is filtered changing dashes to underscores
+<3> HTTP Header request must contains `X-GitHub-Event` key with value `push` to execute the action
+<4> The action is printing a message to terminal
+<5> EDA parses JSON content and you can access it through `event.<fields>`
+
+Create an inventory file registering only the local machine; in this case, no remote machine is used, but of course, you could also register it.
+In the example, we use the YAML format instead of the INI format used xref:02-getting-started.adoc#inventory[previously].
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.eda/inventory.yaml
+----
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+----
+
+=== WebHook
+
+We must create a new GitHub repository and configure the WebHooks to access the EDA server.
+To simplify things and avoid connection problems (like accessing `localhost` from the public network), we'll simulate the event's trigger.
+
+Create a JSON file containing the GitHub body content, it's sent as a webhook in case of a push into a repository.
+Copy the following content to `webhook_git_push_payload_example.json` file:
+
+[.console-input]
+[source, json,subs="+macros,+attributes"]
+.eda/webhook_git_push_payload_example.json
+----
+{
+  "ref": "refs/heads/main",
+  "before": "0000000000000000000000000000000000000000",
+  "after": "a6cea883824d2ef2d65b822b6c8f3d0d222dcbb9",
+  "repository": {
+    "id": 602147939,
+    "node_id": "R_kgDOI-QMYw",
+    "name": "ansible-eda-deepdive",
+    "full_name": "redhat-developer-demos/ansible-eda-deepdive",
+    "private": false,
+    "owner": {
+      "name": "redhat-developer-demos",
+      "email": "developer@redhat.com",
+      "login": "redhat-developer-demos",
+      "id": 19392553,
+      "node_id": "MDEyOk9yZ2FuaXphdGlvbjE5MzkyNTUz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19392553?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/redhat-developer-demos",
+      "html_url": "https://github.com/redhat-developer-demos",
+      "followers_url": "https://api.github.com/users/redhat-developer-demos/followers",
+      "following_url": "https://api.github.com/users/redhat-developer-demos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/redhat-developer-demos/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/redhat-developer-demos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/redhat-developer-demos/subscriptions",
+      "organizations_url": "https://api.github.com/users/redhat-developer-demos/orgs",
+      "repos_url": "https://api.github.com/users/redhat-developer-demos/repos",
+      "events_url": "https://api.github.com/users/redhat-developer-demos/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/redhat-developer-demos/received_events",
+      "type": "Organization",
+      "site_admin": false
+    },
+    "html_url": "https://github.com/redhat-developer-demos/ansible-eda-deepdive",
+    "description": null,
+    "fork": false,
+    "url": "https://github.com/redhat-developer-demos/ansible-eda-deepdive",
+    "forks_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/forks",
+    "keys_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/teams",
+    "hooks_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/hooks",
+    "issue_events_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/events",
+    "assignees_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/tags",
+    "blobs_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/languages",
+    "stargazers_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/stargazers",
+    "contributors_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/contributors",
+    "subscribers_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/subscribers",
+    "subscription_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/subscription",
+    "commits_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/merges",
+    "archive_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/downloads",
+    "issues_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/labels{/name}",
+    "releases_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/redhat-developer-demos/ansible-eda-deepdive/deployments",
+    "created_at": 1676475785,
+    "updated_at": "2023-02-16T01:17:31Z",
+    "pushed_at": 1676626868,
+    "git_url": "git://github.com/redhat-developer-demos/ansible-eda-deepdive.git",
+    "ssh_url": "git@github.com:redhat-developer-demos/ansible-eda-deepdive.git",
+    "clone_url": "https://github.com/redhat-developer-demos/ansible-eda-deepdive.git",
+    "svn_url": "https://github.com/redhat-developer-demos/ansible-eda-deepdive",
+    "homepage": null,
+    "size": 0,
+    "stargazers_count": 1,
+    "watchers_count": 1,
+    "language": null,
+    "has_issues": true,
+    "has_projects": true,
+    "has_downloads": true,
+    "has_wiki": true,
+    "has_pages": false,
+    "has_discussions": false,
+    "forks_count": 0,
+    "mirror_url": null,
+    "archived": false,
+    "disabled": false,
+    "open_issues_count": 0,
+    "license": null,
+    "allow_forking": true,
+    "is_template": false,
+    "web_commit_signoff_required": false,
+    "topics": [
+
+    ],
+    "visibility": "public",
+    "forks": 0,
+    "open_issues": 0,
+    "watchers": 1,
+    "default_branch": "main",
+    "stargazers": 1,
+    "master_branch": "main",
+    "organization": "redhat-developer-demos"
+  },
+  "pusher": {
+    "name": "lordofthejars",
+    "email": "asotobu@gmail.com"
+  },
+  "organization": {
+    "login": "redhat-developer-demos",
+    "id": 19392553,
+    "node_id": "MDEyOk9yZ2FuaXphdGlvbjE5MzkyNTUz",
+    "url": "https://api.github.com/orgs/redhat-developer-demos",
+    "repos_url": "https://api.github.com/orgs/redhat-developer-demos/repos",
+    "events_url": "https://api.github.com/orgs/redhat-developer-demos/events",
+    "hooks_url": "https://api.github.com/orgs/redhat-developer-demos/hooks",
+    "issues_url": "https://api.github.com/orgs/redhat-developer-demos/issues",
+    "members_url": "https://api.github.com/orgs/redhat-developer-demos/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/redhat-developer-demos/public_members{/member}",
+    "avatar_url": "https://avatars.githubusercontent.com/u/19392553?v=4",
+    "description": "Red Hat Developers Kubernetes, Istio, Knative, Microservices, Containers, Java"
+  },
+  "sender": {
+    "login": "lordofthejars",
+    "id": 1517153,
+    "node_id": "MDQ6VXNlcjE1MTcxNTM=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1517153?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/lordofthejars",
+    "html_url": "https://github.com/lordofthejars",
+    "followers_url": "https://api.github.com/users/lordofthejars/followers",
+    "following_url": "https://api.github.com/users/lordofthejars/following{/other_user}",
+    "gists_url": "https://api.github.com/users/lordofthejars/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/lordofthejars/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/lordofthejars/subscriptions",
+    "organizations_url": "https://api.github.com/users/lordofthejars/orgs",
+    "repos_url": "https://api.github.com/users/lordofthejars/repos",
+    "events_url": "https://api.github.com/users/lordofthejars/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/lordofthejars/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "created": true,
+  "deleted": false,
+  "forced": false,
+  "base_ref": null,
+  "compare": "https://github.com/redhat-developer-demos/ansible-eda-deepdive/commit/a6cea883824d",
+  "commits": [
+    {
+      "id": "a6cea883824d2ef2d65b822b6c8f3d0d222dcbb9",
+      "tree_id": "3d3dff7b6877a3bd9b73878f01bc0cd5d0fd1889",
+      "distinct": true,
+      "message": "Hello World Deployment",
+      "timestamp": "2023-02-17T10:35:48+01:00",
+      "url": "https://github.com/redhat-developer-demos/ansible-eda-deepdive/commit/a6cea883824d2ef2d65b822b6c8f3d0d222dcbb9",
+      "author": {
+        "name": "Alex Soto",
+        "email": "asotobu@gmail.com",
+        "username": "lordofthejars"
+      },
+      "committer": {
+        "name": "Alex Soto",
+        "email": "asotobu@gmail.com",
+        "username": "lordofthejars"
+      },
+      "added": [
+        "deployment.yaml"
+      ],
+      "removed": [
+
+      ],
+      "modified": [
+
+      ]
+    }
+  ],
+  "head_commit": {
+    "id": "a6cea883824d2ef2d65b822b6c8f3d0d222dcbb9",
+    "tree_id": "3d3dff7b6877a3bd9b73878f01bc0cd5d0fd1889",
+    "distinct": true,
+    "message": "Hello World Deployment",
+    "timestamp": "2023-02-17T10:35:48+01:00",
+    "url": "https://github.com/redhat-developer-demos/ansible-eda-deepdive/commit/a6cea883824d2ef2d65b822b6c8f3d0d222dcbb9",
+    "author": {
+      "name": "Alex Soto",
+      "email": "asotobu@gmail.com",
+      "username": "lordofthejars"
+    },
+    "committer": {
+      "name": "Alex Soto",
+      "email": "asotobu@gmail.com",
+      "username": "lordofthejars"
+    },
+    "added": [
+      "deployment.yaml"
+    ],
+    "removed": [
+
+    ],
+    "modified": [
+
+    ]
+  }
+}
+----
+
+Now, we can start Ansible EDA server and simulate the trigger of a GitHub push event.
+
+=== Start EDA
+
+In the `eda` directory, run the following command to start Ansible EDA.
+
+IMPORTANT: If not set before, remember to set the `JAVA_HOME` environment variable.
+
+Run the following command in the terminal:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-rulebook -i inventory.yaml --rulebook rulebook-debug.yaml
+----
+
+At this point, Ansible EDA is started and waiting for incoming HTTP requests.
+
+=== Trigger the event
+
+Let's send an HTTP request simulating a push in a GitHub repository in a new terminal window.
+Remember that the content is the same as you would receive in the case of a GitHub webhook; we are just simulating it for simplicity.
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+curl -H 'X-GitHub-Event: push' -H 'X-GitHub-Event-Type: push' -H 'Content-Type: application/json' --data "@./webhook_git_push_payload_example.json" 127.0.0.1:5000/endpoint
+----
+
+Notice that the hostname is the `localhost` at port `5000` and the path is `endpoint`.
+
+After the execution of the command, inspect the terminal where Ansible EDA is running, and you should see the echoed message:
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+2023-03-02 12:49:49.594794 : A change in push in repo ansible-eda-deepdive URL https://github.com/redhat-developer-demos/ansible-eda-deepdive.git
+----
+
+With the Hello World example up and running, let's move the example forward to do something more useful.
+Stop the instance doing a kbd:[Ctrl+C] on the terminal.
+
+[#executingplaybooksfromgit]
+== Executing Playbooks stored at a Git repo
+
+After running a simple example, let's complicate things a bit more.
+We'll implement a GitOps pipeline to react to a change in a playbook.
+
+For example, when updating an application version in production, we might need to modify a playbook to set the new version and then apply the playbook.
+
+One way of doing this is changing and applying the playbook manually, but doing it manually is a slow process, subject to error, and not reproducible.
+
+So a better way would be to store the playbook in the Git repository, and when a change is done, automatically apply the change and propagate it to the environments.
+
+Let's implement this use case using Ansible EDA.
+
+=== Overview of the Process
+
+The idea of what to do is easy, but all the required steps to run it are complex and need several actions.
+Let's summarize the process:
+
+. Extract the _event type_, _repository name_, _clone url_, and _git ref_ of the commit from the request, and store them in Ansible _facts_ (~variables).
+. Print the extracted information.
+. Run a playbook to clone the remote Git repository with the change to the Ansible EDA machine.
+. Run the playbook defined in the Git repository
+. Wipeout the workspace
+
+=== The Remote Git repository
+
+The repository is located at https://github.com/redhat-developer-demos/ansible-eda-deepdive.git and contains a simple `deployment.yaml` file.
+
+image::gh.png[]
+
+And the content of the `deployment.yaml` file is an Ansible playbook that prints a message to configured host.
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.deployment.yaml
+----
+---
+- hosts: all
+  tasks:
+  - name: Print Hello World
+    debug: msg="Hello World"
+----
+
+We don't need to do anything at this section, it's main purpose is showing you the layout of the repository.
+
+IMPORTANT: Although this playbook is simple, everything valid in Ansible playbook is valid here.
+
+=== Create the Rulebook
+
+Now, it's time to write the rulebook with all the steps explained in <<Overview of the Process>>.
+Creates a new file named `ansible-gitops.yaml` in the `eda` directory.
+
+Although this file is not big, it contains some critical pieces that are better to see individually.
+At the end of the section, we'll see the whole file with all the pieces together.
+
+==== Extracting fields
+
+In the Ansible rulebook, there is an action named `set_fact` used to store facts of the events.
+In this case, we store the body information required to clone the repository locally:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.ansible-gitops.yaml
+----
+---
+- name: Capture POSTs from gitea
+  hosts: all
+  sources:
+    - ansible.eda.webhook: # <1>
+        host: 0.0.0.0
+        port: 5000
+      filters:
+        - ansible.eda.dashes_to_underscores:
+
+  rules: # <2>
+    - name: Create facts
+      condition: event.payload is defined # <3>
+      action:
+        set_fact: # <4>
+          fact: # <5>
+            event_type: "{{ event.meta.headers.X_GitHub_Event }}"
+            repository_name: "{{ event.payload.repository.name }}"
+            clone_url: "{{event.payload.repository.clone_url}}"
+            git_ref: "{{event.payload.ref}}"
+----
+<1> Defines Ansible server configuration
+<2> All rules are defined under this section
+<3> Only executethe action if there is content in the request
+<4> `set_fact` is the action to execute
+<5> Extracts data under the `fact` namespace
+
+==== Print the extracted information
+
+We've seen this in the previous rulebook, so nothing new:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.ansible-gitops.yaml
+----
+    - name: Print Important Data
+      condition: fact.event_type == "push" # <1>
+      action:
+        echo: # <2>
+          message: "A change {{fact.event_type}} in {{fact.repository_name}} URL {{fact.clone_url}}."
+----
+<1> Uses `fact` namespace, and then the name of the fact
+<2> `echo` action prints the message to the console
+
+==== Clone the remote Git repository
+
+To clone the repository, we'll create a playbook that clones the remote repository into a temporal directory.
+Create a new playbook file named `onpush.yaml` in the `eda` directory with the following content:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.eda/onpush.yaml
+----
+---
+- name: OnPush -- update application repo
+  hosts: localhost
+  connection: local # <1>
+  gather_facts: true
+  tasks:
+
+  - name: OnPush -- Check if repo exists locally
+    ansible.builtin.stat: # <2>
+      path: "/tmp/{{ fact.repository_name  }}"
+    register: repo_stat # <3>
+
+  - name: OnPush -- Clone application repository to event ref
+    when: repo_stat.stat.exists == false # <4>
+    ansible.builtin.git: # <5>
+      repo: "{{ fact.clone_url }}"
+      dest: "/tmp/{{ fact.repository_name }}" # <6>
+      clone: true
+      update: true
+      version: "{{ fact.git_ref | split('/') | last }}"
+    register: repo_cloned # <7>
+
+  - set_fact: # <8>
+      cacheable: true
+      repository_name: "{{fact.repository_name}}"
+      repo_stat: "{{ repo_stat }}"
+      cloned: "{{ repo_cloned }}"
+----
+<1> Executes command in the localhost using the system Python
+<2> Checks if directory exists
+<3> Stores the result in the `repo_stat` var
+<4> If directory is not present
+<5> Uses Git task to clone the project
+<6> Clones the repository to `/tmp/<name_of_repo>`
+<7> Stores the result in the `repo_cloned` var
+<8> Sets facts for the following execution
+
+Then at the rulebook, we need to run this playbook:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.ansible-gitops.yaml
+----
+    - name: Respond to push event
+      condition: fact.repository_name == "ansible-eda-deepdive" and fact.event_type == "push" # <1>
+      action:
+        run_playbook: # <2>
+          name: onpush.yaml 
+          set_facts: true # <3>
+----
+<1> Only when the repo is the one expected
+<2> Sets the action to `run_playbook`
+<3> Executes the `onpush.yaml` with facts
+
+==== Run the playbook defined in Git
+
+Then, we must repeat the same process as in the previous section but run the cloned playbook.
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.ansible-gitops.yaml
+----
+    - name: Run application deploy playbook
+      condition: fact.cloned.failed == false # <1>
+      action:
+        run_playbook:
+          name: /tmp/{{fact.repository_name}}/deployment.yaml # <2>
+----
+<1> If the repo is cloned
+<2> Runs the playbook defined in the repository
+
+==== Wipeout the workspace
+
+Finally, let's clean the directory where the repository was cloned.
+Create a playbook `clean.yaml` to implement the delete task:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.eda/clean.yaml
+----
+---
+- name: Clean workspace
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  tasks:
+
+  - name: Clean Git directory
+    ansible.builtin.file:
+      path: /tmp/{{ fact.repository_name }}
+      state: absent # <1>
+----
+<1> Deletes the directory
+
+And finally it runs the playbook.
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.ansible-gitops.yaml
+----
+    - name: Clean workspace
+      condition: fact.cloned.failed == false
+      action:
+        run_playbook:
+          name: clean.yaml
+          set_facts: true
+----
+
+==== Full `ansible-gitops.yaml` file
+
+The full rulebook is shown in the following snippet:
+
+[.console-input]
+[source, yaml,subs="+macros,+attributes"]
+.eda/ansible-gitops.yaml
+----
+---
+- name: Capture POSTs from gitea
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+      filters:
+        - ansible.eda.dashes_to_underscores:
+
+  rules:
+    - name: Create facts
+      condition: event.payload is defined
+      action:
+        set_fact:
+          fact:
+            event_type: "{{ event.meta.headers.X_GitHub_Event }}"
+            repository_name: "{{ event.payload.repository.name }}"
+            clone_url: "{{event.payload.repository.clone_url}}"
+            git_ref: "{{event.payload.ref}}"
+          
+    - name: Print Important Data
+      condition: fact.event_type == "push"
+      action:
+        echo:
+          message: "A change {{fact.event_type}} in {{fact.repository_name}} URL {{fact.clone_url}}."
+    - name: Respond to push event
+      condition: fact.repository_name == "ansible-eda-deepdive" and fact.event_type == "push"
+      action:
+        run_playbook:
+          name: onpush.yaml
+          set_facts: true
+
+    - name: Run application deploy playbook
+      condition: fact.cloned.failed == false
+      action:
+        run_playbook:
+          name: /tmp/{{fact.repository_name}}/deployment.yaml
+
+    - name: Clean workspace
+      condition: fact.cloned.failed == false
+      action:
+        run_playbook:
+          name: clean.yaml
+          set_facts: true
+----
+
+=== Start EDA
+
+In the `eda` directory, run the following command to start Ansible EDA.
+
+IMPORTANT: Remember to set the `JAVA_HOME` environment variable if not set before.
+
+Run the following command in the terminal:
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+ansible-rulebook -i inventory.yaml --rulebook ansible-gitops.yaml
+----
+
+At this point, Ansible EDA is started and waiting for incoming HTTP requests.
+
+=== Trigger the event
+
+Let's send an HTTP request simulating a push in a GitHub repository in a new terminal window.
+Remember that the content is the same as you would receive in the case of a GitHub webhook; we are just simulating it for simplicity.
+
+[.console-input]
+[source, bash,subs="+macros,+attributes"]
+----
+curl -H 'X-GitHub-Event: push' -H 'X-GitHub-Event-Type: push' -H 'Content-Type: application/json' --data "@./webhook_git_push_payload_example.json" 127.0.0.1:5000/endpoint
+----
+
+Notice that the hostname is the `localhost` at port `5000` and the path is `endpoint`.
+
+After the execution of the command, inspect the terminal where Ansible EDA is running, and you should see the echoed message:
+
+
+[.console-output]
+[source, terminal,subs="+macros,+attributes"]
+----
+PLAY [OnPush -- update application repo] ***************************************
+
+TASK [Gathering Facts] *********************************************************
+[WARNING]: Platform darwin on host localhost is using the discovered Python
+interpreter at /usr/local/bin/python3.11, but future installation of another
+Python interpreter could change the meaning of that path. See
+https://docs.ansible.com/ansible-
+core/2.14/reference_appendices/interpreter_discovery.html for more information.
+ok: [localhost]
+
+TASK [OnPush -- Check if repo exists locally] **********************************
+ok: [localhost]
+
+TASK [OnPush -- Clone application repository to event ref] *********************
+changed: [localhost]
+
+TASK [set_fact] ****************************************************************
+ok: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+PLAY [all] *********************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [localhost]
+
+TASK [Print Hello World] *******************************************************
+ok: [localhost] => {
+    "msg": "Hello World"
+}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+PLAY [Clean workspace] *********************************************************
+
+TASK [Gathering Facts] *********************************************************
+[WARNING]: Platform darwin on host localhost is using the discovered Python
+interpreter at /usr/local/bin/python3.11, but future installation of another
+Python interpreter could change the meaning of that path. See
+https://docs.ansible.com/ansible-
+core/2.14/reference_appendices/interpreter_discovery.html for more information.
+ok: [localhost]
+
+TASK [Clean Git directory] *****************************************************
+changed: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+----
+
+Stop the instance doing a kbd:[Ctrl+C] on the terminal.
