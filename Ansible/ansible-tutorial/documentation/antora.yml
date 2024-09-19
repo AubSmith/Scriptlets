@@ -1,0 +1,7 @@
+name: ansible-tutorial
+title: Ansible Tutorial
+version: master
+nav:
+  - modules/ROOT/nav.adoc
+
+start_page: ROOT:index.adoc

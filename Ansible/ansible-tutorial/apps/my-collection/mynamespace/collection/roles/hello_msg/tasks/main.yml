@@ -1,0 +1,10 @@
+---
+# tasks file for hello_motd
+- name: Generate greeting and store result
+  demo_hello:
+    name: "{{ friend_name }}"
+  register: demo_greeting
+
+- name: dump output
+  debug:
+    msg: "{{ demo_greeting }}\n"

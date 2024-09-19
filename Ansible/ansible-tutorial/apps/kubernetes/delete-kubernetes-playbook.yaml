@@ -1,0 +1,16 @@
+- name: Login
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  environment:
+    K8S_AUTH_HOST: "https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443"
+    K8S_AUTH_API_KEY: "sha256~NRG7aBVOdaRonMJ172H16KrS0Chy--knwpefomLrcZA"
+  tasks:
+    - name: Delete The Application
+      kubernetes.core.k8s:
+        state: absent
+        api_version: v1
+        kind: Deployment
+        namespace: asotobue-dev
+        name: hello-world
+          

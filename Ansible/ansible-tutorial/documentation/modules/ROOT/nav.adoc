@@ -1,0 +1,43 @@
+* 1. Requirements
+** xref:01-setup.adoc#prerequisite[Prerequisites]
+** xref:01-setup.adoc#ansible[Setup Ansible]
+** xref:01-setup.adoc#downloadtutorial[Get Tutorial Sources]
+** xref:01-setup.adoc#preparingkeys[Preparing SSH keys]
+** xref:01-setup.adoc#bootingservers[Booting Servers]
+
+* 2. Ansible Beginner
+** xref:02-getting-started.adoc[1. Getting Started]
+*** xref:02-getting-started.adoc#ide[Editor]
+*** xref:02-getting-started.adoc#inventory[Defining an Inventory]
+*** xref:02-getting-started.adoc#runningansible[Running Ansible]
+*** xref:02-getting-started.adoc#escalation[Privilege Escalation]
+*** xref:02-getting-started.adoc#playbook[Playbooks]
+** xref:03-advanced.adoc[2. Templates]
+*** xref:03-advanced.adoc#createtemplates[Create Templates]
+*** xref:03-advanced.adoc#ansiblevault[Securing Files]
+** xref:04-roles.adoc[3. Roles]
+*** xref:04-roles.adoc#firstrole[First Role]
+*** xref:04-roles.adoc#handlers[Handlers]
+*** xref:04-roles.adoc#sharingroles[Sharing Roles]
+*** xref:04-roles.adoc#ansiblegalaxy[Ansible Galaxy]
+
+* 3. Ansible Elementary
+** xref:10-setup.adoc[1. Requirements]
+*** xref:10-setup.adoc#previousrequirements[Previous Requirements]
+*** xref:10-setup.adoc#newprerequisite[Prerequisite]
+*** xref:10-setup.adoc#setupansiblerulebook[Setup Ansible Rulebook]
+** xref:11-collections.adoc[2. Collections]
+*** xref:11-collections.adoc#firstcollection[First Collection]
+*** xref:11-collections.adoc#sharingollections[Sharing Collections]
+*** xref:11-collections.adoc#collectionsansiblegalaxy[Ansible Galaxy and Collections]
+** xref:12-ansible-eda.adoc[3. Ansible EDA]
+*** xref:12-ansible-eda.adoc#rulebookeda[Ansible Rulebook and EDA]
+*** xref:12-ansible-eda.adoc#firstrulebook[First Rulebook]
+*** xref:12-ansible-eda.adoc#executingplaybooksfromgit[Executing Playbooks stored at a Git repo]
+** xref:13-kubernetes.adoc[4. Ansible and Kubernetes]
+*** xref:13-kubernetes.adoc#ansiblekubernetes[Ansible Kubernetes Collection]
+*** xref:13-kubernetes.adoc#deployapp[Deploy the application]
+*** xref:13-kubernetes.adoc#ansibletemplatek8s[Ansible Templates in Kubernetes]
+
+* Appendix
+** xref:99-vagrant.adoc[Vagrant]
