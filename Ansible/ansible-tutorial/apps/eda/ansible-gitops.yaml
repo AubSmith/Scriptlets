@@ -1,0 +1,48 @@
+---
+- name: Capture POSTs from gitea
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+      filters:
+        - ansible.eda.dashes_to_underscores:
+
+  rules:
+    - name: Create facts
+      condition: event.payload is defined
+      action:
+        set_fact:
+          fact:
+            event_type: "{{ event.meta.headers.X_GitHub_Event }}"
+            repository_name: "{{ event.payload.repository.name }}"
+            clone_url: "{{event.payload.repository.clone_url}}"
+            git_ref: "{{event.payload.ref}}"
+          
+    - name: Print Important Data
+      condition: fact.event_type == "push"
+      action:
+        echo:
+          message: "A change {{fact.event_type}} in {{fact.repository_name}} URL {{fact.clone_url}}."
+    - name: Respond to push event
+      condition: fact.repository_name == "ansible-eda-deepdive" and fact.event_type == "push"
+      action:
+        run_playbook:
+          name: onpush.yaml
+          set_facts: true
+
+    - name: Run application deploy playbook
+      condition: fact.cloned.failed == false
+      action:
+        #echo:
+        #  message: "Hi {{fact.repository_name}}"
+        run_playbook:
+          name: /tmp/{{fact.repository_name}}/deployment.yaml
+
+    - name: Clean workspace
+      condition: fact.cloned.failed == false
+      action:
+        run_playbook:
+          name: clean.yaml
+          set_facts: true
+        

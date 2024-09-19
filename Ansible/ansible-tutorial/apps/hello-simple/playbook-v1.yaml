@@ -1,0 +1,14 @@
+---
+- hosts: all # <1>
+  become: true # <2>
+  tasks:
+    - name: Install Packages
+      dnf: name={{ item }} # <3>
+      loop: [ 'java-17-openjdk-devel'] # <4>
+      tags: [ 'setup' ]
+    - name: Create a directory if it does not exist
+      file: # <5>
+        path: /var/hello # <6>
+        state: directory
+        mode: '0755'
+      tags: ['setup']

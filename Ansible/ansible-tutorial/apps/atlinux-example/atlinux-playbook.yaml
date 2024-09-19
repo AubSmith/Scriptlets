@@ -1,0 +1,15 @@
+---
+- name: set at command
+  hosts: production 
+  become: yes
+  tasks:
+    - name: Install at Package
+      dnf:
+        name: httpd >= 2.4
+        state: present
+    - name: Schedule a command to execute in 1 minute making sure it is unique in the queue
+      ansible.posix.at:
+        command: ls -d / > /tmp/ls.txt
+        count: 10
+        units: minutes
+        unique: yes

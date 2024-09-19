@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  preprod:
+    image: quay.io/rhdevelopers/server_ssh:1.0.0
+    ports:
+      - "2223:22"
+      - "8080:8080"
+  prod:
+    image: quay.io/rhdevelopers/server_ssh:1.0.0
+    ports:
+      - "2224:22"
+      - "8081:8080"

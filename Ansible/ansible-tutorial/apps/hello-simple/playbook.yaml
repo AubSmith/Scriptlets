@@ -1,0 +1,46 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install Packages
+      dnf: name={{ item }}
+      loop: [ 'java-17-openjdk-devel']
+      tags: [ 'setup' ]
+    - name: Create a directory if it does not exist
+      file:
+        path: /var/hello
+        state: directory
+        mode: '0755'
+      tags: ['setup']
+    - name: Copy file with owner and permissions
+      copy:
+        src: hello-world-1.0.0-SNAPSHOT-runner.jar 
+        dest: /var/hello/hello-world-1.0.0-SNAPSHOT-runner.jar
+        owner: root
+        group: root
+        mode: '0755'
+      tags: ['app']
+    - name: Copy supervisor conf file for the app
+      copy:
+        src: hello.conf
+        dest: /etc/supervisord.d/hello.conf
+        owner: root
+        group: root
+        mode: '0644'
+      tags: ['app']
+    - name: Reread supervisord
+      command: /usr/bin/supervisorctl reread 
+      tags: ['app']
+    - name: Update supervisord
+      command: /usr/bin/supervisorctl update
+      tags: ['app']
+    - name: Check status 200 and fail if incorrect page contents
+      uri:
+        url: http://localhost:8080/hello
+        return_content: yes
+      register: response
+      tags: ['test']
+    - name: Print result
+      debug:
+        var: response.content
+      tags: ['test']

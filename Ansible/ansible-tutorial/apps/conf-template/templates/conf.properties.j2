@@ -1,0 +1,13 @@
+# <1>
+hostname={{ ansible_hostname }}
+
+# <2>
+{% if ansible_memtotal_mb > 500 %}
+buffer_size=30
+{% else %}
+buffer_size=100
+{% endif %}
+
+# <3>
+username={{ username }}
+password={{ password }}

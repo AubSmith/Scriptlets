@@ -1,0 +1,20 @@
+---
+- name: configuration template
+  hosts: all
+  vars: # <1>
+    - username: Alex
+    - password: Alex
+  tasks:
+    - name: Copy conf files
+      loop: # <2>
+        - conf.properties
+        - release
+      template: # <3>
+        src: "{{item}}.j2" # <4>
+        dest: "/tmp/{{item}}" # <5>
+    - name: Display conf.properties contents
+      command: cat conf.properties chdir=/tmp
+      register: command_output
+    - name: Print to console
+      debug:
+        msg: "{{command_output.stdout}}"
