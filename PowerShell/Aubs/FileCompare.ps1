@@ -1,3 +1,14 @@
+# Example usage:
+# PowerShell .\FileCompare.ps1 ".\file1.txt" ".\file2.txt"
+
+[CmdletBinding()]
+Param(
+  [parameter(mandatory=$true,Position=1)]
+  [string]$FilePath1,
+  [parameter(mandatory=$true,Position=2)]
+  [string]$FilePath2
+)
+
 function Compare-Files {
 	param (
 		[string]$FilePath1,
@@ -28,7 +39,5 @@ function Compare-Files {
 	Write-Output "Comparison complete. Log written to $LogFilePath"
 }
 
-# Example usage:
-# Compare-Files -FilePath1 "path\to\first\file.txt" -FilePath2 "path\to\second\file.txt"
 
-private [Stream] $_stream
+Compare-Files -FilePath1 $FilePath1 -FilePath2 $FilePath2
