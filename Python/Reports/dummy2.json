@@ -1,0 +1,43 @@
+[
+ {
+  "productId": 1001080101,
+  "storeNumber": 290,
+  "isSosVendorDirect": true,
+  "price": {
+   "selling": "249.00",
+   "retail": "249.00",
+   "typeCode": 1,
+   "typeIndicator": "Regular Price"
+  },
+  "availability": 
+  [
+   {
+    "availabilityStatus": "Available",
+    "productStockType": "STK",
+    "availabileQuantity": 12,
+    "deliveryMethodId": 1,
+    "deliveryMethodName": "Parcel Shipping",
+    "storeNumber": 905
+   },
+   {
+    "availabilityStatus": "Available",
+    "productStockType": "STK",
+    "availabileQuantity": 12,
+    "leadTime": 1570607222335,
+    "deliveryMethodId": 2,
+    "deliveryMethodName": "Store Pickup",
+    "storeNumber": 287
+   },
+   {
+    "availabilityStatus": "Available",
+    "productStockType": "STK",
+    "availabileQuantity": 1,
+    "leadTime": 1570607222335,
+    "deliveryMethodId": 3,
+    "deliveryMethodName": "Truck Delivery",
+    "storeNumber": 286
+   }
+  ],
+  "@type": "item"
+ }
+]

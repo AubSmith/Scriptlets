@@ -1,0 +1,43 @@
+[
+ {
+  "productId": 1001080037,
+  "storeNumber": "Sam",
+  "isSosVendorDirect": true,
+  "price": {
+   "selling": "249.00",
+   "retail": "249.00",
+   "typeCode": 1,
+   "typeIndicator": "Regular Price"
+  },
+  "availability": 
+  [
+   {
+    "availabilityStatus": "Available",
+    "productStockType": "STK",
+    "availabileQuantity": 17,
+    "deliveryMethodId": 1,
+    "deliveryMethodName": "Parcel Shipping",
+    "storeNumber": "Sam"
+   },
+   {
+    "availabilityStatus": "Available",
+    "productStockType": "STK",
+    "availabileQuantity": 1,
+    "leadTime": 1570607222335,
+    "deliveryMethodId": 2,
+    "deliveryMethodName": "Store Pickup",
+    "storeNumber": "Sam"
+   },
+   {
+    "availabilityStatus": "Available",
+    "productStockType": "STK",
+    "availabileQuantity": 1,
+    "leadTime": 1570607222335,
+    "deliveryMethodId": 3,
+    "deliveryMethodName": "Truck Delivery",
+    "storeNumber": "Sam"
+   }
+  ],
+  "@type": "item"
+ }
+]
